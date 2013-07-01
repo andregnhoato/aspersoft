@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" codebase="http://s3-sa-east-1.amazonaws.com/yaw-site-sp/app/">
+  <information>
+    <title>Aplicação Demo das tecnologias JavaFX e JPA</title>
+    <vendor>YaW Tecnologia</vendor>
+    <description>Demo JavaFX e JPA</description>
+    <icon href="logo_yaw.png"/>
+    <offline-allowed/>
+  </information>
+
+  <security>
+    <all-permissions />
+  </security>
+
+  <resources>
+    <jfx:javafx-runtime version="2.2+" href="http://javadl.sun.com/webapps/download/GetFile/javafx-latest/windows-i586/javafx2.jnlp"/>
+  </resources>
+
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+
+    <jar href="lib/antlr-2.7.7.jar" size="445288" download="eager" />
+    <jar href="lib/dom4j-1.6.1.jar" size="313898" download="eager" />
+    <jar href="lib/hibernate-commons-annotations-4.0.1.Final.jar" size="81271" download="eager" />
+    <jar href="lib/hibernate-core-4.1.6.Final.jar" size="4451312" download="eager" />
+    <jar href="lib/hibernate-entitymanager-4.1.6.Final.jar" size="478426" download="eager" />
+    <jar href="lib/hibernate-jpa-2.0-api-1.0.1.Final.jar" size="102661" download="eager" />
+    <jar href="lib/hibernate-validator-4.3.1.Final.jar" size="477382" download="eager" />
+    <jar href="lib/hsqldb-2.2.8.jar" size="1395415" download="eager" />
+    <jar href="lib/javassist-3.15.0-GA.jar" size="648253" download="eager" />
+    <jar href="lib/jboss-logging-3.1.0.GA.jar" size="60768" download="eager" />
+    <jar href="lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar" size="11209" download="eager" />
+    <jar href="lib/log4j-1.2.16.jar" size="481535" download="eager" />
+    <jar href="lib/slf4j-api-1.6.4.jar" size="25962" download="eager" />
+    <jar href="lib/validation-api-1.0.0.GA.jar" size="47433" download="eager" />
+
+    <jar href="lib/javafx-jpa-crud.jar" size="111492" download="eager" />
+  </resources>
+
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="javafx-jpa-crud" >
+    <param name="requiredFXVersion" value="2.2+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="br.com.yaw.jfx.app.MercadoriaApp"  name="javafx-jpa-crud" />
+  <update check="always"/>
+</jnlp>
