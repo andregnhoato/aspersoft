@@ -3,7 +3,7 @@ Detalhes do Projeto Doutorado
 
 O projeto é um aplicativo desktop desenvolvido com as tecnologias JavaFX, JPA (Java Persistence API) e Hibernate. O JavaFX é a plataforma rich client do Java, projetada para fornercer uma experiência de usabilidade sofisticada e eficiente.
 
-A aplicação utiliza o HSQLDB (HyperSQL DataBase), um banco de dados relacional escrito em Java, adequado para projetos com propósitos de estudos. O objetivo dessa aplicação é servir como conteúdo no estudo de desenvolvimento de soluções desktop/web, utilizando tecnologias para desenvolvimento RIA.
+A aplicação utiliza o HSQLDB (HyperSQL DataBase), um banco de dados relacional escrito em Java, somente nessa fase inicial, posteriormente é trivial a troca do banco de dados.
 
 Detalhes da implementação
 -------
@@ -17,5 +17,5 @@ Tecnologias utilizadas na implementação:
 Pré-requisitos
 -------
 * JDK - versão 1.7 do Java, ou mais recente;
-* NetBeans - recomendamos o NetBeans IDE mais recente;
+* NetBeans - NetBeans IDE mais recente;
 
