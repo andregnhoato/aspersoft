@@ -19,7 +19,7 @@ Pré-requisitos
 * JDK - versão 1.7 do Java, ou mais recente;
 * NetBeans - NetBeans IDE mais recente;
 
-Dúvidas com git http://gitimmersion.com/lab_01.html
+[Dúvidas com git neste link](http://gitimmersion.com/lab_01.html) 
 
 Este repositório seguirá as seguintes regras para commit's:
 
@@ -28,4 +28,4 @@ Branch: develop está branch será a utilizada para desenvolvimento, após ter u
 Demais branch's devem ser criadas para algum bug fix e novos desenvolvimentos
 
 Sugiro seguir essa metodologia, irá nos garantir um total controle sob o repositório, versões etc.
-http://nvie.com/posts/a-successful-git-branching-model/
+[Modelo de utilização do repositório](http://nvie.com/posts/a-successful-git-branching-model/)
