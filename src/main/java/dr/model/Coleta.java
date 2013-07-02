@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
  * @author @Andre
  */
 @Entity
-@Table(name = "collect")
-public class Collect implements AbstractEntity {
+@Table(name = "coleta")
+public class Coleta implements AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,9 +27,9 @@ public class Collect implements AbstractEntity {
     @Column(name = "value")
     private Float value;
     
-    @JoinColumn(name = "id_experiment", referencedColumnName = "id")
+    @JoinColumn(name = "id_ensaio", referencedColumnName = "id")
     @ManyToOne
-    private Experiment experiment;
+    private Ensaio ensaio;
     
     /**
      * Atributo utilizado para controle
@@ -39,7 +39,7 @@ public class Collect implements AbstractEntity {
     @Version
     private Integer version;
     
-    public Collect() {
+    public Coleta() {
     }
 
    @Override
@@ -63,12 +63,12 @@ public class Collect implements AbstractEntity {
         this.value = value;
     }
 
-    public Experiment getExperiment() {
-        return experiment;
+    public Ensaio getEnsaio() {
+        return ensaio;
     }
 
-    public void setExperiment(Experiment experiment) {
-        this.experiment = experiment;
+    public void setEnsaio(Ensaio ensaio) {
+        this.ensaio = ensaio;
     }
      
 }

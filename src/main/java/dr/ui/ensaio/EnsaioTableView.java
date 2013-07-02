@@ -1,6 +1,6 @@
-package dr.ui.experiment;
+package dr.ui.ensaio;
 
-import dr.model.Experiment;
+import dr.model.Ensaio;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,73 +11,80 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
- * <code>TableView</code> adaptada para apresentar objetos <code>Experiment</code>.
+ * <code>TableView</code> adaptada para apresentar objetos <code>Ensaio</code>.
  * @author @Andre
  */
-public class ExperimentTableView extends TableView<ExperimentTableView.ExperimentItem> {
+public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
 
-    private ObservableList<ExperimentItem> experiments;
+    private ObservableList<EnsaioItem> ensaios;
 
-    public ExperimentTableView() {
-        TableColumn<ExperimentItem, String> idCol = new TableColumn<>("Id");
+    public EnsaioTableView() {
+        TableColumn<EnsaioItem, String> idCol = new TableColumn<>("Id");
         idCol.setMinWidth(80);
-        idCol.setCellValueFactory(new PropertyValueFactory<ExperimentItem, String>("id"));
+        idCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("id"));
 
-        TableColumn<ExperimentItem, String> pressureCol = new TableColumn<>("Pressão");
-        pressureCol.setMinWidth(80);
-        pressureCol.setCellValueFactory(new PropertyValueFactory<ExperimentItem, String>("pressure"));
+        TableColumn<EnsaioItem, String> pressaoCol = new TableColumn<>("Pressão");
+        pressaoCol.setMinWidth(80);
+        pressaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("pressao"));
 
-        TableColumn<ExperimentItem, String> nozzleCol = new TableColumn<>("Bocal");
-        nozzleCol.setMinWidth(80);
-        nozzleCol.setCellValueFactory(new PropertyValueFactory<ExperimentItem, String>("noozle"));
+        TableColumn<EnsaioItem, String> bocalCol = new TableColumn<>("Bocal");
+        bocalCol.setMinWidth(80);
+        bocalCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("bocal"));
         
-        TableColumn<ExperimentItem, String> jetBreakCol = new TableColumn<>("QuebraJato");
-        jetBreakCol.setMinWidth(80);
-        jetBreakCol.setCellValueFactory(new PropertyValueFactory<ExperimentItem, String>("jetBreak"));
+        TableColumn<EnsaioItem, String> quebraJatoCol = new TableColumn<>("QuebraJato");
+        quebraJatoCol.setMinWidth(80);
+        quebraJatoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("quebraJato"));
         
-        TableColumn<ExperimentItem, String> durationCol = new TableColumn<>("Duração");
-        durationCol.setMinWidth(80);
-        durationCol.setCellValueFactory(new PropertyValueFactory<ExperimentItem, String>("duration"));
+        TableColumn<EnsaioItem, String> duracaoCol = new TableColumn<>("Duração");
+        duracaoCol.setMinWidth(80);
+        duracaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("duracao"));
         
-        TableColumn<ExperimentItem, String> heigthCol = new TableColumn<>("Altura");
-        heigthCol.setMinWidth(80);
-        heigthCol.setCellValueFactory(new PropertyValueFactory<ExperimentItem, String>("gridHeigth"));
+        TableColumn<EnsaioItem, String> alturaCol = new TableColumn<>("Altura");
+        alturaCol.setMinWidth(80);
+        alturaCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("gridAltura"));
 
-        TableColumn<ExperimentItem, String> widthCol = new TableColumn<>("Largura");
-        widthCol.setMinWidth(80);
-        widthCol.setCellValueFactory(new PropertyValueFactory<ExperimentItem, String>("gridWidth"));
+        TableColumn<EnsaioItem, String> larguraCol = new TableColumn<>("Largura");
+        larguraCol.setMinWidth(80);
+        larguraCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("gridLargura"));
         
-        TableColumn<ExperimentItem, String> dateCol = new TableColumn<>("Data");
-        dateCol.setMinWidth(80);
-        dateCol.setCellValueFactory(new PropertyValueFactory<ExperimentItem, String>("date"));
+        TableColumn<EnsaioItem, String> dataCol = new TableColumn<>("Data");
+        dataCol.setMinWidth(80);
+        dataCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("data"));
         
-                
+        TableColumn<EnsaioItem, String> velocidadeVentoCol = new TableColumn<>("Vel. Vento");
+        velocidadeVentoCol.setMinWidth(80);
+        velocidadeVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("velocidadeVento"));
+        
+        TableColumn<EnsaioItem, String> direcaoVentoCol = new TableColumn<>("Dir. Vento");
+        direcaoVentoCol.setMinWidth(80);
+        direcaoVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("direcaoVento"));
+        
 
-        experiments = FXCollections.observableArrayList();
-        setItems(experiments);
+        ensaios = FXCollections.observableArrayList();
+        setItems(ensaios);
         
-        getColumns().addAll(idCol, dateCol, pressureCol, nozzleCol, jetBreakCol, durationCol, heigthCol, widthCol);
+        getColumns().addAll(idCol, dataCol, pressaoCol, bocalCol, quebraJatoCol, duracaoCol, velocidadeVentoCol, direcaoVentoCol, alturaCol, larguraCol);
 
     }
 
-    public void reload(final List<Experiment> experiments) {
-        this.experiments.clear();
+    public void reload(final List<Ensaio> ensaios) {
+        this.ensaios.clear();
         Platform.runLater(new Runnable(){
             @Override
             public void run() {
-                for (Experiment e: experiments) {
-                    ExperimentItem item = new ExperimentItem(e);
-                    ExperimentTableView.this.experiments.add(item);
+                for (Ensaio e: ensaios) {
+                    EnsaioItem item = new EnsaioItem(e);
+                    EnsaioTableView.this.ensaios.add(item);
                 }
             }
             
         });
     }
 
-    public Experiment getSelectedItem() {
-        ExperimentItem item = getSelectionModel().getSelectedItem();
+    public Ensaio getSelectedItem() {
+        EnsaioItem item = getSelectionModel().getSelectedItem();
         if (item != null) {
-            return item.toExperiment();
+            return item.toEnsaio();
         }
         return null;
     }
@@ -85,29 +92,33 @@ public class ExperimentTableView extends TableView<ExperimentTableView.Experimen
     /**
      * Item da tabela, faz o binding da <code>Mercadoria</code> com <code>TableView</code>.
      */
-    public static class ExperimentItem {
+    public static class EnsaioItem {
 
         private final SimpleStringProperty id;
-        private final SimpleStringProperty pressure;
-        private final SimpleStringProperty nozzle;
-        private final SimpleStringProperty jetBreak;
-        private final SimpleStringProperty start;
-        private final SimpleStringProperty duration;
-        private final SimpleStringProperty gridHeight;
-        private final SimpleStringProperty gridWidth;
+        private final SimpleStringProperty pressao;
+        private final SimpleStringProperty bocal;
+        private final SimpleStringProperty quebraJato;
+        private final SimpleStringProperty inicio;
+        private final SimpleStringProperty duracao;
+        private final SimpleStringProperty velocidadeVento;
+        private final SimpleStringProperty direcaoVento;
+        private final SimpleStringProperty gridAltura;
+        private final SimpleStringProperty gridLargura;
         private final SimpleStringProperty version;
-        private final SimpleStringProperty date;
+        private final SimpleStringProperty data;
 
-        private ExperimentItem(Experiment e) {
+        private EnsaioItem(Ensaio e) {
             this.id = new SimpleStringProperty(e.getId() + "");
-            this.pressure = new SimpleStringProperty(e.getPressure());
-            this.nozzle = new SimpleStringProperty(e.getNozzle());
-            this.jetBreak = new SimpleStringProperty(e.getJetBreak());
-            this.start = new SimpleStringProperty(e.getStart());
-            this.duration = new SimpleStringProperty(e.getDuration());
-            this.gridHeight = new SimpleStringProperty(e.getGridHeight()+ "");
-            this.gridWidth = new SimpleStringProperty(e.getGridWidth()+ "");
-            this.date = new SimpleStringProperty(e.getDate()+"");
+            this.pressao = new SimpleStringProperty(e.getPressao());
+            this.bocal = new SimpleStringProperty(e.getBocal());
+            this.quebraJato = new SimpleStringProperty(e.getQuebraJato());
+            this.inicio = new SimpleStringProperty(e.getInicio());
+            this.duracao = new SimpleStringProperty(e.getDuracao());
+            this.velocidadeVento = new SimpleStringProperty(e.getVelocidadeVento()+"");
+            this.direcaoVento = new SimpleStringProperty(e.getDirecaoVento());
+            this.gridAltura = new SimpleStringProperty(e.getGridAltura()+ "");
+            this.gridLargura = new SimpleStringProperty(e.getGridLargura()+ "");
+            this.data = new SimpleStringProperty(e.getData()+"");
             this.version = new SimpleStringProperty(e.getVersion() + "");
         }
 
@@ -115,49 +126,60 @@ public class ExperimentTableView extends TableView<ExperimentTableView.Experimen
             return id.get();
         }
         
-        public String getPressure() {
-            return pressure.get();
+        public String getPressao() {
+            return pressao.get();
         }
 
-        public String getNozzle() {
-            return nozzle.get();
+        public String getBocal() {
+            return bocal.get();
         }
         
-        public String getJetBreak() {
-            return jetBreak.get();
+        public String getQuebraJato() {
+            return quebraJato.get();
         }
         
-        public String getStart() {
-            return start.get();
+        public String getInicio() {
+            return inicio.get();
         }
         
-        public String getDuration() {
-            return duration.get();
+        public String getDuracao() {
+            return duracao.get();
         }
 
-        public String getGridHeigth() {
-            return gridHeight.get();
+        public String getGridAltura() {
+            return gridAltura.get();
         }
         
-        public String getGridWidth() {
-            return gridWidth.get();
+        public String getGridLargura() {
+            return gridLargura.get();
         }
 
-        public String getDate() {
-            return date.get();
+        public String getData() {
+            return data.get();
         }
         
-        public Experiment toExperiment(){
-            Experiment e = new Experiment();
+        public String getVelocidadeVento() {
+            return velocidadeVento.get();
+        }
+        
+        public String getDirecaoVento() {
+            return direcaoVento.get();
+        }
+        
+        
+        public Ensaio toEnsaio(){
+            Ensaio e = new Ensaio();
             e.setId(Integer.parseInt(this.id.get()));
-            e.setPressure(this.pressure.get());
-            e.setDuration(this.duration.get());
-            e.setGridHeight(Integer.parseInt(this.gridHeight.get()));
-            e.setGridWidth(Integer.parseInt(this.gridWidth.get()));
-            e.setJetBreak(this.jetBreak.get());
-            e.setNozzle(this.nozzle.get());
-            e.setStart(this.start.get());
+            e.setPressao(this.pressao.get());
+            e.setDuracao(this.duracao.get());
+            e.setGridAltura(Integer.parseInt(this.gridAltura.get()));
+            e.setGridLargura(Integer.parseInt(this.gridLargura.get()));
+            e.setQuebraJato(this.quebraJato.get());
+            e.setBocal(this.bocal.get());
+            e.setInicio(this.inicio.get());
             e.setVersion(Integer.parseInt(this.version.get()));
+            e.setDirecaoVento(this.direcaoVento.get());
+            e.setVelocidadeVento(Float.parseFloat(this.getVelocidadeVento()));
             
             return e;
         }

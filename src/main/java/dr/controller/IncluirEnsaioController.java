@@ -4,40 +4,39 @@ import dr.action.AbstractAction;
 import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
 import dr.action.TransactionalAction;
-import dr.dao.ExperimentDAO;
-import dr.dao.ExperimentDAOJPA;
-import dr.event.experiment.AddExperimentEvent;
-import dr.event.experiment.RemoveExperimentEvent;
-import dr.model.Experiment;
-import dr.event.experiment.AddExperimentView;
+import dr.dao.EnsaioDAO;
+import dr.dao.EnsaioDAOJPA;
+import dr.event.ensaio.IncluirEnsaioEvent;
+import dr.event.ensaio.RemoveEnsaioEvent;
+import dr.model.Ensaio;
 import dr.ui.Dialog;
-import dr.validation.ExperimentValidator;
+import dr.ui.ensaio.IncluirEnsaioView;
+import dr.validation.EnsaioValidator;
 import dr.validation.Validator;
-import java.sql.Date;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 
 /**
- * Define a <code>Controller</code> responsável por gerir a tela de inclusão/edição de <code>Experiment</code>.
+ * Define a <code>Controller</code> responsável por gerir a tela de inclusão/edição de <code>Ensaio</code>.
  * 
  * @see controller.PersistenceController
  * 
  * @author @Andre
  */
-public class AddExperimentController extends PersistenceController {
+public class IncluirEnsaioController extends PersistenceController {
     
-    private AddExperimentView view;
-    private Validator<Experiment> validador = new ExperimentValidator();
+    private IncluirEnsaioView view;
+    private Validator<Ensaio> validador = new EnsaioValidator();
     
-    public AddExperimentController(AbstractController parent) {
+    public IncluirEnsaioController(AbstractController parent) {
         super(parent);
         
-        this.view = new AddExperimentView();
+        this.view = new IncluirEnsaioView();
         this.view.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent window) {
-                AddExperimentController.this.cleanUp();
+                IncluirEnsaioController.this.cleanUp();
             }
         });
         
@@ -58,7 +57,7 @@ public class AddExperimentController extends PersistenceController {
                     .addConditional(new BooleanExpression() {
                         @Override
                         public boolean conditional() {
-                            Experiment e = view.getExperiment();
+                            Ensaio e = view.getEnsaio();
                             String msg = validador.validate(e);
                             if (!"".equals(msg == null ? "" : msg)) {
                                 Dialog.showInfo("Validacão", msg, view);
@@ -70,14 +69,14 @@ public class AddExperimentController extends PersistenceController {
                     })
                     .addAction(
                         TransactionalAction.build()
-                            .persistenceCtxOwner(AddExperimentController.this)
+                            .persistenceCtxOwner(IncluirEnsaioController.this)
                             .addAction(new AbstractAction() {
-                                private Experiment e;
+                                private Ensaio e;
 
                                 @Override
                                 protected void action() {
-                                    e = view.getExperiment();
-                                    ExperimentDAO dao = new ExperimentDAOJPA(getPersistenceContext());
+                                    e = view.getEnsaio();
+                                    EnsaioDAO dao = new EnsaioDAOJPA(getPersistenceContext());
                                     e = dao.save(e);
                                 }
 
@@ -89,21 +88,21 @@ public class AddExperimentController extends PersistenceController {
                                             view.hide();
                                         }
                                     });
-                                    fireEvent(new AddExperimentEvent(e));
+                                    fireEvent(new IncluirEnsaioEvent(e));
                                 }
                             })));
         
         registerAction(view.getRemoveButton(), 
                 TransactionalAction.build()
-                    .persistenceCtxOwner(AddExperimentController.this)
+                    .persistenceCtxOwner(IncluirEnsaioController.this)
                     .addAction(new AbstractAction() {
-                        private Experiment e;
+                        private Ensaio e;
                         
                         @Override
                         protected void action() {
-                            Integer id = view.getExperimentId();
+                            Integer id = view.getEnsaioId();
                             if (id != null) {
-                                ExperimentDAO dao = new ExperimentDAOJPA(getPersistenceContext());
+                                EnsaioDAO dao = new EnsaioDAOJPA(getPersistenceContext());
                                 e = dao.findById(id);
                                 if (e != null) { 
                                     dao.remove(e);
@@ -114,7 +113,7 @@ public class AddExperimentController extends PersistenceController {
                         @Override
                         public void posAction() {
                             view.hide();
-                            fireEvent(new RemoveExperimentEvent(e));
+                            fireEvent(new RemoveEnsaioEvent(e));
                         }
                     }));
     }
@@ -124,8 +123,8 @@ public class AddExperimentController extends PersistenceController {
         view.show();
     }
     
-    public void show(Experiment e) {
-        view.setExperiment(e);
+    public void show(Ensaio e) {
+        view.setEnsaio(e);
         view.setTitle("Editar Ensaio");
         show();
     }

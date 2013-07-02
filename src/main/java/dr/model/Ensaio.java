@@ -16,39 +16,45 @@ import javax.validation.constraints.Size;
  * @author @Andre
  */
 @Entity
-@Table(name = "experiment")
-public class Experiment implements AbstractEntity {
+@Table(name = "ensaio")
+public class Ensaio implements AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     
-    @NotNull(message = "Pressão") @Size(min=1, max=200)
-    private String pressure;
+    @NotNull @Size(min=1, max=200)
+    private String pressao;
     
     @NotNull @Size(min=1, max=200)
-    private String nozzle;
+    private String bocal;
     
     @NotNull @Size(min=1, max=200)
-    @Column(name = "jet_break")
-    private String jetBreak;
+    @Column(name = "quebra_jato")
+    private String quebraJato;
     
     @NotNull @Size(min=1, max=200)
-    private String start;
+    private String inicio;
     
     @NotNull 
-    private String duration;
+    private String duracao;
     
     @NotNull
-    @Column(name = "grid_height")
-    private Integer gridHeight;
+    @Column(name = "grid_altura")
+    private Integer gridAltura;
     
     @NotNull
-    @Column(name = "grid_width")
-    private Integer gridWidth;
+    @Column(name = "grid_largura")
+    private Integer gridLargura;
     
     @NotNull
-    private Date date;
+    private Date data;
+    
+    @Column(name = "velocidade_vento")
+    private float velocidadeVento;
+    
+    @Column(name = "direcao_vento")
+    private String direcaoVento;
     
        
     /**
@@ -61,7 +67,7 @@ public class Experiment implements AbstractEntity {
     
     
     
-    public Experiment() {
+    public Ensaio() {
     }
 
    @Override
@@ -81,68 +87,83 @@ public class Experiment implements AbstractEntity {
         this.version =  version;
     }
 
-    public String getPressure() {
-        return pressure;
+    public String getPressao() {
+        return pressao;
     }
 
-    public void setPressure(String pressure) {
-        this.pressure = pressure;
+    public void setPressao(String pressao) {
+        this.pressao = pressao;
     }
 
-    public String getNozzle() {
-        return nozzle;
+    public String getBocal() {
+        return bocal;
     }
 
-    public void setNozzle(String nozzle) {
-        this.nozzle = nozzle;
+    public void setBocal(String bocal) {
+        this.bocal = bocal;
     }
 
-    public String getJetBreak() {
-        return jetBreak;
+    public String getQuebraJato() {
+        return quebraJato;
     }
 
-    public void setJetBreak(String jetBreak) {
-        this.jetBreak = jetBreak;
+    public void setQuebraJato(String quebraJato) {
+        this.quebraJato = quebraJato;
     }
 
-    public String getStart() {
-        return start;
+    public String getInicio() {
+        return inicio;
     }
 
-    public void setStart(String start) {
-        this.start = start;
+    public void setInicio(String inicio) {
+        this.inicio = inicio;
     }
 
-    public String getDuration() {
-        return duration;
+    public String getDuracao() {
+        return duracao;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public void setDuracao(String duracao) {
+        this.duracao = duracao;
     }
 
-    public Date getDate() {
-        return date;
+    public Integer getGridAltura() {
+        return gridAltura;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setGridAltura(Integer gridAltura) {
+        this.gridAltura = gridAltura;
     }
 
-    public Integer getGridHeight() {
-        return gridHeight;
+    public Integer getGridLargura() {
+        return gridLargura;
     }
 
-    public void setGridHeight(Integer gridHeight) {
-        this.gridHeight = gridHeight;
+    public void setGridLargura(Integer gridLargura) {
+        this.gridLargura = gridLargura;
     }
 
-    public Integer getGridWidth() {
-        return gridWidth;
+    public Date getData() {
+        return data;
     }
 
-    public void setGridWidth(Integer gridWidth) {
-        this.gridWidth = gridWidth;
+    public void setData(Date data) {
+        this.data = data;
     }
-         
+
+    public float getVelocidadeVento() {
+        return velocidadeVento;
+    }
+
+    public void setVelocidadeVento(float velocidadeVento) {
+        this.velocidadeVento = velocidadeVento;
+    }
+
+    public String getDirecaoVento() {
+        return direcaoVento;
+    }
+
+    public void setDirecaoVento(String direcaoVento) {
+        this.direcaoVento = direcaoVento;
+    }
 }

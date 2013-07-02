@@ -1,7 +1,7 @@
-package dr.event.experiment;
+package dr.event.ensaio;
 
 import dr.event.AbstractEvent;
-import dr.model.Experiment;
+import dr.model.Ensaio;
 
 
 
@@ -10,12 +10,12 @@ import dr.model.Experiment;
  * 
  * <p>Recebe a referência da <code>Mercadoria</code> que foi removida.</p>
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
-public class RemoveExperimentEvent extends AbstractEvent<Experiment> {
+public class RemoveEnsaioEvent extends AbstractEvent<Ensaio> {
     
-    public RemoveExperimentEvent(Experiment m) {
-        super(m);
+    public RemoveEnsaioEvent(Ensaio e) {
+        super(e);
     }
     
 }

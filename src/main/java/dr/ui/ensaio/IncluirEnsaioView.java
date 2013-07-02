@@ -1,6 +1,6 @@
-package dr.event.experiment;
+package dr.ui.ensaio;
 
-import dr.model.Experiment;
+import dr.model.Ensaio;
 import dr.ui.GridFormBuilder;
 import java.sql.Date;
 import javafx.scene.Group;
@@ -15,26 +15,28 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * add/edit Experiment bean
+ * add/edit Ensaio bean
  * 
  * @author @Andre
  */
-public class AddExperimentView extends Stage {
+public class IncluirEnsaioView extends Stage {
 
     private TextField tfId;
-    private TextField tfPressure;
-    private TextField tfNozzle;
-    private TextField tfJetBreak;
-    private TextField tfStart;
-    private TextField tfDuration;
-    private TextField tfGridHeigth;
-    private TextField tfGridWidth;
+    private TextField tfPressao;
+    private TextField tfBocal;
+    private TextField tfQuebraJato;
+    private TextField tfInicio;
+    private TextField tfDuracao;
+    private TextField tfVelocidadeVento;
+    private TextField tfDirecaoVento;
+    private TextField tfGridAltura;
+    private TextField tfGridLargura;
     private TextField tfVersion;
     private Button bSave;
     private Button bCancel;
     private Button bRemove;
 
-    public AddExperimentView() {
+    public IncluirEnsaioView() {
         setTitle("Incluir Ensaio");
         setWidth(400);
         setHeight(280);
@@ -56,15 +58,15 @@ public class AddExperimentView extends Stage {
 
     private HBox buildButtons() {
         bSave = new Button("Salvar");
-        bSave.setId("saveExperiment");
+        bSave.setId("saveEnsaio");
         bSave.setDefaultButton(true);
 
         bCancel = new Button("Cancelar");
-        bCancel.setId("cancelExperiment");
+        bCancel.setId("cancelEnsaio");
         bCancel.setCancelButton(true);
         
         bRemove = new Button("Excluir");
-        bRemove.setId("removeExperiment");
+        bRemove.setId("removeEnsaio");
         bRemove.getStyleClass().add("buttonDanger");
 
         HBox box = new HBox();
@@ -82,45 +84,53 @@ public class AddExperimentView extends Stage {
         tfId.setMinWidth(90);
         tfId.setMaxWidth(90);
 
-        tfPressure = new TextField();
-        tfPressure.setPromptText("*Campo obrigatório");
-        tfPressure.setMinWidth(180);
-        tfPressure.setMaxWidth(180);
+        tfPressao = new TextField();
+        tfPressao.setPromptText("*Campo obrigatório");
+        tfPressao.setMinWidth(180);
+        tfPressao.setMaxWidth(180);
 
-        tfNozzle = new TextField();
-        tfNozzle.setPromptText("*Campo obrigatório");
-        tfNozzle.setMinWidth(180);
-        tfNozzle.setMaxWidth(180);
+        tfBocal = new TextField();
+        tfBocal.setPromptText("*Campo obrigatório");
+        tfBocal.setMinWidth(180);
+        tfBocal.setMaxWidth(180);
 
-        tfJetBreak = new TextField();
-        tfJetBreak.setPromptText("*Campo obrigatório");
-        tfJetBreak.setMinWidth(180);
-        tfJetBreak.setMaxWidth(180);
+        tfQuebraJato = new TextField();
+        tfQuebraJato.setPromptText("*Campo obrigatório");
+        tfQuebraJato.setMinWidth(180);
+        tfQuebraJato.setMaxWidth(180);
 
-        tfStart = new TextField();
-        tfStart.setPromptText("*Campo obrigatório");
-        tfStart.setMinWidth(180);
-        tfStart.setMaxWidth(180);
+        tfInicio = new TextField();
+        tfInicio.setPromptText("*Campo obrigatório");
+        tfInicio.setMinWidth(180);
+        tfInicio.setMaxWidth(180);
         
-        tfDuration = new TextField();
-        tfDuration.setPromptText("*Campo obrigatório");
-        tfDuration.setMinWidth(180);
-        tfDuration.setMaxWidth(180);
+        tfDuracao = new TextField();
+        tfDuracao.setPromptText("*Campo obrigatório");
+        tfDuracao.setMinWidth(180);
+        tfDuracao.setMaxWidth(180);
         
-        tfStart = new TextField();
-        tfStart.setPromptText("*Campo obrigatório");
-        tfStart.setMinWidth(180);
-        tfStart.setMaxWidth(180);
+        tfVelocidadeVento = new TextField();
+        tfVelocidadeVento.setMinWidth(180);
+        tfVelocidadeVento.setMaxWidth(180);
         
-        tfGridHeigth = new TextField();
-        tfGridHeigth.setPromptText("*");
-        tfGridHeigth.setMinWidth(40);
-        tfGridHeigth.setMaxWidth(40);
+        tfDirecaoVento = new TextField();
+        tfDirecaoVento.setMinWidth(180);
+        tfDirecaoVento.setMaxWidth(180);
         
-        tfGridWidth = new TextField();
-        tfGridWidth.setPromptText("*");
-        tfGridWidth.setMinWidth(40);
-        tfGridWidth.setMaxWidth(40);
+        tfInicio = new TextField();
+        tfInicio.setPromptText("*Campo obrigatório");
+        tfInicio.setMinWidth(180);
+        tfInicio.setMaxWidth(180);
+        
+        tfGridAltura = new TextField();
+        tfGridAltura.setPromptText("*");
+        tfGridAltura.setMinWidth(40);
+        tfGridAltura.setMaxWidth(40);
+        
+        tfGridLargura = new TextField();
+        tfGridLargura.setPromptText("*");
+        tfGridLargura.setMinWidth(40);
+        tfGridLargura.setMaxWidth(40);
         
         
 
@@ -129,65 +139,78 @@ public class AddExperimentView extends Stage {
         
         GridFormBuilder grid = new GridFormBuilder();
         grid.addRow(new Label("Id: "), tfId)
-                .addRow(new Label("Pressão: "), tfPressure)
-                .addRow(new Label("Bocal: "), tfNozzle)
-                .addRow(new Label("Quebra Jato: "), tfJetBreak)
-                .addRow(new Label("Inicio: "), tfStart)
-                .addRow(new Label("Duração:"), tfDuration)
-                .addRow(new Label("Dimensão altura x largura:"), tfGridHeigth, new Label("x"),tfGridWidth);
+                .addRow(new Label("Pressão: "), tfPressao)
+                .addRow(new Label("Bocal: "), tfBocal)
+                .addRow(new Label("Quebra Jato: "), tfQuebraJato)
+                .addRow(new Label("Inicio: "), tfInicio)
+                .addRow(new Label("Duração:"), tfDuracao)
+                .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
+                .addRow(new Label("Direção Vento:"), tfDirecaoVento)
+                .addRow(new Label("Dimensão altura x largura:"), tfGridAltura, new Label("x"),tfGridLargura);
         
         return grid.build();
     }
 
     public final void resetForm() {
         tfId.setText("");
-        tfPressure.setText("");
-        tfNozzle.setText("");
-        tfJetBreak.setText("");
-        tfStart.setText("");
-        tfDuration.setText("");
-        tfGridHeigth.setText("");
-        tfGridWidth.setText("");
+        tfPressao.setText("");
+        tfBocal.setText("");
+        tfQuebraJato.setText("");
+        tfInicio.setText("");
+        tfDuracao.setText("");
+        tfVelocidadeVento.setText("");
+        tfDirecaoVento.setText("");
+        tfGridAltura.setText("");
+        tfGridLargura.setText("");
         tfVersion.setText("");
         bRemove.setVisible(false);
     }
 
-    private void populaTextFields(Experiment e) {
+    private void populaTextFields(Ensaio e) {
         tfId.setText(e.getId().toString());
-        tfPressure.setText(e.getPressure());
-        tfNozzle.setText(e.getNozzle());
-        tfJetBreak.setText(e.getJetBreak());
-        tfStart.setText(e.getStart());
-        tfDuration.setText(e.getDuration());
-        tfGridHeigth.setText(e.getGridHeight().toString());
-        tfGridWidth.setText(e.getGridWidth().toString());
+        tfPressao.setText(e.getPressao());
+        tfBocal.setText(e.getBocal());
+        tfQuebraJato.setText(e.getQuebraJato());
+        tfInicio.setText(e.getInicio());
+        tfDuracao.setText(e.getDuracao());
+        tfVelocidadeVento.setText(e.getVelocidadeVento()+"");
+        tfDirecaoVento.setText(e.getDirecaoVento());
+        tfGridAltura.setText(e.getGridAltura().toString());
+        tfGridLargura.setText(e.getGridLargura().toString());
         tfVersion.setText(e.getVersion() == null ? "0" : e.getVersion().toString());
     }
 
 
-    private Experiment loadExperimentFromPanel() {
-        Experiment e = new Experiment();
-        if (!tfPressure.getText().trim().isEmpty())
-            e.setPressure(tfPressure.getText().trim());
+    private Ensaio loadEnsaioFromPanel() {
+        Ensaio e = new Ensaio();
+        if (!tfPressao.getText().trim().isEmpty())
+            e.setPressao(tfPressao.getText().trim());
         
-        if (!tfNozzle.getText().trim().isEmpty())
-            e.setNozzle(tfNozzle.getText().trim());
+        if (!tfBocal.getText().trim().isEmpty())
+            e.setBocal(tfBocal.getText().trim());
         
-        if (!tfJetBreak.getText().trim().isEmpty())
-            e.setJetBreak(tfJetBreak.getText().trim());
+        if (!tfQuebraJato.getText().trim().isEmpty())
+            e.setQuebraJato(tfQuebraJato.getText().trim());
         
-        if (!tfStart.getText().trim().isEmpty())
-            e.setStart(tfStart.getText().trim());
+        if (!tfInicio.getText().trim().isEmpty())
+            e.setInicio(tfInicio.getText().trim());
         
-        if (!tfDuration.getText().trim().isEmpty())
-            e.setDuration(tfDuration.getText().trim());
+        if (!tfDuracao.getText().trim().isEmpty())
+            e.setDuracao(tfDuracao.getText().trim());
+        
+        //TODO ajustar o parse de float
+        if (!tfVelocidadeVento.getText().trim().isEmpty())
+            e.setVelocidadeVento(Float.parseFloat(tfVelocidadeVento.getText().trim()));
+        
+        if (!tfDirecaoVento.getText().trim().isEmpty())
+            e.setDirecaoVento(tfDirecaoVento.getText().trim());
         
         try {
-            if (!tfGridHeigth.getText().trim().isEmpty())
-                e.setGridHeight(Integer.valueOf(tfGridHeigth.getText()));
+            if (!tfGridAltura.getText().trim().isEmpty())
+                e.setGridAltura(Integer.valueOf(tfGridAltura.getText()));
 
-            if (!tfGridWidth.getText().trim().isEmpty())
-                e.setGridWidth(Integer.valueOf(tfGridWidth.getText()));
+            if (!tfGridLargura.getText().trim().isEmpty())
+                e.setGridLargura(Integer.valueOf(tfGridLargura.getText()));
             
         } catch (NumberFormatException nex) {
             throw new RuntimeException("Erro durante a conversão do campo alturaxlargura (Integer).\nConteudo inválido!");
@@ -198,12 +221,12 @@ public class AddExperimentView extends Stage {
         
         java.util.Calendar cal = java.util.Calendar.getInstance();
         java.util.Date utilDate = cal.getTime();
-        e.setDate(new Date(utilDate.getTime()));
+        e.setData(new Date(utilDate.getTime()));
 
         return e;
     }
 
-    public void setExperiment(Experiment e) {
+    public void setEnsaio(Ensaio e) {
         resetForm();
         if (e != null) {
             populaTextFields(e);
@@ -211,7 +234,7 @@ public class AddExperimentView extends Stage {
         }
     }
     
-    public Integer getExperimentId() {
+    public Integer getEnsaioId() {
         try {
             return Integer.parseInt(tfId.getText());
         } catch (Exception nex) {
@@ -219,8 +242,8 @@ public class AddExperimentView extends Stage {
         }
     }
 
-    public Experiment getExperiment() {
-        return loadExperimentFromPanel();
+    public Ensaio getEnsaio() {
+        return loadEnsaioFromPanel();
     }
 
     public Button getSaveButton() {

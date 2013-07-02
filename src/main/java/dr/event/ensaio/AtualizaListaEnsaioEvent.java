@@ -1,4 +1,4 @@
-package dr.event.experiment;
+package dr.event.ensaio;
 
 import dr.event.*;
 
@@ -7,9 +7,9 @@ import dr.event.*;
  * 
  * @author @Andre
  */
-public class UpdateListExperimentEvent extends AbstractEvent<Object> {
+public class AtualizaListaEnsaioEvent extends AbstractEvent<Object> {
     
-    public UpdateListExperimentEvent() {
+    public AtualizaListaEnsaioEvent() {
         super(null);
     }
     

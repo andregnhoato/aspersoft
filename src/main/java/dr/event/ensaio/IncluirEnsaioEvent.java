@@ -1,19 +1,19 @@
-package dr.event.experiment;
+package dr.event.ensaio;
 
 import dr.event.AbstractEvent;
-import dr.model.Experiment;
+import dr.model.Ensaio;
 
 /**
- * Evento deve ser gerado durante a inclusão de uma <code>Experiment</code>.
+ * Evento deve ser gerado durante a inclusão de uma <code>Ensaio</code>.
  * 
  * <p>Recebe a referência da <code>Mercadoria</code> que foi incluida.</p>
  * 
- * @author YaW Tecnologia
+ * @author @andre
  */
-public class AddExperimentEvent extends AbstractEvent<Experiment> {
+public class IncluirEnsaioEvent extends AbstractEvent<Ensaio> {
 	
-    public AddExperimentEvent(Experiment m) {
-        super(m);
+    public IncluirEnsaioEvent(Ensaio e) {
+        super(e);
     }
     
 }

@@ -1,6 +1,6 @@
-package dr.ui.experiment;
+package dr.ui.ensaio;
 
-import dr.model.Experiment;
+import dr.model.Ensaio;
 import dr.model.Mercadoria;
 import java.util.List;
 import javafx.event.EventHandler;
@@ -9,31 +9,31 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 /**
- * Reune os componentes para formar uma tabela de <code>Experiment</code>.
+ * Reune os componentes para formar uma tabela de <code>Ensaio</code>.
  * 
- * @see ui.ExperimentTableView
+ * @see ui.EnsaioTableView
  * 
  * @author @Andre
  */
-public class ExperimentTable extends VBox {
+public class EnsaioTable extends VBox {
     
-    private ExperimentTableView table;
+    private EnsaioTableView table;
     
-    public ExperimentTable(){
-        table = new ExperimentTableView();
+    public EnsaioTable(){
+        table = new EnsaioTableView();
         this.getChildren().addAll(table);
         this.setPadding(new Insets(30, 0, 0, 10));//css
     }
     
-    public void reload(List<Experiment> experiments) {
-        table.reload(experiments);
+    public void reload(List<Ensaio> ensaios) {
+        table.reload(ensaios);
     }
 
     public void setMouseEvent(EventHandler<MouseEvent> event) {
         table.setOnMouseClicked(event);
     }
     
-    public Experiment getExperimentSelected() {
+    public Ensaio getEnsaioSelected() {
         return table.getSelectedItem();
     }
 }

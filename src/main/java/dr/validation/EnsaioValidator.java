@@ -1,6 +1,6 @@
 package dr.validation;
 
-import dr.model.Experiment;
+import dr.model.Ensaio;
 import static javax.validation.Validation.buildDefaultValidatorFactory;
 
 
@@ -16,7 +16,7 @@ import javax.validation.ValidatorFactory;
  *
  * @author YaW Tecnologia
  */
-public class ExperimentValidator implements Validator<Experiment> {
+public class EnsaioValidator implements Validator<Ensaio> {
 
     private static ValidatorFactory factory;
 
@@ -25,15 +25,15 @@ public class ExperimentValidator implements Validator<Experiment> {
     }
 
     @Override
-    public String validate(Experiment e) {
+    public String validate(Ensaio e) {
         StringBuilder sb = new StringBuilder();
         if (e != null) {
             javax.validation.Validator validator = factory.getValidator();
-            Set<ConstraintViolation<Experiment>> constraintViolations = validator.validate(e);
+            Set<ConstraintViolation<Ensaio>> constraintViolations = validator.validate(e);
 
             if (!constraintViolations.isEmpty()) {
-                sb.append("Validação da entidade Experiment\n");
-                for (ConstraintViolation<Experiment> constraint : constraintViolations) {
+                sb.append("Validação da entidade Ensaio\n");
+                for (ConstraintViolation<Ensaio> constraint : constraintViolations) {
                     sb.append(String.format("%n%s: %s", constraint.getPropertyPath(), constraint.getMessage()));
                 }
             }

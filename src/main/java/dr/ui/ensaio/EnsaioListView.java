@@ -1,11 +1,10 @@
-package dr.ui.experiment;
+package dr.ui.ensaio;
 
-import dr.model.Experiment;
+import dr.model.Ensaio;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuBar;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,15 +16,15 @@ import javafx.stage.Stage;
  * 
  * @author YaW Tecnologia
  */
-public class ExperimentListView extends Stage{
+public class EnsaioListView extends Stage{
 
     private Scene subScene;
-    private ExperimentTable table;
-    private Button bNewExperiment;
+    private EnsaioTable table;
+    private Button bNewEnsaio;
     private Button bRefreshList;
-    private Button bFindExperiment;
+    private Button bFindEnsaio;
     
-    public ExperimentListView() {
+    public EnsaioListView() {
         setTitle("Ensaios");
         setWidth(600);
         setHeight(400);
@@ -52,14 +51,14 @@ public class ExperimentListView extends Stage{
     }
     
     private void inicializaComponentes() {
-        table = new ExperimentTable();
+        table = new EnsaioTable();
         
-        bNewExperiment = new Button("Novo");
-        bNewExperiment.getStyleClass().add("buttonGreen");
-        bNewExperiment.setId("addExperiment");
-        bFindExperiment = new Button("Buscar");
-        bFindExperiment.getStyleClass().add("buttonLarge");
-        bFindExperiment.setId("findExperiment");
+        bNewEnsaio = new Button("Novo");
+        bNewEnsaio.getStyleClass().add("buttonGreen");
+        bNewEnsaio.setId("addEnsaio");
+        bFindEnsaio = new Button("Buscar");
+        bFindEnsaio.getStyleClass().add("buttonLarge");
+        bFindEnsaio.setId("findEnsaio");
         bRefreshList = new Button("Atualizar");
         bRefreshList.getStyleClass().add("buttonWhite");
         bRefreshList.setId("refreshList");
@@ -83,13 +82,13 @@ public class ExperimentListView extends Stage{
     
     private HBox getButtonsBox() {
         HBox box = new HBox();
-        box.getChildren().addAll(bNewExperiment, bFindExperiment, bRefreshList);
+        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList);
         box.getStyleClass().add("buttonBarMain");
         return box;
     }
     
     public Button getNewButton() {
-        return bNewExperiment;
+        return bNewEnsaio;
     }
 
     public Button getRefreshButton() {
@@ -97,20 +96,20 @@ public class ExperimentListView extends Stage{
     }
 
     public Button getFindButton() {
-        return bFindExperiment;
+        return bFindEnsaio;
     }
 
-    public ExperimentTable getTable() {
+    public EnsaioTable getTable() {
         return table;
     }
 
-    public void refreshTable(List<Experiment> experiments) {
-        table.reload(experiments);        
+    public void refreshTable(List<Ensaio> ensaios) {
+        table.reload(ensaios);        
     }
 
     private void disableButtonBar(boolean disable) {
-        bNewExperiment.setDisable(disable);
-        bFindExperiment.setDisable(disable);
+        bNewEnsaio.setDisable(disable);
+        bFindEnsaio.setDisable(disable);
         bRefreshList.setDisable(disable);
     }
 }

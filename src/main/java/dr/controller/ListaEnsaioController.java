@@ -1,14 +1,14 @@
 package dr.controller;
 
 import dr.action.AbstractAction;
-import dr.dao.ExperimentDAO;
-import dr.dao.ExperimentDAOJPA;
+import dr.dao.EnsaioDAO;
+import dr.dao.EnsaioDAOJPA;
 import dr.event.AbstractEventListener;
-import dr.event.experiment.AddExperimentEvent;
-import dr.event.experiment.RemoveExperimentEvent;
-import dr.event.experiment.UpdateListExperimentEvent;
-import dr.model.Experiment;
-import dr.ui.experiment.ExperimentListView;
+import dr.event.ensaio.IncluirEnsaioEvent;
+import dr.event.ensaio.RemoveEnsaioEvent;
+import dr.event.ensaio.AtualizaListaEnsaioEvent;
+import dr.model.Ensaio;
+import dr.ui.ensaio.EnsaioListView;
 import dr.util.JPAUtil;
 import java.util.List;
 import javafx.application.Platform;
@@ -22,30 +22,30 @@ import javafx.scene.input.MouseEvent;
  * 
  * @author @andre
  */
-public class ExperimentListController extends PersistenceController {
+public class ListaEnsaioController extends PersistenceController {
 
-    private ExperimentListView view;
-    private AddExperimentController addExperimentController;
+    private EnsaioListView view;
+    private IncluirEnsaioController addEnsaioController;
     //private BuscarMercadoriaController buscarController;
 
-    public ExperimentListController(AbstractController parent) {
+    public ListaEnsaioController(AbstractController parent) {
         super(parent);
         loadPersistenceContext();
-        this.view = new ExperimentListView();
-        this.addExperimentController = new AddExperimentController(this);
+        this.view = new EnsaioListView();
+        this.addEnsaioController = new IncluirEnsaioController(this);
         //this.buscarController = new BuscarMercadoriaController(this);
         
         registerAction(view.getNewButton(), new AbstractAction() {
             @Override
             protected void action() {
-                ExperimentListController.this.addExperimentController.show();
+                ListaEnsaioController.this.addEnsaioController.show();
             }
         });
         
         /*registerAction(view.getFindButton(), new AbstractAction() {
             @Override
             protected void action() {
-                ExperimentListController.this.buscarController.show();
+                ListaEnsaioController.this.buscarController.show();
             }
         });*/
         
@@ -60,31 +60,31 @@ public class ExperimentListController extends PersistenceController {
             @Override
             public void handle(MouseEvent t) {
                 if (t.getClickCount() == 2) {
-                    Experiment e = view.getTable().getExperimentSelected();
+                    Ensaio e = view.getTable().getEnsaioSelected();
                     if (e != null) {
-                        ExperimentListController.this.addExperimentController.show(e);
+                        ListaEnsaioController.this.addEnsaioController.show(e);
                     }
                 }
             }
         });
         
-        registerEventListener(AddExperimentEvent.class, new AbstractEventListener<AddExperimentEvent>() {
+        registerEventListener(IncluirEnsaioEvent.class, new AbstractEventListener<IncluirEnsaioEvent>() {
             @Override
-            public void handleEvent(AddExperimentEvent event) {
+            public void handleEvent(IncluirEnsaioEvent event) {
                 refreshTable();
             }
         });
         
-        registerEventListener(RemoveExperimentEvent.class, new AbstractEventListener<RemoveExperimentEvent>() {
+        registerEventListener(RemoveEnsaioEvent.class, new AbstractEventListener<RemoveEnsaioEvent>() {
             @Override
-            public void handleEvent(RemoveExperimentEvent event) {
+            public void handleEvent(RemoveEnsaioEvent event) {
                 refreshTable();
             }
         });
         
-        registerEventListener(UpdateListExperimentEvent.class, new AbstractEventListener<UpdateListExperimentEvent>() {
+        registerEventListener(AtualizaListaEnsaioEvent.class, new AbstractEventListener<AtualizaListaEnsaioEvent>() {
             @Override
-            public void handleEvent(UpdateListExperimentEvent event) {
+            public void handleEvent(AtualizaListaEnsaioEvent event) {
                 refreshTable();
             }
         });
@@ -117,7 +117,7 @@ public class ExperimentListController extends PersistenceController {
         refreshTable(null);
     }
     
-    private void refreshTable(List<Experiment> list) {
+    private void refreshTable(List<Ensaio> list) {
         //view.addTransition();
         if (list != null) {
             view.refreshTable(list);
@@ -128,7 +128,7 @@ public class ExperimentListController extends PersistenceController {
 
             @Override
             public void run() {
-                ExperimentDAO dao = new ExperimentDAOJPA(getPersistenceContext());
+                EnsaioDAO dao = new EnsaioDAOJPA(getPersistenceContext());
                 view.refreshTable(dao.getAll());
             }
         });

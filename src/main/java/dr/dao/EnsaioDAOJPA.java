@@ -1,11 +1,8 @@
 package dr.dao;
 
-import dr.model.Experiment;
-import dr.model.Mercadoria;
-import java.util.List;
+import dr.model.Ensaio;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 /**
  * Implementa o contrato de persistência da entidade <code>Mercadoria</code>. 
@@ -16,12 +13,12 @@ import javax.persistence.Query;
  * 
  * @author YaW Tecnologia
  */
-public class ExperimentDAOJPA extends AbstractDAO<Experiment, Integer> implements ExperimentDAO {
+public class EnsaioDAOJPA extends AbstractDAO<Ensaio, Integer> implements EnsaioDAO {
 
     /**
      * @param em Recebe a referência para o <code>EntityManager</code>.
      */
-    public ExperimentDAOJPA(EntityManager em) {
+    public EnsaioDAOJPA(EntityManager em) {
         super(em);
     }
 

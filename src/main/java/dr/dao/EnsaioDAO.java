@@ -1,6 +1,6 @@
 package dr.dao;
 
-import dr.model.Experiment;
+import dr.model.Ensaio;
 import java.util.List;
 
 /**
@@ -9,37 +9,37 @@ import java.util.List;
  * 
  * @author @Andre
  */
-public interface ExperimentDAO {
+public interface EnsaioDAO {
 
     /**
      * Faz a inserção ou atualização
      *
-     * @param experiment
+     * @param ensaio
      * @return referência atualizada do objeto.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    Experiment save(Experiment experiment);
+    Ensaio save(Ensaio ensaio);
 
     /**
      * Exclui o registro da mercadoria na base de dados
      *
-     * @param experiment
+     * @param ensaio
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    void remove(Experiment experiment);
+    void remove(Ensaio ensaio);
 
     /**
      * @return Lista com todas as mercadorias cadastradas no banco de dados.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    List<Experiment> getAll();
+    List<Ensaio> getAll();
 
     /**
      * @param nome Filtro da pesquisa de mercadorias.
      * @return Lista de mercadorias com filtro em nome.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    //List<Experiment> getMercadoriasByNome(String nome);
+    //List<Ensaio> getMercadoriasByNome(String nome);
 
     /**
      * @param id filtro da pesquisa.
@@ -47,5 +47,5 @@ public interface ExperimentDAO {
      * retorna <code>null</code>.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    Experiment findById(Integer id);
+    Ensaio findById(Integer id);
 }
