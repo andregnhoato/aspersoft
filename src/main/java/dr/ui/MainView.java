@@ -1,6 +1,6 @@
 package dr.ui;
 
-import dr.ui.experiment.ExperimentListView;
+import dr.ui.ensaio.EnsaioListView;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -17,8 +17,8 @@ public class MainView {
 
     private Scene mainScene;
     private MenuItem menuAbout;
-    private MenuItem menuExperiment;
-    private MenuItem menuExperimentList;
+    private MenuItem menuEnsaio;
+    private MenuItem menuEnsaioList;
     
     public MainView(Stage stage) {
         //inicializaComponentes();
@@ -28,7 +28,7 @@ public class MainView {
         
         MenuBar menuBar = getMenuBar();
         menuBar.prefWidthProperty().bind(stage.widthProperty());
-        //HBox boxButtons = experimentListView.getButtonsBox();
+        //HBox boxButtons = ensaioListView.getButtonsBox();
         
         panel.getChildren().addAll(menuBar);
         
@@ -50,20 +50,20 @@ public class MainView {
         Menu menuHelp = new Menu("Ajuda");
         Menu menuStart = new Menu("Inicio");
         
-        menuExperiment = new MenuItem("Ensaio");
-        menuExperiment.setId("experiment");
-        menuExperiment.setAccelerator(KeyCombination.keyCombination("F2"));
+        menuEnsaio = new MenuItem("Ensaio");
+        menuEnsaio.setId("ensaio");
+        menuEnsaio.setAccelerator(KeyCombination.keyCombination("F2"));
         
-        menuExperimentList = new MenuItem("Listagem Ensaio");
-        menuExperimentList.setId("experimentList");
-        menuExperimentList.setAccelerator(KeyCombination.keyCombination("F3"));
+        menuEnsaioList = new MenuItem("Listagem Ensaio");
+        menuEnsaioList.setId("ensaioList");
+        menuEnsaioList.setAccelerator(KeyCombination.keyCombination("F3"));
         
         menuAbout = new MenuItem("Sobre");
         menuAbout.setId("exibirSobre");
         menuAbout.setAccelerator(KeyCombination.keyCombination("F1"));
         
         menuHelp.getItems().addAll(menuAbout);
-        menuStart.getItems().addAll(menuExperiment, menuExperimentList);
+        menuStart.getItems().addAll(menuEnsaio, menuEnsaioList);
         menuBar.getMenus().addAll(menuStart, menuHelp);
         return menuBar;
     }
@@ -76,19 +76,19 @@ public class MainView {
         this.menuAbout = menuAbout;
     }
 
-    public MenuItem getMenuExperiment() {
-        return menuExperiment;
+    public MenuItem getMenuEnsaio() {
+        return menuEnsaio;
     }
 
-    public void setMenuExperiment(MenuItem menuExperiment) {
-        this.menuExperiment = menuExperiment;
+    public void setMenuEnsaio(MenuItem menuEnsaio) {
+        this.menuEnsaio = menuEnsaio;
     }
 
-    public MenuItem getMenuExperimentList() {
-        return menuExperimentList;
+    public MenuItem getMenuEnsaioList() {
+        return menuEnsaioList;
     }
 
-    public void setMenuExperimentList(MenuItem menuExperimentList) {
-        this.menuExperimentList = menuExperimentList;
+    public void setMenuEnsaioList(MenuItem menuEnsaioList) {
+        this.menuEnsaioList = menuEnsaioList;
     }
 }

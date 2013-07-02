@@ -7,7 +7,7 @@ import dr.util.JPAUtil;
 import javafx.stage.Stage;
 
 /**
- * Define a <code>Controller</code> principal do sistema, responsável por gerir a tela com a lista de <code>Experiment</code>.
+ * Define a <code>Controller</code> principal do sistema, responsável por gerir a tela com a lista de <code>Ensaio</code>.
  * 
  * @see controller.PersistenceController
  * 
@@ -16,32 +16,32 @@ import javafx.stage.Stage;
 public class MainController extends PersistenceController {
 
     //private ListaMercadoriasView view;
-    private AddExperimentController addExperimentController;
-    private ExperimentListController experimentListController;
+    private IncluirEnsaioController addEnsaioController;
+    private ListaEnsaioController ensaioListController;
     //private BuscarMercadoriaController buscarController;
     private MainView mainView;
 
     public MainController(final Stage mainStage) {
         loadPersistenceContext();
         this.mainView = new MainView(mainStage);
-        this.addExperimentController = new AddExperimentController(this);
-        this.experimentListController = new ExperimentListController(this);
+        this.addEnsaioController = new IncluirEnsaioController(this);
+        this.ensaioListController = new ListaEnsaioController(this);
         //this.incluirController = new IncluirMercadoriaController(this);
         //this.buscarController = new BuscarMercadoriaController(this);
         
         final SobreView sobreView = new SobreView();
         
-        registerAction(mainView.getMenuExperiment(), new AbstractAction() {
+        registerAction(mainView.getMenuEnsaio(), new AbstractAction() {
             @Override
             protected void action() {
-                MainController.this.addExperimentController.show();
+                MainController.this.addEnsaioController.show();
             }
         });
         
-        registerAction(mainView.getMenuExperimentList(), new AbstractAction() {
+        registerAction(mainView.getMenuEnsaioList(), new AbstractAction() {
             @Override
             protected void action() {
-                MainController.this.experimentListController.show();
+                MainController.this.ensaioListController.show();
             }
         });
         /*
