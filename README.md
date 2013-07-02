@@ -18,3 +18,5 @@ Pré-requisitos
 -------
 * JDK - versão 1.7 do Java, ou mais recente;
 * NetBeans - NetBeans IDE mais recente;
+
+Dúvidas com git http://gitimmersion.com/lab_01.html
