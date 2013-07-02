@@ -19,6 +19,8 @@ Pré-requisitos
 * JDK - versão 1.7 do Java, ou mais recente;
 * NetBeans - NetBeans IDE mais recente;
 
+Detalhes do repositório
+-------
 [Dúvidas com git neste link](http://gitimmersion.com/lab_01.html) 
 
 Este repositório seguirá as seguintes regras para commit's:
