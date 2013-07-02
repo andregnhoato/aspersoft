@@ -18,3 +18,16 @@ Pré-requisitos
 -------
 * JDK - versão 1.7 do Java, ou mais recente;
 * NetBeans - NetBeans IDE mais recente;
+
+Detalhes do repositório
+-------
+[Dúvidas com git neste link](http://gitimmersion.com/lab_01.html) 
+
+Este repositório seguirá as seguintes regras para commit's:
+
+Branch: master terá somente versões estáveis. (ainda não possui, será TAG 1.0)
+Branch: develop está branch será a utilizada para desenvolvimento, após ter uma feature pronta é realizado o merge(pull request) com a branch principal 'master'
+Demais branch's devem ser criadas para algum bug fix e novos desenvolvimentos
+
+Sugiro seguir essa metodologia, irá nos garantir um total controle sob o repositório, versões etc.
+[Modelo de utilização do repositório](http://nvie.com/posts/a-successful-git-branching-model/)
