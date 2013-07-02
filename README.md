@@ -20,3 +20,12 @@ Pré-requisitos
 * NetBeans - NetBeans IDE mais recente;
 
 Dúvidas com git http://gitimmersion.com/lab_01.html
+
+Este repositório seguirá as seguintes regras para commit's:
+
+Branch: master terá somente versões estáveis. (ainda não possui, será TAG 1.0)
+Branch: develop está branch será a utilizada para desenvolvimento, após ter uma feature pronta é realizado o merge(pull request) com a branch principal 'master'
+Demais branch's devem ser criadas para algum bug fix e novos desenvolvimentos
+
+Sugiro seguir essa metodologia, irá nos garantir um total controle sob o repositório, versões etc.
+http://nvie.com/posts/a-successful-git-branching-model/
