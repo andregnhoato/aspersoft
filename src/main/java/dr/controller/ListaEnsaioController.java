@@ -4,10 +4,13 @@ import dr.action.AbstractAction;
 import dr.dao.EnsaioDAO;
 import dr.dao.EnsaioDAOJPA;
 import dr.event.AbstractEventListener;
+import dr.event.BuscarMercadoriaEvent;
 import dr.event.ensaio.IncluirEnsaioEvent;
 import dr.event.ensaio.RemoveEnsaioEvent;
 import dr.event.ensaio.AtualizaListaEnsaioEvent;
+import dr.event.ensaio.BuscarEnsaioEvent;
 import dr.model.Ensaio;
+import dr.model.Mercadoria;
 import dr.ui.ensaio.EnsaioListView;
 import dr.util.JPAUtil;
 import java.util.List;
@@ -16,7 +19,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
 /**
- * Define a <code>Controller</code> principal do sistema, responsável por gerir a tela com a lista de <code>Mercadoria</code>.
+ * Define a <code>Controller</code> principal do sistema, responsável por gerir a tela com a lista de <code>Ensaio</code>.
  * 
  * @see controller.PersistenceController
  * 
@@ -26,14 +29,14 @@ public class ListaEnsaioController extends PersistenceController {
 
     private EnsaioListView view;
     private IncluirEnsaioController addEnsaioController;
-    //private BuscarMercadoriaController buscarController;
+    private BuscarEnsaioController buscarController;
 
     public ListaEnsaioController(AbstractController parent) {
         super(parent);
         loadPersistenceContext();
         this.view = new EnsaioListView();
         this.addEnsaioController = new IncluirEnsaioController(this);
-        //this.buscarController = new BuscarMercadoriaController(this);
+        this.buscarController = new BuscarEnsaioController(this);
         
         registerAction(view.getNewButton(), new AbstractAction() {
             @Override
@@ -42,12 +45,12 @@ public class ListaEnsaioController extends PersistenceController {
             }
         });
         
-        /*registerAction(view.getFindButton(), new AbstractAction() {
+        registerAction(view.getFindButton(), new AbstractAction() {
             @Override
             protected void action() {
                 ListaEnsaioController.this.buscarController.show();
             }
-        });*/
+        });
         
         registerAction(view.getRefreshButton(), new AbstractAction() {
             @Override
@@ -89,15 +92,15 @@ public class ListaEnsaioController extends PersistenceController {
             }
         });
         
-        /*registerEventListener(BuscarMercadoriaEvent.class, new AbstractEventListener<BuscarMercadoriaEvent>() {
+        registerEventListener(BuscarEnsaioEvent.class, new AbstractEventListener<BuscarEnsaioEvent>() {
             @Override
-            public void handleEvent(BuscarMercadoriaEvent event) {
-                List<Mercadoria> list = event.getTarget();
+            public void handleEvent(BuscarEnsaioEvent event) {
+                List<Ensaio> list = event.getTarget();
                 if (list != null) {
                     refreshTable(event.getTarget());
                 }
             }
-        }); */
+        });
         
         refreshTable();
     }

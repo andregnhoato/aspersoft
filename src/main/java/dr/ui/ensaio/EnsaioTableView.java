@@ -20,8 +20,12 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
 
     public EnsaioTableView() {
         TableColumn<EnsaioItem, String> idCol = new TableColumn<>("Id");
-        idCol.setMinWidth(80);
+        idCol.setMinWidth(40);
         idCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("id"));
+        
+        TableColumn<EnsaioItem, String> descricaoCol = new TableColumn<>("Descrição");
+        descricaoCol.setMinWidth(100);
+        descricaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("descricao"));
 
         TableColumn<EnsaioItem, String> pressaoCol = new TableColumn<>("Pressão");
         pressaoCol.setMinWidth(80);
@@ -32,7 +36,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         bocalCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("bocal"));
         
         TableColumn<EnsaioItem, String> quebraJatoCol = new TableColumn<>("QuebraJato");
-        quebraJatoCol.setMinWidth(80);
+        quebraJatoCol.setMinWidth(90);
         quebraJatoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("quebraJato"));
         
         TableColumn<EnsaioItem, String> duracaoCol = new TableColumn<>("Duração");
@@ -48,7 +52,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         larguraCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("gridLargura"));
         
         TableColumn<EnsaioItem, String> dataCol = new TableColumn<>("Data");
-        dataCol.setMinWidth(80);
+        dataCol.setMinWidth(100);
         dataCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("data"));
         
         TableColumn<EnsaioItem, String> velocidadeVentoCol = new TableColumn<>("Vel. Vento");
@@ -63,7 +67,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         ensaios = FXCollections.observableArrayList();
         setItems(ensaios);
         
-        getColumns().addAll(idCol, dataCol, pressaoCol, bocalCol, quebraJatoCol, duracaoCol, velocidadeVentoCol, direcaoVentoCol, alturaCol, larguraCol);
+        getColumns().addAll(idCol, descricaoCol, dataCol, pressaoCol, bocalCol, quebraJatoCol, duracaoCol, velocidadeVentoCol, direcaoVentoCol/*, alturaCol, larguraCol*/);
 
     }
 
@@ -95,6 +99,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
     public static class EnsaioItem {
 
         private final SimpleStringProperty id;
+        private final SimpleStringProperty descricao;
         private final SimpleStringProperty pressao;
         private final SimpleStringProperty bocal;
         private final SimpleStringProperty quebraJato;
@@ -109,6 +114,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
 
         private EnsaioItem(Ensaio e) {
             this.id = new SimpleStringProperty(e.getId() + "");
+            this.descricao = new SimpleStringProperty(e.getDescricao());
             this.pressao = new SimpleStringProperty(e.getPressao());
             this.bocal = new SimpleStringProperty(e.getBocal());
             this.quebraJato = new SimpleStringProperty(e.getQuebraJato());
@@ -124,6 +130,10 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
 
         public String getId() {
             return id.get();
+        }
+        
+        public String getDescricao() {
+            return descricao.get();
         }
         
         public String getPressao() {
@@ -170,6 +180,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         public Ensaio toEnsaio(){
             Ensaio e = new Ensaio();
             e.setId(Integer.parseInt(this.id.get()));
+            e.setDescricao(this.descricao.get());
             e.setPressao(this.pressao.get());
             e.setDuracao(this.duracao.get());
             e.setGridAltura(Integer.parseInt(this.gridAltura.get()));

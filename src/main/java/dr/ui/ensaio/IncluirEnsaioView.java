@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 public class IncluirEnsaioView extends Stage {
 
     private TextField tfId;
+    private TextField tfDescricao;
     private TextField tfPressao;
     private TextField tfBocal;
     private TextField tfQuebraJato;
@@ -38,8 +39,8 @@ public class IncluirEnsaioView extends Stage {
 
     public IncluirEnsaioView() {
         setTitle("Incluir Ensaio");
-        setWidth(400);
-        setHeight(280);
+        setWidth(360);
+        setHeight(380);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
         
@@ -83,6 +84,11 @@ public class IncluirEnsaioView extends Stage {
         tfId.setEditable(false);
         tfId.setMinWidth(90);
         tfId.setMaxWidth(90);
+        
+        tfDescricao = new TextField();
+        tfDescricao.setPromptText("*Campo obrigatório");
+        tfDescricao.setMinWidth(180);
+        tfDescricao.setMaxWidth(180);
 
         tfPressao = new TextField();
         tfPressao.setPromptText("*Campo obrigatório");
@@ -139,6 +145,7 @@ public class IncluirEnsaioView extends Stage {
         
         GridFormBuilder grid = new GridFormBuilder();
         grid.addRow(new Label("Id: "), tfId)
+                .addRow(new Label("Descrição: "), tfDescricao)
                 .addRow(new Label("Pressão: "), tfPressao)
                 .addRow(new Label("Bocal: "), tfBocal)
                 .addRow(new Label("Quebra Jato: "), tfQuebraJato)
@@ -146,13 +153,15 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Duração:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
                 .addRow(new Label("Direção Vento:"), tfDirecaoVento)
-                .addRow(new Label("Dimensão altura x largura:"), tfGridAltura, new Label("x"),tfGridLargura);
+                .addRow(new Label("Dimensão altura:"), tfGridAltura)
+                .addRow(new Label("Dimensão largura:"),tfGridLargura);
         
         return grid.build();
     }
 
     public final void resetForm() {
         tfId.setText("");
+        tfDescricao.setText("");
         tfPressao.setText("");
         tfBocal.setText("");
         tfQuebraJato.setText("");
@@ -168,6 +177,7 @@ public class IncluirEnsaioView extends Stage {
 
     private void populaTextFields(Ensaio e) {
         tfId.setText(e.getId().toString());
+        tfDescricao.setText(e.getDescricao());
         tfPressao.setText(e.getPressao());
         tfBocal.setText(e.getBocal());
         tfQuebraJato.setText(e.getQuebraJato());
@@ -183,6 +193,9 @@ public class IncluirEnsaioView extends Stage {
 
     private Ensaio loadEnsaioFromPanel() {
         Ensaio e = new Ensaio();
+        if (!tfDescricao.getText().trim().isEmpty())
+            e.setDescricao(tfDescricao.getText().trim());
+        
         if (!tfPressao.getText().trim().isEmpty())
             e.setPressao(tfPressao.getText().trim());
         

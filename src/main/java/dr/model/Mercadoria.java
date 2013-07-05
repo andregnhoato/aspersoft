@@ -31,8 +31,7 @@ import javax.validation.constraints.Size;
  *
  * @author YaW Tecnologia
  */
-@Entity
-@Table(name = "mercadoria")
+
 public class Mercadoria implements AbstractEntity {
 
     /**

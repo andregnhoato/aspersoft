@@ -1,14 +1,17 @@
 package dr.dao;
 
 import dr.model.Ensaio;
+import dr.model.Ensaio;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
- * Implementa o contrato de persistência da entidade <code>Mercadoria</code>. 
+ * Implementa o contrato de persistência da entidade <code>Ensaio</code>. 
  * Utiliza a herança para <code>AbstractDAO</code> para resolver as operações básicas de cadastro com <code>JPA</code>.
  * 
- * @see br.com.yaw.jfx.dao.MercadoriaDAO
+ * @see br.com.yaw.jfx.dao.EnsaioDAO
  * @see br.com.yaw.jfx.dao.AbstractDAO
  * 
  * @author YaW Tecnologia
@@ -20,6 +23,24 @@ public class EnsaioDAOJPA extends AbstractDAO<Ensaio, Integer> implements Ensaio
      */
     public EnsaioDAOJPA(EntityManager em) {
         super(em);
+    }
+    
+    /**
+     * Reliza a pesquisa mercadorias com filtro no nome (via operador
+     * <code>like</code>).
+     *
+     * @see
+     * br.com.yaw.sjpac.dao.EnsaioDAO#getEnsaiosByNome(java.lang.String)
+     */
+    @Override
+    public List<Ensaio> getEnsaiosByDescricao(String descricao) {
+        if (descricao == null || descricao.isEmpty()) {
+            return null;
+        }
+        String nm = "%";
+        Query query = getPersistenceContext().createQuery("SELECT e FROM Ensaio e WHERE e.descricao like :descricao");
+        query.setParameter("descricao", nm.concat(descricao).concat("%"));
+        return (List<Ensaio>) query.getResultList();
     }
 
 

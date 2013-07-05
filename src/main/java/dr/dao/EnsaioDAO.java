@@ -39,7 +39,7 @@ public interface EnsaioDAO {
      * @return Lista de mercadorias com filtro em nome.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    //List<Ensaio> getMercadoriasByNome(String nome);
+    List<Ensaio> getEnsaiosByDescricao(String Descricao);
 
     /**
      * @param id filtro da pesquisa.

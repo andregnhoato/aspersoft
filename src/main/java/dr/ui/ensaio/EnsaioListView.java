@@ -26,28 +26,21 @@ public class EnsaioListView extends Stage{
     
     public EnsaioListView() {
         setTitle("Ensaios");
-        setWidth(600);
-        setHeight(400);
+        setWidth(800);
+        setHeight(500);
         setResizable(true);
         initModality(Modality.APPLICATION_MODAL);
         
         inicializaComponentes();
+        
         Group panel = new Group();
         HBox boxButtons = getButtonsBox();
         panel.getChildren().addAll(boxButtons, table);
         
-        subScene = new Scene(panel);
-        subScene.getStylesheets().add("style.css");
+        Scene scene = new Scene(panel);
+        scene.getStylesheets().add("style.css");
+        this.setScene(scene);
         
-        
-        
-        //stage.setTitle("Lista de Mercadorias");
-        //stage.setWidth(700);
-        //stage.setHeight(510);
-        //stage.setScene(mainScene);
-        //stage.setResizable(false);
-        //stage.centerOnScreen();
-        //stage.show();
     }
     
     private void inicializaComponentes() {
@@ -62,6 +55,8 @@ public class EnsaioListView extends Stage{
         bRefreshList = new Button("Atualizar");
         bRefreshList.getStyleClass().add("buttonWhite");
         bRefreshList.setId("refreshList");
+        
+          
     }
     
     /*public void addTransition() {

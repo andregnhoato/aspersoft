@@ -3,35 +3,35 @@ package dr.controller;
 import dr.action.AbstractAction;
 import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
-import dr.dao.MercadoriaDAO;
-import dr.dao.MercadoriaDAOJPA;
-import dr.event.BuscarMercadoriaEvent;
-import dr.model.Mercadoria;
-import dr.ui.BuscarMercadoriaView;
+import dr.dao.EnsaioDAO;
+import dr.dao.EnsaioDAOJPA;
+import dr.event.ensaio.BuscarEnsaioEvent;
+import dr.model.Ensaio;
+import dr.ui.ensaio.BuscarEnsaioView;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 
 /**
- * Define a <code>Controller</code> responsável por gerir a tela de Busca de <code>Mercadoria</code> pelo campo <code>nome</code>.
+ * Define a <code>Controller</code> responsável por gerir a tela de Busca de <code>Ensaio</code> pelo campo <code>nome</code>.
  * 
- * @see br.com.yaw.jfx.controller.PersistenceController
+ * @see controller.PersistenceController
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
-public class BuscarMercadoriaController extends PersistenceController {
+public class BuscarEnsaioController extends PersistenceController {
     
-    private BuscarMercadoriaView view;
+    private BuscarEnsaioView view;
     
-    public BuscarMercadoriaController(ListaMercadoriaController parent) {
+    public BuscarEnsaioController(ListaEnsaioController parent) {
         super(parent);
-        this.view = new BuscarMercadoriaView();
+        this.view = new BuscarEnsaioView();
         
         this.view.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent window) {
-                BuscarMercadoriaController.this.cleanUp();
+                BuscarEnsaioController.this.cleanUp();
             }
         });
         
@@ -55,12 +55,12 @@ public class BuscarMercadoriaController extends PersistenceController {
                     }
                 })
                 .addAction(new AbstractAction() {
-                    private List<Mercadoria> list;
+                    private List<Ensaio> list;
 
                     @Override
                     protected void action() {
-                        MercadoriaDAO dao = new MercadoriaDAOJPA(getPersistenceContext());
-                        list = dao.getMercadoriasByNome(view.getText());
+                        EnsaioDAO dao = new EnsaioDAOJPA(getPersistenceContext());
+                        list = dao.getEnsaiosByDescricao(view.getText());
                     }
 
                     @Override
@@ -71,7 +71,7 @@ public class BuscarMercadoriaController extends PersistenceController {
                                 view.hide();
                             }
                         });
-                        fireEvent(new BuscarMercadoriaEvent(list));
+                        fireEvent(new BuscarEnsaioEvent(list));
                         list = null;
                     }
                 }));
