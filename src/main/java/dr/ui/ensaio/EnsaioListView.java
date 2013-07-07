@@ -5,16 +5,17 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Tela principal da aplicação. Apresenta uma lista com as mercadorias cadastradas. 
+ * Tela principal da aplicação. Apresenta uma lista com as ensaios cadastradas. 
  * 
- * <p>A partir dessa tela é possível criar/editar ou pesquisar mercadoria.</p>
+ * <p>A partir dessa tela é possível criar/editar ou pesquisar ensaio.</p>
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public class EnsaioListView extends Stage{
 

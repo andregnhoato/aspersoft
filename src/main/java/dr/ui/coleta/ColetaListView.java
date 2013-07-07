@@ -1,5 +1,6 @@
-package dr.ui.ensaio;
+package dr.ui.coleta;
 
+import dr.ui.ensaio.*;
 import dr.model.Ensaio;
 import java.util.List;
 import javafx.scene.Group;
@@ -10,13 +11,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Tela principal da aplicação. Apresenta uma lista com as mercadorias cadastradas. 
+ * Tela principal da aplicação. Apresenta uma lista com as ensaios cadastradas. 
  * 
- * <p>A partir dessa tela é possível criar/editar ou pesquisar mercadoria.</p>
+ * <p>A partir dessa tela é possível criar/editar ou pesquisar ensaio.</p>
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
-public class EnsaioListView extends Stage{
+public class ColetaListView extends Stage{
 
     private Scene subScene;
     private EnsaioTable table;
@@ -24,7 +25,7 @@ public class EnsaioListView extends Stage{
     private Button bRefreshList;
     private Button bFindEnsaio;
     
-    public EnsaioListView() {
+    public ColetaListView() {
         setTitle("Ensaios");
         setWidth(800);
         setHeight(500);

@@ -1,6 +1,6 @@
 package dr.dao;
 
-import dr.model.AbstractEntity;
+import dr.model.Bean;
 import java.lang.reflect.ParameterizedType;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import javax.persistence.Query;
  *
  * @author @Andre
  *
- * @param <Entity> determina o tipo da entidade, deve herdar <code>AbstractEntity</code>.
+ * @param <Entity> determina o tipo da entidade, deve herdar <code>Bean</code>.
  * @param <PK> determina o tipo da chave primária (Primary Key) da entidade, deve herdar <code>Number</code>.
  */
-public abstract class AbstractDAO<Entity extends AbstractEntity, PK extends Number> {
+public abstract class AbstractDAO<Entity extends Bean, PK extends Number> {
 
     private Class<Entity> entityClass;
     private EntityManager em;

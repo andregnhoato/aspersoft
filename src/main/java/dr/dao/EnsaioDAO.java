@@ -21,7 +21,7 @@ public interface EnsaioDAO {
     Ensaio save(Ensaio ensaio);
 
     /**
-     * Exclui o registro da mercadoria na base de dados
+     * Exclui o registro da ensaio na base de dados
      *
      * @param ensaio
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
@@ -29,14 +29,14 @@ public interface EnsaioDAO {
     void remove(Ensaio ensaio);
 
     /**
-     * @return Lista com todas as mercadorias cadastradas no banco de dados.
+     * @return Lista com todas as ensaios cadastradas no banco de dados.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
     List<Ensaio> getAll();
 
     /**
-     * @param nome Filtro da pesquisa de mercadorias.
-     * @return Lista de mercadorias com filtro em nome.
+     * @param nome Filtro da pesquisa de ensaios.
+     * @return Lista de ensaios com filtro em nome.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
     List<Ensaio> getEnsaiosByDescricao(String Descricao);

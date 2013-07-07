@@ -12,9 +12,9 @@ package dr.action;
  *
  * <p>Para implementar esse componente utilizamos o padrão de projeto <strong>Decorator</strong>.</p>
  *
- * @see br.com.yaw.jfx.action.BooleanExpression
+ * @see action.BooleanExpression
  *
- * @author YaW Tecnologia
+ * @author @andre
  */
 public final class ConditionalAction extends AbstractAction {
 

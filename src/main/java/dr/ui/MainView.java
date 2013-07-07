@@ -1,11 +1,11 @@
 package dr.ui;
 
-import dr.ui.ensaio.EnsaioListView;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
@@ -28,9 +28,11 @@ public class MainView {
         
         MenuBar menuBar = getMenuBar();
         menuBar.prefWidthProperty().bind(stage.widthProperty());
-        //HBox boxButtons = ensaioListView.getButtonsBox();
         
         panel.getChildren().addAll(menuBar);
+        
+        Image image = new Image(getClass().getResourceAsStream("/logo.png"));
+        stage.getIcons().add(image);
         
         stage.setTitle("Definir Nome");
         stage.setWidth(700);

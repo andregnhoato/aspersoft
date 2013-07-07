@@ -15,9 +15,9 @@ package dr.event;
  * 
  * <p><code>AbstractEventListener</code> atua como <i>observado</i>.</p>
  * 
- * @see br.com.yaw.jfx.event.AbstractEventListener
+ * @see event.AbstractEventListener
  * 
- * @author YaW Tecnologia
+ * @author @andre
  *
  * @param <Target> tipo do elemento relacionado a geração do evento.
  */

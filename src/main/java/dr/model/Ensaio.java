@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "ensaio")
-public class Ensaio implements AbstractEntity {
+public class Ensaio implements Bean {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

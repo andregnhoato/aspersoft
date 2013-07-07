@@ -1,5 +1,6 @@
-package dr.ui.ensaio;
+package dr.ui.coleta;
 
+import dr.ui.ensaio.*;
 import dr.model.Ensaio;
 import java.util.List;
 import javafx.application.Platform;
@@ -14,11 +15,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * <code>TableView</code> adaptada para apresentar objetos <code>Ensaio</code>.
  * @author @Andre
  */
-public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
+public class ColetaTableView extends TableView<EnsaioTableView.EnsaioItem> {
 
     private ObservableList<EnsaioItem> ensaios;
 
-    public EnsaioTableView() {
+    public ColetaTableView(Integer x, Integer Y) {
         TableColumn<EnsaioItem, String> idCol = new TableColumn<>("Id");
         idCol.setMinWidth(40);
         idCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("id"));
@@ -63,12 +64,12 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         direcaoVentoCol.setMinWidth(80);
         direcaoVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("direcaoVento"));
         
-
+/*
         ensaios = FXCollections.observableArrayList();
         setItems(ensaios);
         
-        getColumns().addAll(idCol, descricaoCol, dataCol, pressaoCol, bocalCol, quebraJatoCol, duracaoCol, velocidadeVentoCol, direcaoVentoCol/*, alturaCol, larguraCol*/);
-
+        getColumns().addAll(idCol, descricaoCol, dataCol, pressaoCol, bocalCol, quebraJatoCol, duracaoCol, velocidadeVentoCol, direcaoVentoCol/*, alturaCol, larguraCol);
+*/
     }
 
     public void reload(final List<Ensaio> ensaios) {
@@ -78,7 +79,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             public void run() {
                 for (Ensaio e: ensaios) {
                     EnsaioItem item = new EnsaioItem(e);
-                    EnsaioTableView.this.ensaios.add(item);
+             //       EnsaioTableView.this.ensaios.add(item);
                 }
             }
             
@@ -86,10 +87,10 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
     }
 
     public Ensaio getSelectedItem() {
-        EnsaioItem item = getSelectionModel().getSelectedItem();
+       /*EnsaioItem item = getSelectionModel().getSelectedItem();
         if (item != null) {
             return item.toEnsaio();
-        }
+        }*/
         return null;
     }
 

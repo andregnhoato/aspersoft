@@ -10,7 +10,7 @@ import javafx.scene.layout.GridPane;
  *
  * <p>Cada linha é organizada com um <code>Label</code> na coluna1 e um <code>TextField</code> na coluna2.
  * 
- * @author YaW Tecnologia
+ * @author @André
  */
 public class GridFormBuilder {
     

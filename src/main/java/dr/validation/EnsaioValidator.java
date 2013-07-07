@@ -14,7 +14,7 @@ import javax.validation.ValidatorFactory;
  * <p>A validação ocorre através do Bean Validations, mecanismo de validação
  * padrão do Java baseado em anotações.</p>
  *
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public class EnsaioValidator implements Validator<Ensaio> {
 

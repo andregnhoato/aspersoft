@@ -1,7 +1,7 @@
-package dr.ui.ensaio;
+package dr.ui.coleta;
 
+import dr.ui.ensaio.*;
 import dr.model.Ensaio;
-import dr.model.Mercadoria;
 import java.util.List;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -15,11 +15,11 @@ import javafx.scene.layout.VBox;
  * 
  * @author @Andre
  */
-public class EnsaioTable extends VBox {
+public class ColetaTable extends VBox {
     
     private EnsaioTableView table;
     
-    public EnsaioTable(){
+    public ColetaTable(){
         table = new EnsaioTableView();
         this.getChildren().addAll(table);
         this.setPadding(new Insets(30, 0, 0, 10));//css

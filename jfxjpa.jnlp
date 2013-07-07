@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0" xmlns:jfx="http://javafx.com" codebase="http://s3-sa-east-1.amazonaws.com/yaw-site-sp/app/">
   <information>
-    <title>Aplicação Demo das tecnologias JavaFX e JPA</title>
-    <vendor>YaW Tecnologia</vendor>
+    <title>Aplicação</title>
+    <vendor>@André</vendor>
     <description>Demo JavaFX e JPA</description>
-    <icon href="logo_yaw.png"/>
+    <icon href="logo.png"/>
     <offline-allowed/>
   </information>
 
@@ -34,12 +34,12 @@
     <jar href="lib/slf4j-api-1.6.4.jar" size="25962" download="eager" />
     <jar href="lib/validation-api-1.0.0.GA.jar" size="47433" download="eager" />
 
-    <jar href="lib/javafx-jpa-crud.jar" size="111492" download="eager" />
+    <jar href="lib/dr.jar" size="111492" download="eager" />
   </resources>
 
-  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="javafx-jpa-crud" >
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="dr" >
     <param name="requiredFXVersion" value="2.2+"/>
   </applet-desc>
-  <jfx:javafx-desc  width="800" height="600" main-class="br.com.yaw.jfx.app.MercadoriaApp"  name="javafx-jpa-crud" />
+  <jfx:javafx-desc  width="800" height="600" main-class="app.MainApp"  name="dr" />
   <update check="always"/>
 </jnlp>

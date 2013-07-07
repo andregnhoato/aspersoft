@@ -14,18 +14,24 @@ import javax.validation.constraints.NotNull;
 
 /**
  * @author @Andre
+ * os valores x e y representam o posicionameno da coleta no grid
  */
 @Entity
 @Table(name = "coleta")
-public class Coleta implements AbstractEntity {
+public class Coleta implements Bean {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     
     @NotNull 
-    @Column(name = "value")
     private Float value;
+    
+    @NotNull
+    private Integer x;
+    
+    @NotNull
+    private Integer y;
     
     @JoinColumn(name = "id_ensaio", referencedColumnName = "id")
     @ManyToOne
@@ -70,5 +76,20 @@ public class Coleta implements AbstractEntity {
     public void setEnsaio(Ensaio ensaio) {
         this.ensaio = ensaio;
     }
-     
+
+    public Integer getX() {
+        return x;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
+    public Integer getY() {
+        return y;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
 }

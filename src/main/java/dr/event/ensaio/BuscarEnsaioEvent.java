@@ -5,7 +5,7 @@ import dr.model.Ensaio;
 import java.util.List;
 
 /**
- * Evento deve ser gerado durante a pesquisa de mercadorias.
+ * Evento deve ser gerado durante a pesquisa de ensaios.
  * 
  * <p>
  *  Recebe um <code>List</code> com a(s) <code>Ensaio<code>(s) encontrada(s).

@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  * 
  * @see persistence.xml
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public class JPAUtil {
 

@@ -19,7 +19,7 @@ import javax.persistence.EntityTransaction;
  * 
  * <p>Para implementar esse componente utilizamos o padrão de projeto <strong>Decorator</strong>.</p>
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public class TransactionalAction extends AbstractAction {
 
