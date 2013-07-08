@@ -1,6 +1,8 @@
 
 /build/
 /dist/
+/nbproject/
 doutorado.log
-doutorado.scrip
+doutorado.script
 doutorado.properties
+
