@@ -1,6 +1,9 @@
 package dr.ui.ensaio;
 
 import dr.model.Ensaio;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -124,7 +127,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             this.direcaoVento = new SimpleStringProperty(e.getDirecaoVento());
             this.gridAltura = new SimpleStringProperty(e.getGridAltura()+ "");
             this.gridLargura = new SimpleStringProperty(e.getGridLargura()+ "");
-            this.data = new SimpleStringProperty(e.getData()+"");
+            this.data = new SimpleStringProperty(formatDate(e.getData()));
             this.version = new SimpleStringProperty(e.getVersion() + "");
         }
 
@@ -193,6 +196,11 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             e.setVelocidadeVento(Float.parseFloat(this.getVelocidadeVento()));
             
             return e;
+        }
+
+        private String formatDate(Date data) {
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(data);
         }
     }
 }

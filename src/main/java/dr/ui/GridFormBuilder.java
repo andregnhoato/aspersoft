@@ -1,6 +1,7 @@
 package dr.ui;
 
 import javafx.geometry.HPos;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -26,6 +27,13 @@ public class GridFormBuilder {
     public GridFormBuilder addRow(Label label, TextField tf) {
         this.pane.add(label, 0, row);
         this.pane.add(tf, 1, row++);
+        GridPane.setHalignment(label, HPos.RIGHT);
+        return this;
+    }
+    
+    public GridFormBuilder addRow(Label label, ComboBox cb) {
+        this.pane.add(label, 0, row);
+        this.pane.add(cb, 1, row++);
         GridPane.setHalignment(label, HPos.RIGHT);
         return this;
     }
