@@ -3,9 +3,12 @@ package dr.ui.ensaio;
 import dr.model.Ensaio;
 import dr.ui.GridFormBuilder;
 import java.sql.Date;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -29,7 +32,7 @@ public class IncluirEnsaioView extends Stage {
     private TextField tfInicio;
     private TextField tfDuracao;
     private TextField tfVelocidadeVento;
-    private TextField tfDirecaoVento;
+    private ComboBox  cbDirecaoVento;
     private TextField tfGridAltura;
     private TextField tfGridLargura;
     private TextField tfVersion;
@@ -119,9 +122,10 @@ public class IncluirEnsaioView extends Stage {
         tfVelocidadeVento.setMinWidth(180);
         tfVelocidadeVento.setMaxWidth(180);
         
-        tfDirecaoVento = new TextField();
-        tfDirecaoVento.setMinWidth(180);
-        tfDirecaoVento.setMaxWidth(180);
+        
+        cbDirecaoVento = new ComboBox(getDirecoes());
+        cbDirecaoVento.setMinWidth(180);
+        cbDirecaoVento.setMaxWidth(180);
         
         tfInicio = new TextField();
         tfInicio.setPromptText("*Campo obrigatório");
@@ -152,7 +156,7 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Inicio: "), tfInicio)
                 .addRow(new Label("Duração:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
-                .addRow(new Label("Direção Vento:"), tfDirecaoVento)
+                .addRow(new Label("Direção Vento:"), cbDirecaoVento)
                 .addRow(new Label("Dimensão altura:"), tfGridAltura)
                 .addRow(new Label("Dimensão largura:"),tfGridLargura);
         
@@ -168,7 +172,7 @@ public class IncluirEnsaioView extends Stage {
         tfInicio.setText("");
         tfDuracao.setText("");
         tfVelocidadeVento.setText("");
-        tfDirecaoVento.setText("");
+        cbDirecaoVento.setValue(null);
         tfGridAltura.setText("");
         tfGridLargura.setText("");
         tfVersion.setText("");
@@ -184,7 +188,7 @@ public class IncluirEnsaioView extends Stage {
         tfInicio.setText(e.getInicio());
         tfDuracao.setText(e.getDuracao());
         tfVelocidadeVento.setText(e.getVelocidadeVento()+"");
-        tfDirecaoVento.setText(e.getDirecaoVento());
+        cbDirecaoVento.setValue(e.getDirecaoVento());
         tfGridAltura.setText(e.getGridAltura().toString());
         tfGridLargura.setText(e.getGridLargura().toString());
         tfVersion.setText(e.getVersion() == null ? "0" : e.getVersion().toString());
@@ -215,8 +219,8 @@ public class IncluirEnsaioView extends Stage {
         if (!tfVelocidadeVento.getText().trim().isEmpty())
             e.setVelocidadeVento(Float.parseFloat(tfVelocidadeVento.getText().trim()));
         
-        if (!tfDirecaoVento.getText().trim().isEmpty())
-            e.setDirecaoVento(tfDirecaoVento.getText().trim());
+        if (cbDirecaoVento.getValue()!= null && !"".equals(cbDirecaoVento.getValue().toString()))
+            e.setDirecaoVento(cbDirecaoVento.getValue().toString());
         
         try {
             if (!tfGridAltura.getText().trim().isEmpty())
@@ -269,5 +273,29 @@ public class IncluirEnsaioView extends Stage {
     
     public Button getRemoveButton() {
         return bRemove;
+    }
+
+    private ObservableList getDirecoes() {
+       ObservableList<String> direcoes = 
+        FXCollections.observableArrayList(
+        "N",
+        "NNE",
+        "NE",
+        "ENE",
+        "E",
+        "ESE",
+        "SE",
+        "SSE",
+        "S",
+        "SSW",
+        "SW",
+        "WSW",
+        "W",
+        "WNW",
+        "NW",
+        "NNW"
+        );
+       
+       return direcoes;
     }
 }
