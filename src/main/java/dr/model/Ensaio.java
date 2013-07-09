@@ -58,6 +58,9 @@ public class Ensaio implements Bean {
     @Column(name = "direcao_vento")
     private String direcaoVento;
     
+    @Column(name = "espacamento_pluviometro")
+    private Float espacamentoPluviometro;
+    
        
     /**
      * Atributo utilizado para controle
@@ -175,5 +178,13 @@ public class Ensaio implements Bean {
 
     public void setDirecaoVento(String direcaoVento) {
         this.direcaoVento = direcaoVento;
+    }
+
+    public Float getEspacamentoPluviometro() {
+        return espacamentoPluviometro;
+    }
+
+    public void setEspacamentoPluviometro(Float espacamentoPluviometro) {
+        this.espacamentoPluviometro = espacamentoPluviometro;
     }
 }

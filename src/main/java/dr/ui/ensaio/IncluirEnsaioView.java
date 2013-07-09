@@ -29,6 +29,7 @@ public class IncluirEnsaioView extends Stage {
     private TextField tfPressao;
     private TextField tfBocal;
     private TextField tfQuebraJato;
+    private TextField tfEspacamentoPluviometro;
     private TextField tfInicio;
     private TextField tfDuracao;
     private TextField tfVelocidadeVento;
@@ -42,8 +43,8 @@ public class IncluirEnsaioView extends Stage {
 
     public IncluirEnsaioView() {
         setTitle("Incluir Ensaio");
-        setWidth(360);
-        setHeight(380);
+        setWidth(390);
+        setHeight(410);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
         
@@ -107,6 +108,25 @@ public class IncluirEnsaioView extends Stage {
         tfQuebraJato.setPromptText("*Campo obrigatório");
         tfQuebraJato.setMinWidth(180);
         tfQuebraJato.setMaxWidth(180);
+        
+        tfEspacamentoPluviometro = new TextField(){
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceSelection(text);
+                }
+            }
+        };
+        
+        tfEspacamentoPluviometro.setPromptText("valor em metros");
+        tfEspacamentoPluviometro.setMinWidth(180);
+        tfEspacamentoPluviometro.setMaxWidth(180);
 
         tfInicio = new TextField();
         tfInicio.setPromptText("*Campo obrigatório");
@@ -118,7 +138,21 @@ public class IncluirEnsaioView extends Stage {
         tfDuracao.setMinWidth(180);
         tfDuracao.setMaxWidth(180);
         
-        tfVelocidadeVento = new TextField();
+        tfVelocidadeVento = new TextField(){
+           
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceSelection(text);
+                }
+            }
+        };
         tfVelocidadeVento.setMinWidth(180);
         tfVelocidadeVento.setMaxWidth(180);
         
@@ -132,12 +166,39 @@ public class IncluirEnsaioView extends Stage {
         tfInicio.setMinWidth(180);
         tfInicio.setMaxWidth(180);
         
-        tfGridAltura = new TextField();
+        tfGridAltura = new TextField(){
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("\\d{0,2}")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("\\d{0,2}")) {
+                    super.replaceSelection(text);
+                }
+            }
+        };
         tfGridAltura.setPromptText("*");
         tfGridAltura.setMinWidth(40);
         tfGridAltura.setMaxWidth(40);
         
-        tfGridLargura = new TextField();
+        tfGridLargura = new TextField(){
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("\\d{0,2}")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("\\d{0,2}")) {
+                    super.replaceSelection(text);
+                }
+            }
+            
+        };
         tfGridLargura.setPromptText("*");
         tfGridLargura.setMinWidth(40);
         tfGridLargura.setMaxWidth(40);
@@ -153,6 +214,7 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Pressão: "), tfPressao)
                 .addRow(new Label("Bocal: "), tfBocal)
                 .addRow(new Label("Quebra Jato: "), tfQuebraJato)
+                .addRow(new Label("Espaço entre Pluviometros:"), tfEspacamentoPluviometro)
                 .addRow(new Label("Inicio: "), tfInicio)
                 .addRow(new Label("Duração:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
@@ -169,6 +231,7 @@ public class IncluirEnsaioView extends Stage {
         tfPressao.setText("");
         tfBocal.setText("");
         tfQuebraJato.setText("");
+        tfEspacamentoPluviometro.setText("");
         tfInicio.setText("");
         tfDuracao.setText("");
         tfVelocidadeVento.setText("");
@@ -185,6 +248,7 @@ public class IncluirEnsaioView extends Stage {
         tfPressao.setText(e.getPressao());
         tfBocal.setText(e.getBocal());
         tfQuebraJato.setText(e.getQuebraJato());
+        tfEspacamentoPluviometro.setText(e.getEspacamentoPluviometro()+"");
         tfInicio.setText(e.getInicio());
         tfDuracao.setText(e.getDuracao());
         tfVelocidadeVento.setText(e.getVelocidadeVento()+"");
@@ -215,7 +279,9 @@ public class IncluirEnsaioView extends Stage {
         if (!tfDuracao.getText().trim().isEmpty())
             e.setDuracao(tfDuracao.getText().trim());
         
-        //TODO ajustar o parse de float
+        if (!tfEspacamentoPluviometro.getText().trim().isEmpty())
+            e.setEspacamentoPluviometro(Float.parseFloat(tfEspacamentoPluviometro.getText().trim()));
+        
         if (!tfVelocidadeVento.getText().trim().isEmpty())
             e.setVelocidadeVento(Float.parseFloat(tfVelocidadeVento.getText().trim()));
         
