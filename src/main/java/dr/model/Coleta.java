@@ -1,6 +1,5 @@
 package dr.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,12 +24,12 @@ public class Coleta implements Bean {
     private Integer id;
     
     @NotNull 
-    private Float value;
+    private Float valor;
     
-    @NotNull
+    @NotNull/*linha*/
     private Integer x;
     
-    @NotNull
+    @NotNull/*coluna*/
     private Integer y;
     
     @JoinColumn(name = "id_ensaio", referencedColumnName = "id")
@@ -61,12 +60,12 @@ public class Coleta implements Bean {
         return version;
     }
 
-    public Float getValue() {
-        return value;
+    public Float getValor() {
+        return valor;
     }
 
-    public void setValue(Float value) {
-        this.value = value;
+    public void setValor(Float valor) {
+        this.valor = valor;
     }
 
     public Ensaio getEnsaio() {
