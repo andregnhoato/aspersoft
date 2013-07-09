@@ -95,7 +95,7 @@ public class IncluirEnsaioView extends Stage {
         tfDescricao.setMaxWidth(180);
 
         tfPressao = new TextField();
-        tfPressao.setPromptText("*Campo obrigatório");
+        tfPressao.setPromptText("*kPa");
         tfPressao.setMinWidth(180);
         tfPressao.setMaxWidth(180);
 
@@ -152,8 +152,15 @@ public class IncluirEnsaioView extends Stage {
                     super.replaceSelection(text);
                 }
             }
+            /*private void verify() {
+                if (getText().contains(".") && getText().substring(getText().indexOf("."), getText().length()).length() > 2) {
+                    setText(getText().substring(getText().indexOf("."), getText().indexOf(".")+2));
+                }
+            }*/ 
+
         };
         tfVelocidadeVento.setMinWidth(180);
+        tfVelocidadeVento.setPromptText("m/s");
         tfVelocidadeVento.setMaxWidth(180);
         
         
@@ -171,14 +178,21 @@ public class IncluirEnsaioView extends Stage {
                 //permitir somente numeros no campo
                 if (text.matches("\\d{0,2}")) {
                     super.replaceText(start, end, text);
+                    verify();
                 }
             }
 
             @Override public void replaceSelection(String text) {
                 if (text.matches("\\d{0,2}")) {
                     super.replaceSelection(text);
+                    verify();
                 }
             }
+            private void verify() {
+                if (getText().length() > 2) {
+                    setText(getText().substring(0, 2));
+                }
+            } 
         };
         tfGridAltura.setPromptText("*");
         tfGridAltura.setMinWidth(40);
@@ -189,20 +203,27 @@ public class IncluirEnsaioView extends Stage {
                 //permitir somente numeros no campo
                 if (text.matches("\\d{0,2}")) {
                     super.replaceText(start, end, text);
+                    verify();
                 }
             }
 
             @Override public void replaceSelection(String text) {
                 if (text.matches("\\d{0,2}")) {
                     super.replaceSelection(text);
+                    verify();
                 }
             }
+            
+            private void verify() {
+                if (getText().length() > 2) {
+                    setText(getText().substring(0, 2));
+                }
+            }   
             
         };
         tfGridLargura.setPromptText("*");
         tfGridLargura.setMinWidth(40);
         tfGridLargura.setMaxWidth(40);
-        
         
 
         tfVersion = new TextField();
