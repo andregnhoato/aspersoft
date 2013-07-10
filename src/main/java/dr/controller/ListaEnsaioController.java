@@ -9,6 +9,7 @@ import dr.event.ensaio.RemoveEnsaioEvent;
 import dr.event.ensaio.AtualizaListaEnsaioEvent;
 import dr.event.ensaio.BuscarEnsaioEvent;
 import dr.model.Ensaio;
+import dr.ui.Dialog;
 import dr.ui.ensaio.EnsaioListView;
 import dr.util.JPAUtil;
 import java.util.List;
@@ -57,6 +58,20 @@ public class ListaEnsaioController extends PersistenceController {
             }
         });
         
+        registerAction(view.getColetaButton(), new AbstractAction() {
+
+            @Override
+            protected void action() {
+                Ensaio e = view.getTable().getEnsaioSelected();
+                    if (e != null) {
+                        /*alterar pelo controller de coleta ainda não implementado*/
+                        ListaEnsaioController.this.addEnsaioController.show(e);
+                    }else{
+                        Dialog.showInfo("Validacão", "Selecione um Ensaio", view);
+                    }
+            }
+        });
+                   
         view.getTable().setMouseEvent(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent t) {

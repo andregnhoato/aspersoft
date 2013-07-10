@@ -24,6 +24,7 @@ public class EnsaioListView extends Stage{
     private Button bNewEnsaio;
     private Button bRefreshList;
     private Button bFindEnsaio;
+    private Button bColeta;
     
     public EnsaioListView() {
         setTitle("Ensaios");
@@ -48,14 +49,17 @@ public class EnsaioListView extends Stage{
         table = new EnsaioTable();
         
         bNewEnsaio = new Button("Novo");
-        bNewEnsaio.getStyleClass().add("buttonGreen");
+        bNewEnsaio.getStyleClass().add("buttonLarge");
         bNewEnsaio.setId("addEnsaio");
         bFindEnsaio = new Button("Buscar");
         bFindEnsaio.getStyleClass().add("buttonLarge");
         bFindEnsaio.setId("findEnsaio");
         bRefreshList = new Button("Atualizar");
-        bRefreshList.getStyleClass().add("buttonWhite");
+        bRefreshList.getStyleClass().add("buttonLarge");
         bRefreshList.setId("refreshList");
+        bColeta = new Button("Coleta");
+        bColeta.getStyleClass().add("buttonLarge");
+        bColeta.setId("addColeta");
         
           
     }
@@ -78,7 +82,7 @@ public class EnsaioListView extends Stage{
     
     private HBox getButtonsBox() {
         HBox box = new HBox();
-        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList);
+        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList, bColeta);
         box.getStyleClass().add("buttonBarMain");
         return box;
     }
@@ -94,6 +98,10 @@ public class EnsaioListView extends Stage{
     public Button getFindButton() {
         return bFindEnsaio;
     }
+    
+    public Button getColetaButton() {
+        return bColeta;
+    }
 
     public EnsaioTable getTable() {
         return table;
@@ -107,5 +115,6 @@ public class EnsaioListView extends Stage{
         bNewEnsaio.setDisable(disable);
         bFindEnsaio.setDisable(disable);
         bRefreshList.setDisable(disable);
+        bColeta.setDisable(disable);
     }
 }
