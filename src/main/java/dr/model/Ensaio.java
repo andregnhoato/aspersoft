@@ -59,7 +59,7 @@ public class Ensaio implements Bean {
     private String direcaoVento;
     
     @Column(name = "espacamento_pluviometro")
-    private Float espacamentoPluviometro;
+    private float espacamentoPluviometro;
     
        
     /**
@@ -180,11 +180,11 @@ public class Ensaio implements Bean {
         this.direcaoVento = direcaoVento;
     }
 
-    public Float getEspacamentoPluviometro() {
+    public float getEspacamentoPluviometro() {
         return espacamentoPluviometro;
     }
 
-    public void setEspacamentoPluviometro(Float espacamentoPluviometro) {
+    public void setEspacamentoPluviometro(float espacamentoPluviometro) {
         this.espacamentoPluviometro = espacamentoPluviometro;
     }
 }
