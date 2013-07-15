@@ -1,12 +1,9 @@
 package dr.ui.coleta;
 
-import dr.ui.ensaio.*;
 import dr.model.Ensaio;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -20,13 +17,11 @@ import javafx.stage.Stage;
 public class ColetaListView extends Stage{
 
     private Scene subScene;
-    private EnsaioTable table;
-    private Button bNewEnsaio;
-    private Button bRefreshList;
-    private Button bFindEnsaio;
+    private ColetaTable table;
+    private Ensaio ensaio = new Ensaio();
     
     public ColetaListView() {
-        setTitle("Ensaios");
+        setTitle("Coletas");
         setWidth(800);
         setHeight(500);
         setResizable(true);
@@ -35,8 +30,7 @@ public class ColetaListView extends Stage{
         inicializaComponentes();
         
         Group panel = new Group();
-        HBox boxButtons = getButtonsBox();
-        panel.getChildren().addAll(boxButtons, table);
+        panel.getChildren().addAll(table);
         
         Scene scene = new Scene(panel);
         scene.getStylesheets().add("style.css");
@@ -45,18 +39,7 @@ public class ColetaListView extends Stage{
     }
     
     private void inicializaComponentes() {
-        table = new EnsaioTable();
-        
-        bNewEnsaio = new Button("Novo");
-        bNewEnsaio.getStyleClass().add("buttonGreen");
-        bNewEnsaio.setId("addEnsaio");
-        bFindEnsaio = new Button("Buscar");
-        bFindEnsaio.getStyleClass().add("buttonLarge");
-        bFindEnsaio.setId("findEnsaio");
-        bRefreshList = new Button("Atualizar");
-        bRefreshList.getStyleClass().add("buttonWhite");
-        bRefreshList.setId("refreshList");
-        
+        table = new ColetaTable(ensaio);
           
     }
     
@@ -76,36 +59,16 @@ public class ColetaListView extends Stage{
         });
     }*/
     
-    private HBox getButtonsBox() {
-        HBox box = new HBox();
-        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList);
-        box.getStyleClass().add("buttonBarMain");
-        return box;
-    }
-    
-    public Button getNewButton() {
-        return bNewEnsaio;
-    }
-
-    public Button getRefreshButton() {
-        return bRefreshList;
-    }
-
-    public Button getFindButton() {
-        return bFindEnsaio;
-    }
-
-    public EnsaioTable getTable() {
+    public ColetaTable getTable() {
         return table;
     }
 
     public void refreshTable(List<Ensaio> ensaios) {
-        table.reload(ensaios);        
+        //table.reload(ensaios);        
+    }
+    
+    public void setEnsaio(Ensaio e){
+        this.ensaio = e;
     }
 
-    private void disableButtonBar(boolean disable) {
-        bNewEnsaio.setDisable(disable);
-        bFindEnsaio.setDisable(disable);
-        bRefreshList.setDisable(disable);
-    }
 }

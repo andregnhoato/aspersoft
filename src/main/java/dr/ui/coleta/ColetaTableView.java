@@ -6,74 +6,59 @@ import dr.model.Ensaio;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 /**
  * <code>TableView</code> adaptada para apresentar objetos <code>Coleta</code>.
  * @author @Andre
  */
-public class ColetaTableView extends TableView<ColetaTableView.ColetaItem> {
+public class ColetaTableView extends TableView {
 
-    private ObservableList<ColetaItem> ensaios;
+    private ObservableList coletas;
     private Coleta coleta;
-    private Ensaio ensaio;
+    private Ensaio ensaio = new Ensaio();
 
     public ColetaTableView(Ensaio e) {
-        
-        for (int i = 0; i < e.getGridLargura(); i++) {
-            TableColumn<ColetaItem, String> idCol = new TableColumn<>(i+"");
-            idCol.setMinWidth(10);
-            idCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("id"));
-        }
+        coletas= FXCollections.observableArrayList();
+        //ensaio.setGridAltura(10);
+        //ensaio.setGridLargura(10);
+        ensaio = e;
+        if(ensaio !=null && ensaio.getGridAltura() !=null ){
+            for (int i = 0; i < ensaio.getGridLargura(); i++) {
+                final int j = i;
+                TableColumn  col = new TableColumn(i+"");
+                col.setMinWidth(10);
+                col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){
+                public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                             
+                            return new SimpleStringProperty(param.getValue().get(j).toString());                       
+                        }                   
+                    });
+               getColumns().addAll(col);
+            }
+
+            for (int i = 0; i < ensaio.getGridAltura(); i++) {
+                    //Iterate Row
+                    ObservableList<String> row = FXCollections.observableArrayList();
+                    for(int x=1 ; x<=ensaio.getGridAltura(); x++){
+                        //Iterate Column
+                        row.add(x+"");
+                    }
+                    System.out.println("Row [1] added "+row );
+                    coletas.add(row);
+                }
+                //FINALLY ADDED TO TableView
+                setItems(coletas);
+
+            }
+    }
        
-        TableColumn<ColetaItem, String> idCol = new TableColumn<>("Id");
-        idCol.setMinWidth(40);
-        idCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("id"));
-        
-        TableColumn<ColetaItem, String> descricaoCol = new TableColumn<>("Descrição");
-        descricaoCol.setMinWidth(100);
-        descricaoCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("descricao"));
-
-        TableColumn<ColetaItem, String> pressaoCol = new TableColumn<>("Pressão");
-        pressaoCol.setMinWidth(80);
-        pressaoCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("pressao"));
-
-        TableColumn<ColetaItem, String> bocalCol = new TableColumn<>("Bocal");
-        bocalCol.setMinWidth(80);
-        bocalCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("bocal"));
-        
-        TableColumn<ColetaItem, String> quebraJatoCol = new TableColumn<>("QuebraJato");
-        quebraJatoCol.setMinWidth(90);
-        quebraJatoCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("quebraJato"));
-        
-        TableColumn<ColetaItem, String> duracaoCol = new TableColumn<>("Duração");
-        duracaoCol.setMinWidth(80);
-        duracaoCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("duracao"));
-        
-        TableColumn<ColetaItem, String> alturaCol = new TableColumn<>("Altura");
-        alturaCol.setMinWidth(80);
-        alturaCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("gridAltura"));
-
-        TableColumn<ColetaItem, String> larguraCol = new TableColumn<>("Largura");
-        larguraCol.setMinWidth(80);
-        larguraCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("gridLargura"));
-        
-        TableColumn<ColetaItem, String> dataCol = new TableColumn<>("Data");
-        dataCol.setMinWidth(100);
-        dataCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("data"));
-        
-        TableColumn<ColetaItem, String> velocidadeVentoCol = new TableColumn<>("Vel. Vento");
-        velocidadeVentoCol.setMinWidth(80);
-        velocidadeVentoCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("velocidadeVento"));
-        
-        TableColumn<ColetaItem, String> direcaoVentoCol = new TableColumn<>("Dir. Vento");
-        direcaoVentoCol.setMinWidth(80);
-        direcaoVentoCol.setCellValueFactory(new PropertyValueFactory<ColetaItem, String>("direcaoVento"));
-        
 /*
         ensaios = FXCollections.observableArrayList();
         setItems(ensaios);
@@ -82,7 +67,7 @@ public class ColetaTableView extends TableView<ColetaTableView.ColetaItem> {
 */
     }
 
-    public void reload(final List<Coleta> ensaios) {
+    /*public void reload(final List<Coleta> ensaios) {
         this.ensaios.clear();
         Platform.runLater(new Runnable(){
             @Override
@@ -94,19 +79,19 @@ public class ColetaTableView extends TableView<ColetaTableView.ColetaItem> {
             }
             
         });
-    }
+    }*/
 
-    public Coleta getSelectedItem() {
+    /*public Coleta getSelectedItem() {
        /*ColetaItem item = getSelectionModel().getSelectedItem();
         if (item != null) {
             return item.toColeta();
-        }*/
+        }
         return null;
-    }
+    }*/
 
     /**
      * Item da tabela, faz o binding da <code>Mercadoria</code> com <code>TableView</code>.
-     */
+     
     public static class ColetaItem {
 
         private final SimpleStringProperty id;
@@ -139,8 +124,8 @@ public class ColetaTableView extends TableView<ColetaTableView.ColetaItem> {
             e.setVersion(Integer.parseInt(this.version.get()));
             e.setDirecaoVento(this.direcaoVento.get());
             e.setVelocidadeVento(Float.parseFloat(this.getVelocidadeVento()));
-           */ 
+           
             return e;
         }
-    }
-}
+    }*/
+

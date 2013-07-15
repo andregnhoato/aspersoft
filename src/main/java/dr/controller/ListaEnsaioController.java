@@ -10,6 +10,7 @@ import dr.event.ensaio.AtualizaListaEnsaioEvent;
 import dr.event.ensaio.BuscarEnsaioEvent;
 import dr.model.Ensaio;
 import dr.ui.Dialog;
+import dr.ui.coleta.ColetaListView;
 import dr.ui.ensaio.EnsaioListView;
 import dr.util.JPAUtil;
 import java.util.List;
@@ -27,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 public class ListaEnsaioController extends PersistenceController {
 
     private EnsaioListView view;
+    private ColetaListView coletaView;
     private IncluirEnsaioController addEnsaioController;
     private BuscarEnsaioController buscarController;
 
@@ -36,6 +38,7 @@ public class ListaEnsaioController extends PersistenceController {
         this.view = new EnsaioListView();
         this.addEnsaioController = new IncluirEnsaioController(this);
         this.buscarController = new BuscarEnsaioController(this);
+        this.coletaView = new ColetaListView();
         
         registerAction(view.getNewButton(), new AbstractAction() {
             @Override
@@ -65,7 +68,8 @@ public class ListaEnsaioController extends PersistenceController {
                 Ensaio e = view.getTable().getEnsaioSelected();
                     if (e != null) {
                         /*alterar pelo controller de coleta ainda não implementado*/
-                        ListaEnsaioController.this.addEnsaioController.show(e);
+                        ListaEnsaioController.this.coletaView.setEnsaio(e);
+                        ListaEnsaioController.this.coletaView.show();
                     }else{
                         Dialog.showInfo("Validacão", "Selecione um Ensaio", view);
                     }

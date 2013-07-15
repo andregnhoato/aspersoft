@@ -17,23 +17,23 @@ import javafx.scene.layout.VBox;
  */
 public class ColetaTable extends VBox {
     
-    private EnsaioTableView table;
+    private ColetaTableView table;
     
-    public ColetaTable(){
-        table = new EnsaioTableView();
+    public ColetaTable(Ensaio e){
+        table = new ColetaTableView(e);
         this.getChildren().addAll(table);
         this.setPadding(new Insets(30, 0, 0, 10));//css
     }
     
-    public void reload(List<Ensaio> ensaios) {
+    /*public void reload(List<Ensaio> ensaios) {
         table.reload(ensaios);
-    }
+    }*/
 
     public void setMouseEvent(EventHandler<MouseEvent> event) {
         table.setOnMouseClicked(event);
     }
     
-    public Ensaio getEnsaioSelected() {
+    /*public Ensaio getEnsaioSelected() {
         return table.getSelectedItem();
-    }
+    }*/
 }
