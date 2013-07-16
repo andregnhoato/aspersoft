@@ -39,10 +39,12 @@ public class ColetaListView extends Stage{
     }
     
     private void inicializaComponentes() {
-        table = new ColetaTable(ensaio);
-          
+        table = new ColetaTable();
     }
     
+    public void reRenderTable(){
+        table.reRenderTable(ensaio);
+    }
     /*public void addTransition() {
         disableButtonBar(true);
         FadeTransition ft = new FadeTransition(Duration.millis(2000), tabela);

@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -23,32 +24,39 @@ public class ColetaTableView extends TableView {
 
     private ObservableList coletas;
     private Coleta coleta;
-    private Ensaio ensaio = new Ensaio();
 
-    public ColetaTableView(Ensaio e) {
+    public ColetaTableView() {
+        
+    }
+    
+    public void reRenderTable(Ensaio ensaio ){
+        //IMPLEMENTAR A REDERIZAÇÃO DA TABELA DE ACORDO COM O TAMANHO PASSADO NO ENSAIO
+        
         coletas= FXCollections.observableArrayList();
-        //ensaio.setGridAltura(10);
-        //ensaio.setGridLargura(10);
-        ensaio = e;
         if(ensaio !=null && ensaio.getGridAltura() !=null ){
             for (int i = 0; i < ensaio.getGridLargura(); i++) {
                 final int j = i;
                 TableColumn  col = new TableColumn(i+"");
                 col.setMinWidth(10);
                 col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){
-                public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                             
-                            return new SimpleStringProperty(param.getValue().get(j).toString());                       
-                        }                   
-                    });
+                    public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {
+                                return new SimpleStringProperty(param.getValue().get(j).toString());
+                    }
+                });
+               
                getColumns().addAll(col);
             }
 
             for (int i = 0; i < ensaio.getGridAltura(); i++) {
                     //Iterate Row
-                    ObservableList<String> row = FXCollections.observableArrayList();
+                    ObservableList<Coleta> row = FXCollections.observableArrayList();
                     for(int x=1 ; x<=ensaio.getGridAltura(); x++){
                         //Iterate Column
-                        row.add(x+"");
+                        Coleta a = new Coleta();
+                        a.setX(x);
+                        a.setY(i);
+                        a.setValor(Float.NaN);
+                        row.add(a);
                     }
                     System.out.println("Row [1] added "+row );
                     coletas.add(row);

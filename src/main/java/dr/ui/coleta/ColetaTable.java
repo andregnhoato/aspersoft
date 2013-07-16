@@ -19,8 +19,8 @@ public class ColetaTable extends VBox {
     
     private ColetaTableView table;
     
-    public ColetaTable(Ensaio e){
-        table = new ColetaTableView(e);
+    public ColetaTable(){
+        table = new ColetaTableView();
         this.getChildren().addAll(table);
         this.setPadding(new Insets(30, 0, 0, 10));//css
     }
@@ -29,8 +29,12 @@ public class ColetaTable extends VBox {
         table.reload(ensaios);
     }*/
 
-    public void setMouseEvent(EventHandler<MouseEvent> event) {
-        table.setOnMouseClicked(event);
+    //public void setMouseEvent(EventHandler<MouseEvent> event) {
+    //    table.setOnMouseClicked(event);
+    //}
+    
+    public void reRenderTable(Ensaio ensaio){
+        table.reRenderTable(ensaio);
     }
     
     /*public Ensaio getEnsaioSelected() {

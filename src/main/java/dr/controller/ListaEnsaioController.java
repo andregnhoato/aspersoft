@@ -69,6 +69,7 @@ public class ListaEnsaioController extends PersistenceController {
                     if (e != null) {
                         /*alterar pelo controller de coleta ainda não implementado*/
                         ListaEnsaioController.this.coletaView.setEnsaio(e);
+                        ListaEnsaioController.this.coletaView.reRenderTable();
                         ListaEnsaioController.this.coletaView.show();
                     }else{
                         Dialog.showInfo("Validacão", "Selecione um Ensaio", view);
