@@ -28,7 +28,7 @@ public class ColetaTableView extends TableView {
     public ColetaTableView() {
         
     }
-    
+    /*
     public void reRenderTable(Ensaio ensaio ){
         //IMPLEMENTAR A REDERIZAÇÃO DA TABELA DE ACORDO COM O TAMANHO PASSADO NO ENSAIO
         

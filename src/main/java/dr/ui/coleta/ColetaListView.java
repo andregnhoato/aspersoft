@@ -22,8 +22,9 @@ public class ColetaListView extends Stage{
     
     public ColetaListView() {
         setTitle("Coletas");
-        setWidth(800);
-        setHeight(500);
+        //setWidth(800);
+        //setHeight(500);
+        
         setResizable(true);
         initModality(Modality.APPLICATION_MODAL);
         

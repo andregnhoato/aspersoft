@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -26,11 +27,14 @@ public class Coleta implements Bean {
     @NotNull 
     private Float valor;
     
-    @NotNull/*linha*/
-    private Integer x;
+    @Transient
+    private String teste;
     
-    @NotNull/*coluna*/
-    private Integer y;
+    @NotNull
+    private Integer linha;
+    
+    @NotNull
+    private Integer coluna;
     
     @JoinColumn(name = "id_ensaio", referencedColumnName = "id")
     @ManyToOne
@@ -47,7 +51,15 @@ public class Coleta implements Bean {
     public Coleta() {
     }
 
-   @Override
+    public String getTeste() {
+        return teste;
+    }
+
+    public void setTeste(String teste) {
+        this.teste = teste;
+    }
+
+    @Override
     public Integer getId() {
         return id;
     }
@@ -76,19 +88,19 @@ public class Coleta implements Bean {
         this.ensaio = ensaio;
     }
 
-    public Integer getX() {
-        return x;
+    public Integer getLinha() {
+        return linha;
     }
 
-    public void setX(Integer x) {
-        this.x = x;
+    public void setLinha(Integer linha) {
+        this.linha = linha;
     }
 
-    public Integer getY() {
-        return y;
+    public Integer getColuna() {
+        return coluna;
     }
 
-    public void setY(Integer y) {
-        this.y = y;
+    public void setColuna(Integer coluna) {
+        this.coluna = coluna;
     }
 }
