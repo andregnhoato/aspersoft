@@ -46,22 +46,7 @@ public class ColetaListView extends Stage{
     public void reRenderTable(){
         table.reRenderTable(ensaio);
     }
-    /*public void addTransition() {
-        disableButtonBar(true);
-        FadeTransition ft = new FadeTransition(Duration.millis(2000), tabela);
-        ft.setFromValue(0.2);
-        ft.setToValue(1);
-        ft.setAutoReverse(true);
-        ft.play();
-        
-        ft.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                disableButtonBar(false);
-            }
-        });
-    }*/
-    
+
     public ColetaTable getTable() {
         return table;
     }
