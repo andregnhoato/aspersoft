@@ -34,7 +34,7 @@ public class MainView {
         Image image = new Image(getClass().getResourceAsStream("/logo.png"));
         stage.getIcons().add(image);
         
-        stage.setTitle("Definir Nome");
+        stage.setTitle("Experimento");
         stage.setWidth(700);
         stage.setHeight(510);
         stage.setScene(mainScene);
