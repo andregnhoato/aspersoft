@@ -5,6 +5,7 @@ import dr.model.Coleta;
 import dr.model.Ensaio;
 import java.util.List;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -58,19 +59,23 @@ public class ColetaTableView extends TableView<ColetaTableView.ColetaItem> {
     */
     public static class ColetaItem {
 
-        private final SimpleStringProperty valor;
+        private final SimpleFloatProperty valor;
 
-        private ColetaItem(Coleta c) {
-            this.valor = new SimpleStringProperty(c.getValor()+"");
+        public ColetaItem(Float valor) {
+            this.valor = new SimpleFloatProperty(valor);
         }
 
-        public String getValor() {
+        public Float getValor() {
             return valor.get();
+        }
+        
+        public void setValor(Float valor){
+            this.valor.set(valor);
         }
         
         public Coleta toColeta(){
             Coleta c = new Coleta();
-            c.setValor(Float.parseFloat(this.valor.get()));
+            c.setValor(this.valor.get());
 
             return c;
         }
