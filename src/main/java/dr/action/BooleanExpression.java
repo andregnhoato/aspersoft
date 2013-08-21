@@ -3,7 +3,7 @@ package dr.action;
 /**
  * Contrato define uma operação condicional (<code>boolean</code>).
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public interface BooleanExpression {
 

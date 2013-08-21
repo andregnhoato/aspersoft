@@ -21,7 +21,7 @@ Pré-requisitos
 
 Detalhes do repositório
 -------
-[Dúvidas com git neste link](http://gitimmersion.com/lab_01.html) 
+[Dúvidas com git neste link]-> (http://gitimmersion.com/lab_01.html) 
 
 Este repositório seguirá as seguintes regras para commit's:
 

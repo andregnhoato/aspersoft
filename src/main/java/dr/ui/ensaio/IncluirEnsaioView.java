@@ -3,9 +3,12 @@ package dr.ui.ensaio;
 import dr.model.Ensaio;
 import dr.ui.GridFormBuilder;
 import java.sql.Date;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -22,13 +25,15 @@ import javafx.stage.Stage;
 public class IncluirEnsaioView extends Stage {
 
     private TextField tfId;
+    private TextField tfDescricao;
     private TextField tfPressao;
     private TextField tfBocal;
     private TextField tfQuebraJato;
+    private TextField tfEspacamentoPluviometro;
     private TextField tfInicio;
     private TextField tfDuracao;
     private TextField tfVelocidadeVento;
-    private TextField tfDirecaoVento;
+    private ComboBox  cbDirecaoVento;
     private TextField tfGridAltura;
     private TextField tfGridLargura;
     private TextField tfVersion;
@@ -38,8 +43,8 @@ public class IncluirEnsaioView extends Stage {
 
     public IncluirEnsaioView() {
         setTitle("Incluir Ensaio");
-        setWidth(400);
-        setHeight(280);
+        setWidth(390);
+        setHeight(410);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
         
@@ -83,9 +88,14 @@ public class IncluirEnsaioView extends Stage {
         tfId.setEditable(false);
         tfId.setMinWidth(90);
         tfId.setMaxWidth(90);
+        
+        tfDescricao = new TextField();
+        tfDescricao.setPromptText("*Campo obrigatório");
+        tfDescricao.setMinWidth(180);
+        tfDescricao.setMaxWidth(180);
 
         tfPressao = new TextField();
-        tfPressao.setPromptText("*Campo obrigatório");
+        tfPressao.setPromptText("*kPa");
         tfPressao.setMinWidth(180);
         tfPressao.setMaxWidth(180);
 
@@ -98,6 +108,25 @@ public class IncluirEnsaioView extends Stage {
         tfQuebraJato.setPromptText("*Campo obrigatório");
         tfQuebraJato.setMinWidth(180);
         tfQuebraJato.setMaxWidth(180);
+        
+        tfEspacamentoPluviometro = new TextField(){
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceSelection(text);
+                }
+            }
+        };
+        
+        tfEspacamentoPluviometro.setPromptText("valor em metros");
+        tfEspacamentoPluviometro.setMinWidth(180);
+        tfEspacamentoPluviometro.setMaxWidth(180);
 
         tfInicio = new TextField();
         tfInicio.setPromptText("*Campo obrigatório");
@@ -109,29 +138,92 @@ public class IncluirEnsaioView extends Stage {
         tfDuracao.setMinWidth(180);
         tfDuracao.setMaxWidth(180);
         
-        tfVelocidadeVento = new TextField();
+        tfVelocidadeVento = new TextField(){
+           
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceSelection(text);
+                }
+            }
+            /*private void verify() {
+                if (getText().contains(".") && getText().substring(getText().indexOf("."), getText().length()).length() > 2) {
+                    setText(getText().substring(getText().indexOf("."), getText().indexOf(".")+2));
+                }
+            }*/ 
+
+        };
         tfVelocidadeVento.setMinWidth(180);
+        tfVelocidadeVento.setPromptText("m/s");
         tfVelocidadeVento.setMaxWidth(180);
         
-        tfDirecaoVento = new TextField();
-        tfDirecaoVento.setMinWidth(180);
-        tfDirecaoVento.setMaxWidth(180);
+        
+        cbDirecaoVento = new ComboBox(getDirecoes());
+        cbDirecaoVento.setMinWidth(180);
+        cbDirecaoVento.setMaxWidth(180);
         
         tfInicio = new TextField();
         tfInicio.setPromptText("*Campo obrigatório");
         tfInicio.setMinWidth(180);
         tfInicio.setMaxWidth(180);
         
-        tfGridAltura = new TextField();
+        tfGridAltura = new TextField(){
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("\\d{0,2}")) {
+                    super.replaceText(start, end, text);
+                    verify();
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("\\d{0,2}")) {
+                    super.replaceSelection(text);
+                    verify();
+                }
+            }
+            private void verify() {
+                if (getText().length() > 2) {
+                    setText(getText().substring(0, 2));
+                }
+            } 
+        };
         tfGridAltura.setPromptText("*");
         tfGridAltura.setMinWidth(40);
         tfGridAltura.setMaxWidth(40);
         
-        tfGridLargura = new TextField();
+        tfGridLargura = new TextField(){
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("\\d{0,2}")) {
+                    super.replaceText(start, end, text);
+                    verify();
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("\\d{0,2}")) {
+                    super.replaceSelection(text);
+                    verify();
+                }
+            }
+            
+            private void verify() {
+                if (getText().length() > 2) {
+                    setText(getText().substring(0, 2));
+                }
+            }   
+            
+        };
         tfGridLargura.setPromptText("*");
         tfGridLargura.setMinWidth(40);
         tfGridLargura.setMaxWidth(40);
-        
         
 
         tfVersion = new TextField();
@@ -139,27 +231,32 @@ public class IncluirEnsaioView extends Stage {
         
         GridFormBuilder grid = new GridFormBuilder();
         grid.addRow(new Label("Id: "), tfId)
+                .addRow(new Label("Descrição: "), tfDescricao)
                 .addRow(new Label("Pressão: "), tfPressao)
                 .addRow(new Label("Bocal: "), tfBocal)
                 .addRow(new Label("Quebra Jato: "), tfQuebraJato)
+                .addRow(new Label("Espaço entre Pluviometros:"), tfEspacamentoPluviometro)
                 .addRow(new Label("Inicio: "), tfInicio)
-                .addRow(new Label("Duração:"), tfDuracao)
+                .addRow(new Label("Duração em horas:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
-                .addRow(new Label("Direção Vento:"), tfDirecaoVento)
-                .addRow(new Label("Dimensão altura x largura:"), tfGridAltura, new Label("x"),tfGridLargura);
+                .addRow(new Label("Direção Vento:"), cbDirecaoVento)
+                .addRow(new Label("Dimensão altura:"), tfGridAltura)
+                .addRow(new Label("Dimensão largura:"),tfGridLargura);
         
         return grid.build();
     }
 
     public final void resetForm() {
         tfId.setText("");
+        tfDescricao.setText("");
         tfPressao.setText("");
         tfBocal.setText("");
         tfQuebraJato.setText("");
+        tfEspacamentoPluviometro.setText("");
         tfInicio.setText("");
         tfDuracao.setText("");
         tfVelocidadeVento.setText("");
-        tfDirecaoVento.setText("");
+        cbDirecaoVento.setValue(null);
         tfGridAltura.setText("");
         tfGridLargura.setText("");
         tfVersion.setText("");
@@ -168,13 +265,15 @@ public class IncluirEnsaioView extends Stage {
 
     private void populaTextFields(Ensaio e) {
         tfId.setText(e.getId().toString());
+        tfDescricao.setText(e.getDescricao());
         tfPressao.setText(e.getPressao());
         tfBocal.setText(e.getBocal());
         tfQuebraJato.setText(e.getQuebraJato());
+        tfEspacamentoPluviometro.setText(e.getEspacamentoPluviometro()+"");
         tfInicio.setText(e.getInicio());
         tfDuracao.setText(e.getDuracao());
         tfVelocidadeVento.setText(e.getVelocidadeVento()+"");
-        tfDirecaoVento.setText(e.getDirecaoVento());
+        cbDirecaoVento.setValue(e.getDirecaoVento());
         tfGridAltura.setText(e.getGridAltura().toString());
         tfGridLargura.setText(e.getGridLargura().toString());
         tfVersion.setText(e.getVersion() == null ? "0" : e.getVersion().toString());
@@ -183,6 +282,9 @@ public class IncluirEnsaioView extends Stage {
 
     private Ensaio loadEnsaioFromPanel() {
         Ensaio e = new Ensaio();
+        if (!tfDescricao.getText().trim().isEmpty())
+            e.setDescricao(tfDescricao.getText().trim());
+        
         if (!tfPressao.getText().trim().isEmpty())
             e.setPressao(tfPressao.getText().trim());
         
@@ -198,12 +300,14 @@ public class IncluirEnsaioView extends Stage {
         if (!tfDuracao.getText().trim().isEmpty())
             e.setDuracao(tfDuracao.getText().trim());
         
-        //TODO ajustar o parse de float
+        if (!tfEspacamentoPluviometro.getText().trim().isEmpty())
+            e.setEspacamentoPluviometro(Float.parseFloat(tfEspacamentoPluviometro.getText().trim()));
+        
         if (!tfVelocidadeVento.getText().trim().isEmpty())
             e.setVelocidadeVento(Float.parseFloat(tfVelocidadeVento.getText().trim()));
         
-        if (!tfDirecaoVento.getText().trim().isEmpty())
-            e.setDirecaoVento(tfDirecaoVento.getText().trim());
+        if (cbDirecaoVento.getValue()!= null && !"".equals(cbDirecaoVento.getValue().toString()))
+            e.setDirecaoVento(cbDirecaoVento.getValue().toString());
         
         try {
             if (!tfGridAltura.getText().trim().isEmpty())
@@ -256,5 +360,29 @@ public class IncluirEnsaioView extends Stage {
     
     public Button getRemoveButton() {
         return bRemove;
+    }
+
+    private ObservableList getDirecoes() {
+       ObservableList<String> direcoes = 
+        FXCollections.observableArrayList(
+        "N",
+        "NNE",
+        "NE",
+        "ENE",
+        "E",
+        "ESE",
+        "SE",
+        "SSE",
+        "S",
+        "SSW",
+        "SW",
+        "WSW",
+        "W",
+        "WNW",
+        "NW",
+        "NNW"
+        );
+       
+       return direcoes;
     }
 }

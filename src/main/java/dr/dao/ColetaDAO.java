@@ -1,6 +1,6 @@
 package dr.dao;
 
-import dr.model.Ensaio;
+import dr.model.Coleta;
 import java.util.List;
 
 /**
@@ -9,37 +9,37 @@ import java.util.List;
  * 
  * @author @Andre
  */
-public interface EnsaioDAO {
+public interface ColetaDAO {
 
     /**
      * Faz a inserção ou atualização
      *
-     * @param ensaio
+     * @param coleta
      * @return referência atualizada do objeto.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    Ensaio save(Ensaio ensaio);
+    Coleta save(Coleta coleta);
 
     /**
-     * Exclui o registro da ensaio na base de dados
+     * Exclui o registro da coleta na base de dados
      *
-     * @param ensaio
+     * @param coleta
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    void remove(Ensaio ensaio);
+    void remove(Coleta coleta);
 
     /**
-     * @return Lista com todas as ensaios cadastradas no banco de dados.
+     * @return Lista com todas as coletas cadastradas no banco de dados.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    List<Ensaio> getAll();
+    List<Coleta> getAll();
 
     /**
-     * @param nome Filtro da pesquisa de ensaios.
-     * @return Lista de ensaios com filtro em nome.
+     * @param nome Filtro da pesquisa de coletas.
+     * @return Lista de coletas com filtro em nome.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    List<Ensaio> getEnsaiosByDescricao(String Descricao);
+    List<Coleta> getColetasByEnsaio(Integer id);
 
     /**
      * @param id filtro da pesquisa.
@@ -47,5 +47,5 @@ public interface EnsaioDAO {
      * retorna <code>null</code>.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    Ensaio findById(Integer id);
+    Coleta findById(Integer id);
 }

@@ -1,7 +1,6 @@
 package dr.model;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,11 +16,14 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "ensaio")
-public class Ensaio implements AbstractEntity {
+public class Ensaio implements Bean {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    
+    @NotNull @Size(min=1, max=200)
+    private String descricao;
     
     @NotNull @Size(min=1, max=200)
     private String pressao;
@@ -56,6 +58,9 @@ public class Ensaio implements AbstractEntity {
     @Column(name = "direcao_vento")
     private String direcaoVento;
     
+    @Column(name = "espacamento_pluviometro")
+    private float espacamentoPluviometro;
+    
        
     /**
      * Atributo utilizado para controle
@@ -77,6 +82,14 @@ public class Ensaio implements AbstractEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public Integer getVersion() {
@@ -165,5 +178,13 @@ public class Ensaio implements AbstractEntity {
 
     public void setDirecaoVento(String direcaoVento) {
         this.direcaoVento = direcaoVento;
+    }
+
+    public float getEspacamentoPluviometro() {
+        return espacamentoPluviometro;
+    }
+
+    public void setEspacamentoPluviometro(float espacamentoPluviometro) {
+        this.espacamentoPluviometro = espacamentoPluviometro;
     }
 }

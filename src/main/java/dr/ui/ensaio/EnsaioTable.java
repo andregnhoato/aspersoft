@@ -1,7 +1,6 @@
 package dr.ui.ensaio;
 
 import dr.model.Ensaio;
-import dr.model.Mercadoria;
 import java.util.List;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

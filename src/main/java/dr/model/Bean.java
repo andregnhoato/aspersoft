@@ -6,11 +6,11 @@ package dr.model;
  * <p>Esse contrato é utilizado pelo componente base de persistência:
  * <code>AbstractDAO</code>.</p>
  *
- * @see br.com.yaw.jfx.dao.AbstractDAO
+ * @see dao.AbstractDAO
  *
- * @author YaW Tecnologia
+ * @author @Andre
  */
-public interface AbstractEntity {
+public interface Bean {
 
     /**
      * @return A referência para a chave primária (Primary Key) de cada objeto

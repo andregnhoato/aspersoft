@@ -1,5 +1,6 @@
-package dr.ui;
+package dr.ui.ensaio;
 
+import dr.ui.*;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,19 +13,19 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Tela utilizada para realizar a pesquisa de <code>Mercadoria</code> 
+ * Tela utilizada para realizar a pesquisa de <code>Ensaio</code> 
  * com filtro no campo <code>nome</code>. 
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
-public class BuscarMercadoriaView extends Stage {
+public class BuscarEnsaioView extends Stage {
 
     private TextField tfNome;
     private Button bBuscar;
     private Button bCancelar;
 
-    public BuscarMercadoriaView() {
-        setTitle("Buscar Mercadoria");
+    public BuscarEnsaioView() {
+        setTitle("Buscar Ensaio");
         setWidth(250);
         setHeight(150);
         setResizable(false);
@@ -46,11 +47,11 @@ public class BuscarMercadoriaView extends Stage {
 
     private HBox buildBotoes() {
         bBuscar = new Button("Buscar");
-        bBuscar.setId("buscarMercadoria");
+        bBuscar.setId("buscarEnsaio");
         bBuscar.setDefaultButton(true);
         
         bCancelar = new Button("Cancelar");
-        bCancelar.setId("cancelarBuscaMercadoria");
+        bCancelar.setId("cancelarBuscaEnsaio");
         bCancelar.setCancelButton(true);
         
         HBox box = new HBox();

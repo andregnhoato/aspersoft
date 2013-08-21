@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  *   <li><code>actionFailure()</code>: Acionando caso a execução de <code>action()</code> falhe.</li>
  * </ul>
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public abstract class AbstractAction {
 

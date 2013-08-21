@@ -5,16 +5,17 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Tela principal da aplicação. Apresenta uma lista com as mercadorias cadastradas. 
+ * Tela principal da aplicação. Apresenta uma lista com as ensaios cadastradas. 
  * 
- * <p>A partir dessa tela é possível criar/editar ou pesquisar mercadoria.</p>
+ * <p>A partir dessa tela é possível criar/editar ou pesquisar ensaio.</p>
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public class EnsaioListView extends Stage{
 
@@ -23,45 +24,44 @@ public class EnsaioListView extends Stage{
     private Button bNewEnsaio;
     private Button bRefreshList;
     private Button bFindEnsaio;
+    private Button bColeta;
     
     public EnsaioListView() {
         setTitle("Ensaios");
-        setWidth(600);
-        setHeight(400);
+        setWidth(900);
+        setHeight(500);
         setResizable(true);
         initModality(Modality.APPLICATION_MODAL);
         
         inicializaComponentes();
+        
         Group panel = new Group();
         HBox boxButtons = getButtonsBox();
         panel.getChildren().addAll(boxButtons, table);
         
-        subScene = new Scene(panel);
-        subScene.getStylesheets().add("style.css");
+        Scene scene = new Scene(panel);
+        scene.getStylesheets().add("style.css");
+        this.setScene(scene);
         
-        
-        
-        //stage.setTitle("Lista de Mercadorias");
-        //stage.setWidth(700);
-        //stage.setHeight(510);
-        //stage.setScene(mainScene);
-        //stage.setResizable(false);
-        //stage.centerOnScreen();
-        //stage.show();
     }
     
     private void inicializaComponentes() {
         table = new EnsaioTable();
         
         bNewEnsaio = new Button("Novo");
-        bNewEnsaio.getStyleClass().add("buttonGreen");
+        bNewEnsaio.getStyleClass().add("buttonLarge");
         bNewEnsaio.setId("addEnsaio");
         bFindEnsaio = new Button("Buscar");
         bFindEnsaio.getStyleClass().add("buttonLarge");
         bFindEnsaio.setId("findEnsaio");
         bRefreshList = new Button("Atualizar");
-        bRefreshList.getStyleClass().add("buttonWhite");
+        bRefreshList.getStyleClass().add("buttonLarge");
         bRefreshList.setId("refreshList");
+        bColeta = new Button("Coleta");
+        bColeta.getStyleClass().add("buttonLarge");
+        bColeta.setId("addColeta");
+        
+          
     }
     
     /*public void addTransition() {
@@ -82,7 +82,7 @@ public class EnsaioListView extends Stage{
     
     private HBox getButtonsBox() {
         HBox box = new HBox();
-        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList);
+        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList, bColeta);
         box.getStyleClass().add("buttonBarMain");
         return box;
     }
@@ -98,6 +98,10 @@ public class EnsaioListView extends Stage{
     public Button getFindButton() {
         return bFindEnsaio;
     }
+    
+    public Button getColetaButton() {
+        return bColeta;
+    }
 
     public EnsaioTable getTable() {
         return table;
@@ -111,5 +115,6 @@ public class EnsaioListView extends Stage{
         bNewEnsaio.setDisable(disable);
         bFindEnsaio.setDisable(disable);
         bRefreshList.setDisable(disable);
+        bColeta.setDisable(disable);
     }
 }

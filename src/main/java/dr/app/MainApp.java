@@ -1,6 +1,5 @@
 package dr.app;
 
-import dr.controller.ListaMercadoriaController;
 import dr.controller.MainController;
 import java.util.Locale;
 import javafx.application.Application;
@@ -13,7 +12,6 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
     
-    //private ListaMercadoriaController controller;
     private MainController controller;
     
     @Override

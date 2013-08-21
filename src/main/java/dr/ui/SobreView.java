@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 /**
  * Tela <i>Sobre</i>. Apresenta detalhes da aplicação.
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public class SobreView extends Stage {
 

@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
  *   <li>Liberar recursos do componente no encerramento da janela.</li>
  * </ul>
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public class AbstractController implements EventHandler<ActionEvent> {
 

@@ -12,9 +12,9 @@ import org.apache.log4j.Logger;
  *  para as operações de persistência definidas na <code>Controller</code>.
  * </p>
  * 
- * @see br.com.yaw.jfx.controller.AbstractController
+ * @see controller.AbstractController
  * 
- * @author YaW Tecnologia
+ * @author @Andre
  */
 public class PersistenceController extends AbstractController {
 

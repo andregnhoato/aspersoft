@@ -1,6 +1,9 @@
 package dr.ui.ensaio;
 
 import dr.model.Ensaio;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,8 +23,12 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
 
     public EnsaioTableView() {
         TableColumn<EnsaioItem, String> idCol = new TableColumn<>("Id");
-        idCol.setMinWidth(80);
+        idCol.setMinWidth(40);
         idCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("id"));
+        
+        TableColumn<EnsaioItem, String> descricaoCol = new TableColumn<>("Descrição");
+        descricaoCol.setMinWidth(100);
+        descricaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("descricao"));
 
         TableColumn<EnsaioItem, String> pressaoCol = new TableColumn<>("Pressão");
         pressaoCol.setMinWidth(80);
@@ -32,12 +39,16 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         bocalCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("bocal"));
         
         TableColumn<EnsaioItem, String> quebraJatoCol = new TableColumn<>("QuebraJato");
-        quebraJatoCol.setMinWidth(80);
+        quebraJatoCol.setMinWidth(90);
         quebraJatoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("quebraJato"));
         
         TableColumn<EnsaioItem, String> duracaoCol = new TableColumn<>("Duração");
         duracaoCol.setMinWidth(80);
         duracaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("duracao"));
+        
+        TableColumn<EnsaioItem, String> espacamentoCol = new TableColumn<>("Esp. pluviometro");
+        espacamentoCol.setMinWidth(110);
+        espacamentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("espacamentoPluviometro"));
         
         TableColumn<EnsaioItem, String> alturaCol = new TableColumn<>("Altura");
         alturaCol.setMinWidth(80);
@@ -48,7 +59,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         larguraCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("gridLargura"));
         
         TableColumn<EnsaioItem, String> dataCol = new TableColumn<>("Data");
-        dataCol.setMinWidth(80);
+        dataCol.setMinWidth(100);
         dataCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("data"));
         
         TableColumn<EnsaioItem, String> velocidadeVentoCol = new TableColumn<>("Vel. Vento");
@@ -63,7 +74,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         ensaios = FXCollections.observableArrayList();
         setItems(ensaios);
         
-        getColumns().addAll(idCol, dataCol, pressaoCol, bocalCol, quebraJatoCol, duracaoCol, velocidadeVentoCol, direcaoVentoCol, alturaCol, larguraCol);
+        getColumns().addAll(idCol, descricaoCol, dataCol, pressaoCol, bocalCol, quebraJatoCol, espacamentoCol ,duracaoCol, velocidadeVentoCol, direcaoVentoCol/*, alturaCol, larguraCol*/);
 
     }
 
@@ -95,9 +106,11 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
     public static class EnsaioItem {
 
         private final SimpleStringProperty id;
+        private final SimpleStringProperty descricao;
         private final SimpleStringProperty pressao;
         private final SimpleStringProperty bocal;
         private final SimpleStringProperty quebraJato;
+        private final SimpleStringProperty espacamentoPluviometro;
         private final SimpleStringProperty inicio;
         private final SimpleStringProperty duracao;
         private final SimpleStringProperty velocidadeVento;
@@ -109,21 +122,27 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
 
         private EnsaioItem(Ensaio e) {
             this.id = new SimpleStringProperty(e.getId() + "");
+            this.descricao = new SimpleStringProperty(e.getDescricao());
             this.pressao = new SimpleStringProperty(e.getPressao());
             this.bocal = new SimpleStringProperty(e.getBocal());
             this.quebraJato = new SimpleStringProperty(e.getQuebraJato());
+            this.espacamentoPluviometro = new SimpleStringProperty(e.getEspacamentoPluviometro()+"");
             this.inicio = new SimpleStringProperty(e.getInicio());
             this.duracao = new SimpleStringProperty(e.getDuracao());
             this.velocidadeVento = new SimpleStringProperty(e.getVelocidadeVento()+"");
             this.direcaoVento = new SimpleStringProperty(e.getDirecaoVento());
             this.gridAltura = new SimpleStringProperty(e.getGridAltura()+ "");
             this.gridLargura = new SimpleStringProperty(e.getGridLargura()+ "");
-            this.data = new SimpleStringProperty(e.getData()+"");
+            this.data = new SimpleStringProperty(formatDate(e.getData()));
             this.version = new SimpleStringProperty(e.getVersion() + "");
         }
 
         public String getId() {
             return id.get();
+        }
+        
+        public String getDescricao() {
+            return descricao.get();
         }
         
         public String getPressao() {
@@ -144,6 +163,10 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         
         public String getDuracao() {
             return duracao.get();
+        }
+        
+        public String getEspacamentoPluviometro() {
+            return espacamentoPluviometro.get();
         }
 
         public String getGridAltura() {
@@ -170,18 +193,25 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         public Ensaio toEnsaio(){
             Ensaio e = new Ensaio();
             e.setId(Integer.parseInt(this.id.get()));
+            e.setDescricao(this.descricao.get());
             e.setPressao(this.pressao.get());
             e.setDuracao(this.duracao.get());
             e.setGridAltura(Integer.parseInt(this.gridAltura.get()));
             e.setGridLargura(Integer.parseInt(this.gridLargura.get()));
             e.setQuebraJato(this.quebraJato.get());
+            e.setEspacamentoPluviometro(Float.parseFloat(this.espacamentoPluviometro.get()));
             e.setBocal(this.bocal.get());
             e.setInicio(this.inicio.get());
             e.setVersion(Integer.parseInt(this.version.get()));
             e.setDirecaoVento(this.direcaoVento.get());
-            e.setVelocidadeVento(Float.parseFloat(this.getVelocidadeVento()));
+            e.setVelocidadeVento(Float.parseFloat(this.velocidadeVento.get()));
             
             return e;
+        }
+
+        private String formatDate(Date data) {
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(data);
         }
     }
 }
