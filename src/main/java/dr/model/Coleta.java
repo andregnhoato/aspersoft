@@ -1,13 +1,15 @@
 package dr.model;
 
+import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -18,28 +20,28 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "coleta")
-public class Coleta implements Bean {
+public class Coleta implements Bean, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     
     @NotNull 
+    @Column
     private Float valor;
     
-    @Transient
-    private String teste;
-    
     @NotNull
+    @Column
     private Integer linha;
     
     @NotNull
+    @Column
     private Integer coluna;
-    
+    /* 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ensaio", referencedColumnName = "id")
-    @ManyToOne
     private Ensaio ensaio;
-    
+    */
     /**
      * Atributo utilizado para controle
      * <code>lock</code> (otimista) da
@@ -49,14 +51,6 @@ public class Coleta implements Bean {
     private Integer version;
     
     public Coleta() {
-    }
-
-    public String getTeste() {
-        return teste;
-    }
-
-    public void setTeste(String teste) {
-        this.teste = teste;
     }
 
     @Override
@@ -79,7 +73,7 @@ public class Coleta implements Bean {
     public void setValor(Float valor) {
         this.valor = valor;
     }
-
+/*
     public Ensaio getEnsaio() {
         return ensaio;
     }
@@ -87,7 +81,7 @@ public class Coleta implements Bean {
     public void setEnsaio(Ensaio ensaio) {
         this.ensaio = ensaio;
     }
-
+*/
     public Integer getLinha() {
         return linha;
     }

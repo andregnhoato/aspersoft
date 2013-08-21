@@ -4,6 +4,7 @@ import dr.action.AbstractAction;
 import dr.dao.EnsaioDAO;
 import dr.dao.EnsaioDAOJPA;
 import dr.event.AbstractEventListener;
+import dr.event.ensaio.AtualizaColetaEvent;
 import dr.event.ensaio.IncluirEnsaioEvent;
 import dr.event.ensaio.RemoveEnsaioEvent;
 import dr.event.ensaio.AtualizaListaEnsaioEvent;
@@ -28,9 +29,10 @@ import javafx.scene.input.MouseEvent;
 public class ListaEnsaioController extends PersistenceController {
 
     private EnsaioListView view;
-    private ColetaListView coletaView;
+    
     private IncluirEnsaioController addEnsaioController;
     private BuscarEnsaioController buscarController;
+    private ListaColetaController coletaController;
 
     public ListaEnsaioController(AbstractController parent) {
         super(parent);
@@ -38,7 +40,8 @@ public class ListaEnsaioController extends PersistenceController {
         this.view = new EnsaioListView();
         this.addEnsaioController = new IncluirEnsaioController(this);
         this.buscarController = new BuscarEnsaioController(this);
-        this.coletaView = new ColetaListView();
+        this.coletaController = new ListaColetaController(this);
+        
         
         registerAction(view.getNewButton(), new AbstractAction() {
             @Override
@@ -68,9 +71,9 @@ public class ListaEnsaioController extends PersistenceController {
                 Ensaio e = view.getTable().getEnsaioSelected();
                     if (e != null) {
                         /*alterar pelo controller de coleta ainda não implementado*/
-                        ListaEnsaioController.this.coletaView.setEnsaio(e);
-                        ListaEnsaioController.this.coletaView.reRenderTable();
-                        ListaEnsaioController.this.coletaView.show();
+                        ListaEnsaioController.this.coletaController.setEnsaio(e);
+                        ListaEnsaioController.this.coletaController.reRenderTable();
+                        ListaEnsaioController.this.coletaController.show();
                     }else{
                         Dialog.showInfo("Validacão", "Selecione um Ensaio", view);
                     }

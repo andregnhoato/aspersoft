@@ -1,6 +1,7 @@
 package dr.dao;
 
 import dr.model.Coleta;
+import dr.model.Ensaio;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -31,12 +32,12 @@ public class ColetaDAOJPA extends AbstractDAO<Coleta, Integer> implements Coleta
      * @see dao.ColetaDAO#getColetasByEnsaio(java.lang.Integer)
      */
     @Override
-    public List<Coleta> getColetasByEnsaio(Integer id) {
-        if (id == null || id < 0) {
+    public List<Coleta> findColetasByEnsaio(Ensaio e) {
+        if (e == null) {
             return null;
         }
-        Query query = getPersistenceContext().createQuery("SELECT c FROM Coleta c WHERE c.id_ensio = :id_ensaio");
-        query.setParameter("id_ensaio", id);
+        Query query = getPersistenceContext().createQuery("SELECT c FROM Coleta c WHERE c.ensaio = :ensaio");
+        query.setParameter("ensaio", e);
         return (List<Coleta>) query.getResultList();
     }
 

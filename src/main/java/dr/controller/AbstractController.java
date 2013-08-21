@@ -91,7 +91,7 @@ public class AbstractController implements EventHandler<ActionEvent> {
      *
      * @param event tipo do evento
      */
-    protected void fireEvent(AbstractEvent<?> event) {
+    public void fireEvent(AbstractEvent<?> event) {
         if (eventListeners.get(event.getClass()) != null) {
             for (AbstractEventListener eventListener : eventListeners.get(event.getClass())) {
                 log.debug("Evento: " + event.getClass().getName() + " com listener: " + eventListener.getClass().getName());

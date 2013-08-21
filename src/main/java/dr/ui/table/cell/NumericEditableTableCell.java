@@ -1,5 +1,10 @@
 package dr.ui.table.cell;
 
+import dr.controller.AbstractController;
+import dr.dao.ColetaDAOJPA;
+import dr.event.ensaio.AtualizaColetaEvent;
+import dr.model.Coleta;
+import dr.util.JPAUtil;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -79,14 +84,13 @@ public class NumericEditableTableCell<S extends Object, T extends Number> extend
             int startIndex = 0;
             ParsePosition position = new ParsePosition(startIndex);
             Number parsedNumber = /*format.parse(*/ Float.parseFloat(input) /*, position)*/;
-            /*
-            if (completeParse && position.getIndex() != input.length()) {
-                throw new ParseException("Failed to parse complete string: " + input, position.getIndex());
-            }
-             
-            if (position.getIndex() == startIndex ) {
-                throw new ParseException("Failed to parse a number from the string: " + input, position.getIndex());
-            }*/
+            
+            Coleta c = new Coleta();
+            c.setValor((Float) parsedNumber);
+            
+            
+            
+            
             commitEdit( (T)parsedNumber );
         } catch (Exception ex) {
             //Most of the time we don't mind if there is a parse exception as it
@@ -94,6 +98,9 @@ public class NumericEditableTableCell<S extends Object, T extends Number> extend
             //it means the user has clicked away with bad data in the cell. In that
             //situation we want to just cancel the editing and show them the old
             //value.
+            
+            System.out.println(ex.getMessage());
+            
             if( losingFocus ) {
                 cancelEdit();
             }

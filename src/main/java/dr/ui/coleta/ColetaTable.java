@@ -1,5 +1,10 @@
 package dr.ui.coleta;
 
+import dr.controller.PersistenceController;
+import dr.dao.ColetaDAO;
+import dr.dao.ColetaDAOJPA;
+import dr.dao.EnsaioDAO;
+import dr.dao.EnsaioDAOJPA;
 import dr.model.Coleta;
 import dr.ui.ensaio.*;
 import dr.model.Ensaio;
@@ -7,8 +12,8 @@ import dr.ui.table.cell.NumericEditableTableCell;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -31,12 +36,16 @@ public class ColetaTable extends VBox {
     
     private ColetaTableView table;
     private ObservableList coletas;
+    private Ensaio e = null;
+    PersistenceController pe = new PersistenceController();
     
     public ColetaTable(){
         table = new ColetaTableView();
         
         this.getChildren().addAll(table);
         this.setPadding(new Insets(10, 10, 10, 10));//css
+        
+
     }
     
     /*public void reload(List<Ensaio> ensaios) {
@@ -48,6 +57,15 @@ public class ColetaTable extends VBox {
     //}
     
     public void reRenderTable(Ensaio ensaio){
+        
+        ColetaDAO dao = new ColetaDAOJPA(pe.getPersistenceContext());
+        ArrayList<Coleta> clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
+        System.out.println("tamanho do array"+clts.size());
+        for (Coleta c : clts) {
+            System.out.println("***** valor da coleta: "+c.getValor());
+        }
+        
+        this.e = ensaio;
         List<TableColumn> columns = new ArrayList<>();
         this.getChildren().remove(table);
         table = new ColetaTableView();
@@ -71,7 +89,6 @@ public class ColetaTable extends VBox {
 
                 TableColumn col = createColumns(numericFactory, ""+alphabet);
                 
-                
                 table.getColumns().add(col);
 
                 /*VERIFICAR REPRESENTAÇÃO DOS OBJETOS NO GRID */
@@ -82,19 +99,6 @@ public class ColetaTable extends VBox {
             }
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.autosize();
-            table.getColumns().addListener(new ListChangeListener() {
-        public boolean suspended;
- 
-        @Override
-        public void onChanged(Change change) {
-            change.next();
-            if (change.wasReplaced() && !suspended) {
-                this.suspended = true;
-                //table.getColumns().setAll(coletas);
-                this.suspended = false;
-            }
-        }
-    });
             table.setItems(coletas);
         }
         this.getChildren().addAll(table);
@@ -116,6 +120,28 @@ public class ColetaTable extends VBox {
             public void handle(CellEditEvent<ColetaTableView.ColetaItem, Float> t) {
                 Float valor = t.getNewValue().floatValue();
                 ((ColetaTableView.ColetaItem) t.getTableView().getItems().get(t.getTablePosition().getRow())).setValor(valor);
+                // = new Coleta();
+                final Coleta c = ((ColetaTableView.ColetaItem) t.getTableView().getItems().get(t.getTablePosition().getRow())).toColeta();
+          //      c.setEnsaio(e);
+                c.setLinha(Integer.SIZE);
+                c.setColuna(Integer.SIZE);
+
+                final ColetaDAO dao = new ColetaDAOJPA(pe.getPersistenceContext());
+                
+                try{
+                    if(dao!=null){
+                        Platform.runLater(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                dao.save(c);
+                                            }
+                                       });
+                    }else
+                        throw new Exception("dao está nulo");
+    
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
         });
          

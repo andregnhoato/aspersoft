@@ -6,9 +6,9 @@ import dr.model.Ensaio;
 
 
 /**
- * Evento deve ser gerado durante a exclusão de uma <code>Mercadoria</code>.
+ * Evento deve ser gerado durante a exclusão de uma <code>Ensaio</code>.
  * 
- * <p>Recebe a referência da <code>Mercadoria</code> que foi removida.</p>
+ * <p>Recebe a referência da <code>Ensaio</code> que foi removida.</p>
  * 
  * @author @Andre
  */

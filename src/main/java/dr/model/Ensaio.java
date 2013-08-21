@@ -1,5 +1,6 @@
 package dr.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,8 +17,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "ensaio")
-public class Ensaio implements Bean {
-
+public class Ensaio implements Bean, Serializable {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -50,6 +51,7 @@ public class Ensaio implements Bean {
     private Integer gridLargura;
     
     @NotNull
+    //@Temporal(TemporalType.TIMESTAMP)
     private Date data;
     
     @Column(name = "velocidade_vento")

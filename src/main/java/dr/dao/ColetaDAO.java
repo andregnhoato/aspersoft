@@ -1,6 +1,7 @@
 package dr.dao;
 
 import dr.model.Coleta;
+import dr.model.Ensaio;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public interface ColetaDAO {
      * @return Lista de coletas com filtro em nome.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    List<Coleta> getColetasByEnsaio(Integer id);
+    List<Coleta> findColetasByEnsaio(Ensaio e);
 
     /**
      * @param id filtro da pesquisa.

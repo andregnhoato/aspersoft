@@ -47,6 +47,9 @@ public class PersistenceController extends AbstractController {
     }
 
     public EntityManager getPersistenceContext() {
+        if(this.persistenceContext == null){
+            this.loadPersistenceContext();
+        }
         return this.persistenceContext;
     }
 
