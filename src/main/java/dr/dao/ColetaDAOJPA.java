@@ -36,8 +36,8 @@ public class ColetaDAOJPA extends AbstractDAO<Coleta, Integer> implements Coleta
         if (e == null) {
             return null;
         }
-        Query query = getPersistenceContext().createQuery("SELECT c FROM Coleta c WHERE c.ensaio = :ensaio");
-        query.setParameter("ensaio", e);
+        Query query = getPersistenceContext().createQuery("SELECT c FROM Coleta c WHERE c.ensaio.id = :id");
+        query.setParameter("id", e.getId());
         return (List<Coleta>) query.getResultList();
     }
 

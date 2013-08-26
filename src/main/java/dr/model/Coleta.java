@@ -37,11 +37,11 @@ public class Coleta implements Bean, Serializable {
     @NotNull
     @Column
     private Integer coluna;
-    /* 
+     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ensaio", referencedColumnName = "id")
     private Ensaio ensaio;
-    */
+    
     /**
      * Atributo utilizado para controle
      * <code>lock</code> (otimista) da
