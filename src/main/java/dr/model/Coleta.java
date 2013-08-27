@@ -73,7 +73,7 @@ public class Coleta implements Bean, Serializable {
     public void setValor(Float valor) {
         this.valor = valor;
     }
-/*
+
     public Ensaio getEnsaio() {
         return ensaio;
     }
@@ -81,7 +81,7 @@ public class Coleta implements Bean, Serializable {
     public void setEnsaio(Ensaio ensaio) {
         this.ensaio = ensaio;
     }
-*/
+
     public Integer getLinha() {
         return linha;
     }
