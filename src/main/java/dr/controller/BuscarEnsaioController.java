@@ -4,7 +4,7 @@ import dr.action.AbstractAction;
 import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
 import dr.dao.EnsaioDAO;
-import dr.dao.EnsaioDAOJPA;
+import dr.dao.EnsaioDAOImpl;
 import dr.event.ensaio.BuscarEnsaioEvent;
 import dr.model.Ensaio;
 import dr.ui.ensaio.BuscarEnsaioView;
@@ -59,7 +59,7 @@ public class BuscarEnsaioController extends PersistenceController {
 
                     @Override
                     protected void action() {
-                        EnsaioDAO dao = new EnsaioDAOJPA(getPersistenceContext());
+                        EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
                         list = dao.getEnsaiosByDescricao(view.getText());
                     }
 

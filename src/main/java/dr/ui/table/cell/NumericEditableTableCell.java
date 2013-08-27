@@ -1,7 +1,7 @@
 package dr.ui.table.cell;
 
 import dr.controller.AbstractController;
-import dr.dao.ColetaDAOJPA;
+import dr.dao.ColetaDAOImpl;
 import dr.event.ensaio.AtualizaColetaEvent;
 import dr.model.Coleta;
 import dr.util.JPAUtil;

@@ -10,43 +10,14 @@ import java.util.List;
  * 
  * @author @Andre
  */
-public interface ColetaDAO {
+public interface ColetaDAO extends AbstractDAO<Coleta>{
 
-    /**
-     * Faz a inserção ou atualização
-     *
-     * @param coleta
-     * @return referência atualizada do objeto.
-     * @throws <code>RuntimeException</code> se algum problema ocorrer.
-     */
-    Coleta save(Coleta coleta);
-
-    /**
-     * Exclui o registro da coleta na base de dados
-     *
-     * @param coleta
-     * @throws <code>RuntimeException</code> se algum problema ocorrer.
-     */
-    void remove(Coleta coleta);
-
-    /**
-     * @return Lista com todas as coletas cadastradas no banco de dados.
-     * @throws <code>RuntimeException</code> se algum problema ocorrer.
-     */
-    List<Coleta> getAll();
-
-    /**
+    /*
      * @param nome Filtro da pesquisa de coletas.
      * @return Lista de coletas com filtro em nome.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    List<Coleta> findColetasByEnsaio(Ensaio e);
+    List<Coleta> findColetasByEnsaio(Ensaio e)throws Exception;;
 
-    /**
-     * @param id filtro da pesquisa.
-     * @return Experimet com filtro no id, caso nao exista
-     * retorna <code>null</code>.
-     * @throws <code>RuntimeException</code> se algum problema ocorrer.
-     */
-    Coleta findById(Integer id);
+   
 }

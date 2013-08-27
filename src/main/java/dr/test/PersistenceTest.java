@@ -6,9 +6,9 @@ package dr.test;
 
 import dr.controller.PersistenceController;
 import dr.dao.ColetaDAO;
-import dr.dao.ColetaDAOJPA;
+import dr.dao.ColetaDAOImpl;
 import dr.dao.EnsaioDAO;
-import dr.dao.EnsaioDAOJPA;
+import dr.dao.EnsaioDAOImpl;
 import dr.model.*;
 import java.sql.Date;
 import java.util.List;
@@ -23,7 +23,7 @@ public class PersistenceTest extends PersistenceController {
     public static ColetaDAO cdao;
     public static EnsaioDAO edao;
     
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception{
         PersistenceTest pt = new PersistenceTest();
         
         for(int i =0; i<10; i++){
@@ -45,7 +45,7 @@ public class PersistenceTest extends PersistenceController {
             
         }
         
-        System.err.println(edao.getAll().size());
+        System.err.println(edao.findAll().size());
         
         
         /*
@@ -77,8 +77,8 @@ public class PersistenceTest extends PersistenceController {
     }
 
     public PersistenceTest() {
-        this.cdao = new ColetaDAOJPA(getPersistenceContext());
-        this.edao = new EnsaioDAOJPA(getPersistenceContext());
+        this.cdao = new ColetaDAOImpl(getPersistenceContext());
+        this.edao = new EnsaioDAOImpl(getPersistenceContext());
     }
     
 }

@@ -15,8 +15,8 @@ import javax.validation.constraints.Size;
 /**
  * @author @Andre
  */
-@Entity
-@Table(name = "ensaio")
+@Table
+@Entity(name = "ensaio")
 public class Ensaio implements Bean, Serializable {
     
     @Id

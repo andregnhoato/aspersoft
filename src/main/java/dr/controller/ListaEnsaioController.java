@@ -2,19 +2,19 @@ package dr.controller;
 
 import dr.action.AbstractAction;
 import dr.dao.EnsaioDAO;
-import dr.dao.EnsaioDAOJPA;
+import dr.dao.EnsaioDAOImpl;
 import dr.event.AbstractEventListener;
-import dr.event.ensaio.AtualizaColetaEvent;
 import dr.event.ensaio.IncluirEnsaioEvent;
 import dr.event.ensaio.RemoveEnsaioEvent;
 import dr.event.ensaio.AtualizaListaEnsaioEvent;
 import dr.event.ensaio.BuscarEnsaioEvent;
 import dr.model.Ensaio;
 import dr.ui.Dialog;
-import dr.ui.coleta.ColetaListView;
 import dr.ui.ensaio.EnsaioListView;
 import dr.util.JPAUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -152,8 +152,15 @@ public class ListaEnsaioController extends PersistenceController {
 
             @Override
             public void run() {
-                EnsaioDAO dao = new EnsaioDAOJPA(getPersistenceContext());
-                view.refreshTable(dao.getAll());
+                if(view == null){
+                    Logger.getLogger("nulo a parada da view");
+                }
+                try {
+                    EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                    view.refreshTable((List<Ensaio>) dao.findAll());
+                } catch (Exception ex) {
+                    Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

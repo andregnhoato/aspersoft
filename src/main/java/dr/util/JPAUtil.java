@@ -6,55 +6,62 @@ import javax.persistence.Persistence;
 import org.apache.log4j.Logger;
 
 /**
- * Durante a execução do projeto é possível trabalhar com várias sessões com o banco de dados. Na JPA a sessão com o banco é representa pelo componente EntityManager.
- * 
- * <p>Essa classe é responsavel por disponibilizar o(s) componente(s) <code>EntityManager</code>. Utilizamos o <code>EntityManagerFactory</code> fornecedor (fábrica) de sessões com o banco de dados.</p>
- * 
- * <p>Caso não consiga carregar a fabrica de sessões, problemas com a conexão com banco ou não encontrou configurador, a execução da aplicação é interrompida (lança <code>ExceptionInInitializerError</code>).</p>
- * 
+ * Durante a execução do projeto é possível trabalhar com várias sessões com o
+ * banco de dados. Na JPA a sessão com o banco é representa pelo componente
+ * EntityManager.
+ *
+ * <p>Essa classe é responsavel por disponibilizar o(s) componente(s)
+ * <code>EntityManager</code>. Utilizamos o
+ * <code>EntityManagerFactory</code> fornecedor (fábrica) de sessões com o banco
+ * de dados.</p>
+ *
+ * <p>Caso não consiga carregar a fabrica de sessões, problemas com a conexão
+ * com banco ou não encontrou configurador, a execução da aplicação é
+ * interrompida (lança
+ * <code>ExceptionInInitializerError</code>).</p>
+ *
  * @see persistence.xml
- * 
- * @author @Andre
+ *
+ * @author
+ * @Andre
  */
 public class JPAUtil {
 
     private static Logger log = Logger.getLogger(JPAUtil.class);
-    
     /**
      * Unidade de persistencia definida no arquivo
      * <code>persistence.xml</code>
      */
     private static final String PERSISTENCE_UNIT_NAME = "appJavaFXUnit";
-    private static EntityManagerFactory emf;
+    private static EntityManagerFactory factory;
+    private static EntityManager em = null;
 
-    static {
-        try {
-            emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        } catch (Throwable ex) {
-            log.error("Não conseguiu carregar a EntityManagerFactory: " + ex.getMessage());
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
+    public static EntityManager getEntityManager() {
+        if (factory == null) {
+            try {
+                factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 
-    /**
-     * @return Cria e retorna um componente <code>EntityManager</code>.
-     * @throws Lança <code>RuntimeException</code>
-     * se <code>EntityManagerFactory</code> estiver fechada.
-     */
-    public static EntityManager createEntityManager() {
-        if (!emf.isOpen()) {
-            throw new RuntimeException("EntityManagerFactory está fechada!");
+            } catch (Throwable ex) {
+                log.error("Não conseguiu carregar a EntityManagerFactory: " + ex.getMessage());
+                throw new ExceptionInInitializerError(ex);
+            }
+            if (em
+                    == null || !em.isOpen()) {
+                em = factory.createEntityManager();
+            }
+            return em;
         }
-        return emf.createEntityManager();
+        return null;
     }
+    
 
     /**
      * Fecha o
      * <code>EntityManagerFactory</code>.
      */
     public static void closeEntityManagerFactory() {
-        if (emf.isOpen()) {
-            emf.close();
+        if (factory.isOpen()) {
+            factory.close();
         }
     }
 }
