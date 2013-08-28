@@ -156,7 +156,7 @@ public class ListaEnsaioController extends PersistenceController {
                     Logger.getLogger("nulo a parada da view");
                 }
                 try {
-                    EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                    EnsaioDAO dao = new EnsaioDAOImpl(JPAUtil.getEntityManager());
                     view.refreshTable((List<Ensaio>) dao.findAll());
                 } catch (Exception ex) {
                     Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, ex);

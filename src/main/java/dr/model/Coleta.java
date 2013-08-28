@@ -18,8 +18,9 @@ import javax.validation.constraints.NotNull;
  * @author @Andre
  * os valores x e y representam o posicionameno da coleta no grid
  */
-@Entity(name = "coleta")
+
 @Table
+@Entity(name = "coleta")
 public class Coleta implements Bean, Serializable {
 
     @Id

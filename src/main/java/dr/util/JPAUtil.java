@@ -45,15 +45,14 @@ public class JPAUtil {
                 log.error("Não conseguiu carregar a EntityManagerFactory: " + ex.getMessage());
                 throw new ExceptionInInitializerError(ex);
             }
-            if (em
-                    == null || !em.isOpen()) {
-                em = factory.createEntityManager();
-            }
-            return em;
+
         }
-        return null;
+        if (em == null || !em.isOpen()) {
+            em = factory.createEntityManager();
+        }
+        return em;
+
     }
-    
 
     /**
      * Fecha o
