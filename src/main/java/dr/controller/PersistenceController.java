@@ -37,7 +37,7 @@ public class PersistenceController extends AbstractController {
     protected void loadPersistenceContext(EntityManager persistenceContext) {
         if (persistenceContext == null) {
             log.debug("Criando um contexto de persistência (EntityManager).");
-            this.persistenceContext = JPAUtil.createEntityManager();
+            this.persistenceContext = JPAUtil.getEntityManager();
             this.ownsPersistenceContext = true;
         } else {
             log.debug("Utilizando contexto de persistência (EntityManager) existente.");

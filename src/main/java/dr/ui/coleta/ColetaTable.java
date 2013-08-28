@@ -2,9 +2,9 @@ package dr.ui.coleta;
 
 import dr.controller.PersistenceController;
 import dr.dao.ColetaDAO;
-import dr.dao.ColetaDAOJPA;
+import dr.dao.ColetaDAOImpl;
 import dr.dao.EnsaioDAO;
-import dr.dao.EnsaioDAOJPA;
+import dr.dao.EnsaioDAOImpl;
 import dr.model.Coleta;
 import dr.ui.ensaio.*;
 import dr.model.Ensaio;
@@ -12,6 +12,8 @@ import dr.ui.table.cell.NumericEditableTableCell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,11 +60,17 @@ public class ColetaTable extends VBox {
     
     public void reRenderTable(Ensaio ensaio){
         
-        ColetaDAO dao = new ColetaDAOJPA(pe.getPersistenceContext());
-        ArrayList<Coleta> clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
-        System.out.println("tamanho do array"+clts.size());
-        for (Coleta c : clts) {
-            System.out.println("***** valor da coleta: "+c.getValor());
+        ColetaDAO dao = new ColetaDAOImpl(pe.getPersistenceContext());
+        ArrayList<Coleta> clts;
+//       System.out.println("***** valor da coleta: "+e.getId());
+        try {
+            clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
+            System.out.println("tamanho do array"+clts.size());
+            for (Coleta c : clts) {
+                System.out.println("***** valor da coleta: "+c.getValor());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ColetaTable.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         this.e = ensaio;
@@ -126,14 +134,18 @@ public class ColetaTable extends VBox {
                 c.setLinha(Integer.SIZE);
                 c.setColuna(Integer.SIZE);
 
-                final ColetaDAO dao = new ColetaDAOJPA(pe.getPersistenceContext());
+                final ColetaDAO dao = new ColetaDAOImpl(pe.getPersistenceContext());
                 
                 try{
                     if(dao!=null){
                         Platform.runLater(new Runnable() {
                                             @Override
                                             public void run() {
-                                                dao.save(c);
+                                                try {
+                                                    dao.save(c);
+                                                } catch (Exception ex) {
+                                                    Logger.getLogger(ColetaTable.class.getName()).log(Level.SEVERE, null, ex);
+                                                }
                                             }
                                        });
                     }else

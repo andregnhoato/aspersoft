@@ -5,7 +5,7 @@ import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
 import dr.action.TransactionalAction;
 import dr.dao.EnsaioDAO;
-import dr.dao.EnsaioDAOJPA;
+import dr.dao.EnsaioDAOImpl;
 import dr.event.ensaio.IncluirEnsaioEvent;
 import dr.event.ensaio.RemoveEnsaioEvent;
 import dr.model.Ensaio;
@@ -13,6 +13,8 @@ import dr.ui.Dialog;
 import dr.ui.ensaio.IncluirEnsaioView;
 import dr.validation.EnsaioValidator;
 import dr.validation.Validator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
@@ -76,8 +78,12 @@ public class IncluirEnsaioController extends PersistenceController {
                                 @Override
                                 protected void action() {
                                     e = view.getEnsaio();
-                                    EnsaioDAO dao = new EnsaioDAOJPA(getPersistenceContext());
-                                    e = dao.save(e);
+                                    EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                                    try {
+                                        e = dao.save(e);
+                                    } catch (Exception ex) {
+                                        Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                 }
 
                                 @Override
@@ -102,11 +108,16 @@ public class IncluirEnsaioController extends PersistenceController {
                         protected void action() {
                             Integer id = view.getEnsaioId();
                             if (id != null) {
-                                EnsaioDAO dao = new EnsaioDAOJPA(getPersistenceContext());
-                                e = dao.findById(id);
-                                if (e != null) { 
-                                    dao.remove(e);
+                                try {
+                                    EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                                    e = dao.findById(id);
+                                    if (e != null) { 
+                                        dao.remove(e);
+                                    }
+                                } catch (Exception ex) {
+                                    Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
+                                
                             }
                         }
                         
