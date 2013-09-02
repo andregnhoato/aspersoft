@@ -3,6 +3,7 @@ package dr.dao;
 import dr.model.Ensaio;
 import dr.model.Ensaio;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -60,6 +61,11 @@ public class EnsaioDAOImpl implements EnsaioDAO {
                 return this.update(object);
             } else {
                 this.em.getTransaction();
+                if(object.getData()==null){
+                    java.util.Calendar cal = java.util.Calendar.getInstance();
+                    java.util.Date utilDate = cal.getTime();
+                    object.setData(new Date(utilDate.getTime()));
+                }
                 this.em.persist(object);
                 this.em.flush();
                 return object;

@@ -50,7 +50,7 @@ public class Ensaio implements Bean, Serializable {
     @Column(name = "grid_largura")
     private Integer gridLargura;
     
-    @NotNull
+    //@NotNull
     //@Temporal(TemporalType.TIMESTAMP)
     private Date data;
     
@@ -62,6 +62,13 @@ public class Ensaio implements Bean, Serializable {
     
     @Column(name = "espacamento_pluviometro")
     private float espacamentoPluviometro;
+    
+    
+    @Column
+    private float evaporacao;
+    
+    @Column 
+    private float vazao;
     
        
     /**
@@ -189,4 +196,21 @@ public class Ensaio implements Bean, Serializable {
     public void setEspacamentoPluviometro(float espacamentoPluviometro) {
         this.espacamentoPluviometro = espacamentoPluviometro;
     }
+
+    public float getEvaporacao() {
+        return evaporacao;
+    }
+
+    public void setEvaporacao(float evaporacao) {
+        this.evaporacao = evaporacao;
+    }
+
+    public float getVazao() {
+        return vazao;
+    }
+
+    public void setVazao(float vazao) {
+        this.vazao = vazao;
+    }
+    
 }

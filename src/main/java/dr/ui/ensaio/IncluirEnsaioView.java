@@ -1,8 +1,14 @@
 package dr.ui.ensaio;
 
+import com.sun.javafx.binding.StringFormatter;
 import dr.model.Ensaio;
 import dr.ui.GridFormBuilder;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -37,6 +43,9 @@ public class IncluirEnsaioView extends Stage {
     private TextField tfGridAltura;
     private TextField tfGridLargura;
     private TextField tfVersion;
+    private TextField tfEvaporacao;
+    private TextField tfVazao;
+    private TextField tfData;
     private Button bSave;
     private Button bCancel;
     private Button bRemove;
@@ -44,7 +53,7 @@ public class IncluirEnsaioView extends Stage {
     public IncluirEnsaioView() {
         setTitle("Incluir Ensaio");
         setWidth(390);
-        setHeight(410);
+        setHeight(480);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
         
@@ -95,7 +104,7 @@ public class IncluirEnsaioView extends Stage {
         tfDescricao.setMaxWidth(180);
 
         tfPressao = new TextField();
-        tfPressao.setPromptText("*kPa");
+        tfPressao.setPromptText("*kgf/cm3");
         tfPressao.setMinWidth(180);
         tfPressao.setMaxWidth(180);
 
@@ -127,6 +136,8 @@ public class IncluirEnsaioView extends Stage {
         tfEspacamentoPluviometro.setPromptText("valor em metros");
         tfEspacamentoPluviometro.setMinWidth(180);
         tfEspacamentoPluviometro.setMaxWidth(180);
+        
+        
 
         tfInicio = new TextField();
         tfInicio.setPromptText("*Campo obrigatório");
@@ -172,6 +183,44 @@ public class IncluirEnsaioView extends Stage {
         tfInicio.setPromptText("*Campo obrigatório");
         tfInicio.setMinWidth(180);
         tfInicio.setMaxWidth(180);
+        
+        tfVazao = new TextField(){
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceSelection(text);
+                }
+            }
+        };
+        
+        tfVazao.setPromptText("valor em litros");
+        tfVazao.setMinWidth(180);
+        tfVazao.setMaxWidth(180);
+        
+        tfEvaporacao = new TextField(){
+            @Override public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override public void replaceSelection(String text) {
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceSelection(text);
+                }
+            }
+        };
+        
+        tfEvaporacao.setPromptText("valor em milimetros");
+        tfEvaporacao.setMinWidth(180);
+        tfEvaporacao.setMaxWidth(180);
         
         tfGridAltura = new TextField(){
             @Override public void replaceText(int start, int end, String text) {
@@ -229,19 +278,25 @@ public class IncluirEnsaioView extends Stage {
         tfVersion = new TextField();
         tfVersion.setVisible(false);
         
+        tfData = new TextField();
+        tfData.setEditable(false);
+        
         GridFormBuilder grid = new GridFormBuilder();
         grid.addRow(new Label("Id: "), tfId)
                 .addRow(new Label("Descrição: "), tfDescricao)
                 .addRow(new Label("Pressão: "), tfPressao)
                 .addRow(new Label("Bocal: "), tfBocal)
                 .addRow(new Label("Quebra Jato: "), tfQuebraJato)
-                .addRow(new Label("Espaço entre Pluviometros:"), tfEspacamentoPluviometro)
                 .addRow(new Label("Inicio: "), tfInicio)
                 .addRow(new Label("Duração em horas:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
                 .addRow(new Label("Direção Vento:"), cbDirecaoVento)
+                .addRow(new Label("Vazão:"), tfVazao)
+                .addRow(new Label("Evaporação:"), tfEvaporacao)
+                .addRow(new Label("Espaço entre Pluviometros:"), tfEspacamentoPluviometro)
                 .addRow(new Label("Dimensão altura:"), tfGridAltura)
-                .addRow(new Label("Dimensão largura:"),tfGridLargura);
+                .addRow(new Label("Dimensão largura:"),tfGridLargura)
+                .addRow(new Label("Data:"), tfData);
         
         return grid.build();
     }
@@ -257,9 +312,12 @@ public class IncluirEnsaioView extends Stage {
         tfDuracao.setText("");
         tfVelocidadeVento.setText("");
         cbDirecaoVento.setValue(null);
+        tfVazao.setText("");
+        tfEvaporacao.setText("");
         tfGridAltura.setText("");
         tfGridLargura.setText("");
         tfVersion.setText("");
+        tfData.setText("");
         bRemove.setVisible(false);
     }
 
@@ -274,13 +332,24 @@ public class IncluirEnsaioView extends Stage {
         tfDuracao.setText(e.getDuracao());
         tfVelocidadeVento.setText(e.getVelocidadeVento()+"");
         cbDirecaoVento.setValue(e.getDirecaoVento());
+        tfVazao.setText(e.getVazao()+"");
+        tfEvaporacao.setText(e.getEvaporacao()+"");
         tfGridAltura.setText(e.getGridAltura().toString());
         tfGridLargura.setText(e.getGridLargura().toString());
         tfVersion.setText(e.getVersion() == null ? "0" : e.getVersion().toString());
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        if(e.getData()!=null)
+            tfData.setText(df.format(e.getData()));
+        else{
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            java.util.Date utilDate = cal.getTime();
+            tfData.setText(df.format(new Date(utilDate.getTime())));
+        }
+            
     }
 
 
-    private Ensaio loadEnsaioFromPanel() {
+    private Ensaio loadEnsaioFromPanel(){
         Ensaio e = new Ensaio();
         if (!tfDescricao.getText().trim().isEmpty())
             e.setDescricao(tfDescricao.getText().trim());
@@ -299,6 +368,13 @@ public class IncluirEnsaioView extends Stage {
         
         if (!tfDuracao.getText().trim().isEmpty())
             e.setDuracao(tfDuracao.getText().trim());
+        
+        if (!tfVazao.getText().trim().isEmpty())
+            e.setVazao(Float.parseFloat(tfVazao.getText().trim()));
+        
+        if (!tfEvaporacao.getText().trim().isEmpty())
+            e.setEvaporacao(Float.parseFloat(tfEvaporacao.getText().trim()));
+        
         
         if (!tfEspacamentoPluviometro.getText().trim().isEmpty())
             e.setEspacamentoPluviometro(Float.parseFloat(tfEspacamentoPluviometro.getText().trim()));
@@ -322,11 +398,13 @@ public class IncluirEnsaioView extends Stage {
 
         e.setId((tfId.getText()!=null && !tfId.getText().isEmpty() ? Integer.parseInt(tfId.getText()): null));
         e.setVersion(tfVersion.getText() !=null && !tfVersion.getText().isEmpty() ? Integer.parseInt(tfVersion.getText()) : null);
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        try {
+            e.setData((Date) df.parse(tfData.getText()));
+        } catch (ParseException ex) {
+            Logger.getLogger(IncluirEnsaioView.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        java.util.Date utilDate = cal.getTime();
-        e.setData(new Date(utilDate.getTime()));
-
         return e;
     }
 

@@ -1,4 +1,4 @@
-Detalhes do Projeto Doutorado
+Detalhes do Projeto
 ===============
 
 O projeto é um aplicativo desktop desenvolvido com as tecnologias JavaFX, JPA (Java Persistence API) e Hibernate. 

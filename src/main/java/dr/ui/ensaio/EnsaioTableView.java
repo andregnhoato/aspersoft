@@ -118,6 +118,8 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         private final SimpleStringProperty gridAltura;
         private final SimpleStringProperty gridLargura;
         private final SimpleStringProperty version;
+        private final SimpleStringProperty vazao;
+        private final SimpleStringProperty evaporacao;
         private final SimpleStringProperty data;
 
         private EnsaioItem(Ensaio e) {
@@ -135,6 +137,8 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             this.gridLargura = new SimpleStringProperty(e.getGridLargura()+ "");
             this.data = new SimpleStringProperty(formatDate(e.getData()));
             this.version = new SimpleStringProperty(e.getVersion() + "");
+            this.vazao = new SimpleStringProperty(e.getVazao() + "");
+            this.evaporacao = new SimpleStringProperty(e.getEvaporacao() + "");
         }
 
         public String getId() {
@@ -189,6 +193,14 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             return direcaoVento.get();
         }
         
+        public String getVazao() {
+            return vazao.get();
+        }
+        
+        public String getEvaporacao() {
+            return evaporacao.get();
+        }
+        
         
         public Ensaio toEnsaio(){
             Ensaio e = new Ensaio();
@@ -205,6 +217,9 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             e.setVersion(Integer.parseInt(this.version.get()));
             e.setDirecaoVento(this.direcaoVento.get());
             e.setVelocidadeVento(Float.parseFloat(this.velocidadeVento.get()));
+            e.setVazao(Float.parseFloat(this.vazao.get()));
+            e.setEvaporacao(Float.parseFloat(this.evaporacao.get()));
+            //e.setData();
             
             return e;
         }
