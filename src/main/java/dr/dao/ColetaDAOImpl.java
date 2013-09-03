@@ -59,9 +59,10 @@ public class ColetaDAOImpl implements ColetaDAO {
             if (object.getId() != null) {
                 return this.update(object);
             } else {
-                this.em.getTransaction();
+                this.em.getTransaction().begin();
                 this.em.persist(object);
                 this.em.flush();
+                this.em.getTransaction().commit();
                 return object;
             }
         } catch (PersistenceException e) {
@@ -97,6 +98,7 @@ public class ColetaDAOImpl implements ColetaDAO {
     public Collection<Coleta> findAll() throws Exception {
         String query = "SELECT co FROM coleta co ORDER BY co.linha, co.coluna ASC";
         try {
+            this.em.getTransaction().begin();
             return this.em.createQuery(query, Coleta.class).getResultList();
         } catch (NoResultException e) {
             return new ArrayList<Coleta>(0);

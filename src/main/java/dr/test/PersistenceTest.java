@@ -11,6 +11,7 @@ import dr.dao.EnsaioDAO;
 import dr.dao.EnsaioDAOImpl;
 import dr.model.*;
 import java.sql.Date;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -26,26 +27,26 @@ public class PersistenceTest extends PersistenceController {
     public static void main(String[] args) throws Exception{
         PersistenceTest pt = new PersistenceTest();
         
-        for(int i =0; i<10; i++){
-            Ensaio e = new Ensaio();
-            e.setBocal("2.4");
-            e.setData(new Date(2013, 7, 19));
-            e.setDescricao("e1");
-            e.setDirecaoVento("N");
-            e.setDuracao("22");
-            e.setEspacamentoPluviometro(1.4F);
-            e.setGridAltura(10);
-            e.setGridLargura(10);
-            e.setInicio("11");
-            e.setPressao("per");
-            e.setQuebraJato("qq");
-            e.setVelocidadeVento(0.4F);
-            
-            edao.save(e);
-            
-        }
+//        for(int i =0; i<10; i++){
+//            Ensaio e = new Ensaio();
+//            e.setBocal("2.4");
+//            e.setData(new Date(2013, 7, 19));
+//            e.setDescricao("e1");
+//            e.setDirecaoVento("N");
+//            e.setDuracao("22");
+//            e.setEspacamentoPluviometro(1.4F);
+//            e.setGridAltura(10);
+//            e.setGridLargura(10);
+//            e.setInicio("11");
+//            e.setPressao("per");
+//            e.setQuebraJato("qq");
+//            e.setVelocidadeVento(0.4F);
+//            
+//            edao.save(e);
+//            
+//        }
         
-        System.err.println(edao.findAll().size());
+//        System.err.println(edao.findAll().size());
         
         
         /*
@@ -54,26 +55,38 @@ public class PersistenceTest extends PersistenceController {
         /*
         for(int i=0; i<e.getGridAltura(); i++){
             for(int j=0; j<e.getGridLargura(); j++){*/
-        /*
-        Ensaio ensaio = edao.getAll().get(0);
-        System.out.println(e.getDescricao());
-        System.out.println("ensaio"+ e.toString());
         
-        Coleta coleta = new Coleta();
-        coleta.setEnsaio(ensaio);
-        coleta.setLinha(1);
-        coleta.setColuna(1);
-        coleta.setValor(0F);
-        cdao.save(coleta);
+//        Ensaio ensaio = edao.getAll().get(0);
+//        System.out.println(e.getDescricao());
+//        System.out.println("ensaio"+ e.toString());
+//        
+//        Coleta coleta = new Coleta();
+//        coleta.setEnsaio(ensaio);
+//        coleta.setLinha(1);
+//        coleta.setColuna(1);
+//        coleta.setValor(0F);
+//        cdao.save(coleta);
        
         
-        List<Coleta> coletas = cdao.getAll();
+        List<Coleta> coletas = (List<Coleta>) cdao.findAll();
+        for (Iterator<Coleta> it = coletas.iterator(); it.hasNext();) {
+            Coleta coleta = it.next();
+            System.out.println("coleta id: "+ coleta.getId());
+            System.out.println("coleta coluna: "+ coleta.getColuna());
+            System.out.println("coleta linha: "+ coleta.getLinha());
+            System.out.println("coleta valor"+ coleta.getValor());
+            System.out.println("ensaio"+ (coleta.getEnsaio() == null ? "nulo" : coleta.getEnsaio().getDescricao()));
+            System.out.println("=====================================");
+            
+            
+        }
+        
         if(coletas.size()>0)
             System.out.println("Maior que 0"+ coletas.size());
         else
             System.err.println("menor");
        
-       */
+       
     }
 
     public PersistenceTest() {

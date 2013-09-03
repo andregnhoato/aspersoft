@@ -55,7 +55,7 @@ public class ColetaTableView extends TableView<ColetaTableView.ColetaItem> {
     }
 
     /**
-     * Item da tabela, faz o binding da <code>Mercadoria</code> com <code>TableView</code>.
+     * Item da tabela, faz o binding da <code>coleta</code> com <code>TableView</code>.
     */
     public static class ColetaItem {
 

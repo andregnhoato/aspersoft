@@ -39,7 +39,7 @@ public class Coleta implements Bean, Serializable {
     @Column
     private Integer coluna;
      
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_ensaio", referencedColumnName = "id")
     private Ensaio ensaio;
     
