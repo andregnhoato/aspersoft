@@ -1,13 +1,15 @@
 package dr.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -51,7 +53,7 @@ public class Ensaio implements Bean, Serializable {
     private Integer gridLargura;
     
     //@NotNull
-    //@Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date data;
     
     @Column(name = "velocidade_vento")

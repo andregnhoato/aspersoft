@@ -1,10 +1,13 @@
 package dr.ui.ensaio;
 
 import dr.model.Ensaio;
-import java.sql.Date;
+import java.util.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -70,11 +73,15 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         direcaoVentoCol.setMinWidth(80);
         direcaoVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("direcaoVento"));
         
+        TableColumn<EnsaioItem, String> vazaoCol = new TableColumn<>("Vazão");
+        vazaoCol.setMinWidth(80);
+        vazaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("vazao"));
+        
 
         ensaios = FXCollections.observableArrayList();
         setItems(ensaios);
         
-        getColumns().addAll(idCol, descricaoCol, dataCol, pressaoCol, bocalCol, quebraJatoCol, espacamentoCol ,duracaoCol, velocidadeVentoCol, direcaoVentoCol/*, alturaCol, larguraCol*/);
+        getColumns().addAll(idCol, descricaoCol, dataCol, pressaoCol, bocalCol, quebraJatoCol , duracaoCol, velocidadeVentoCol, direcaoVentoCol, vazaoCol ,espacamentoCol/*, alturaCol, larguraCol*/);
 
     }
 
@@ -219,7 +226,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             e.setVelocidadeVento(Float.parseFloat(this.velocidadeVento.get()));
             e.setVazao(Float.parseFloat(this.vazao.get()));
             e.setEvaporacao(Float.parseFloat(this.evaporacao.get()));
-            //e.setData();
+            e.setData(formatDate(this.data.get()));
             
             return e;
         }
@@ -227,6 +234,17 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         private String formatDate(Date data) {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             return df.format(data);
+        }
+        
+        private Date formatDate(String data){
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            try {
+                return df.parse(data);
+            } catch (ParseException ex) {
+                Logger.getLogger(EnsaioTableView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return null;
+            
         }
     }
 }

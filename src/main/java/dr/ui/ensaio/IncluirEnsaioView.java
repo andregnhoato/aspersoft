@@ -3,10 +3,12 @@ package dr.ui.ensaio;
 import com.sun.javafx.binding.StringFormatter;
 import dr.model.Ensaio;
 import dr.ui.GridFormBuilder;
+import eu.schudt.javafx.controls.calendar.DatePicker;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -45,7 +47,8 @@ public class IncluirEnsaioView extends Stage {
     private TextField tfVersion;
     private TextField tfEvaporacao;
     private TextField tfVazao;
-    private TextField tfData;
+    //private TextField tfData;
+    private DatePicker dpData;
     private Button bSave;
     private Button bCancel;
     private Button bRemove;
@@ -278,8 +281,13 @@ public class IncluirEnsaioView extends Stage {
         tfVersion = new TextField();
         tfVersion.setVisible(false);
         
-        tfData = new TextField();
-        tfData.setEditable(false);
+        dpData = new DatePicker(new Locale("pt", "BR"));
+        dpData.setDateFormat(new SimpleDateFormat("dd/MM/yyyy"));
+        dpData.getCalendarView().todayButtonTextProperty().set("Hoje");
+        dpData.getCalendarView().setShowWeeks(true);
+        dpData.getStylesheets().add("datePicker.css");
+
+        //tfData.setEditable(false);
         
         GridFormBuilder grid = new GridFormBuilder();
         grid.addRow(new Label("Id: "), tfId)
@@ -288,6 +296,7 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Bocal: "), tfBocal)
                 .addRow(new Label("Quebra Jato: "), tfQuebraJato)
                 .addRow(new Label("Inicio: "), tfInicio)
+                .addRow(new Label("Data:"), dpData)
                 .addRow(new Label("Duração em horas:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
                 .addRow(new Label("Direção Vento:"), cbDirecaoVento)
@@ -296,7 +305,7 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Espaço entre Pluviometros:"), tfEspacamentoPluviometro)
                 .addRow(new Label("Dimensão altura:"), tfGridAltura)
                 .addRow(new Label("Dimensão largura:"),tfGridLargura)
-                .addRow(new Label("Data:"), tfData);
+                ;
         
         return grid.build();
     }
@@ -317,7 +326,7 @@ public class IncluirEnsaioView extends Stage {
         tfGridAltura.setText("");
         tfGridLargura.setText("");
         tfVersion.setText("");
-        tfData.setText("");
+        //tfData.setText("");
         bRemove.setVisible(false);
     }
 
@@ -337,14 +346,14 @@ public class IncluirEnsaioView extends Stage {
         tfGridAltura.setText(e.getGridAltura().toString());
         tfGridLargura.setText(e.getGridLargura().toString());
         tfVersion.setText(e.getVersion() == null ? "0" : e.getVersion().toString());
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        if(e.getData()!=null)
-            tfData.setText(df.format(e.getData()));
-        else{
-            java.util.Calendar cal = java.util.Calendar.getInstance();
-            java.util.Date utilDate = cal.getTime();
-            tfData.setText(df.format(new Date(utilDate.getTime())));
-        }
+//        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//        if(e.getData()!=null)
+        dpData.setSelectedDate(e.getData());
+//        else{
+//            java.util.Calendar cal = java.util.Calendar.getInstance();
+//            java.util.Date utilDate = cal.getTime();
+//            dpData.setSelectedDate(new Date(utilDate.getTime()));
+//        }
             
     }
 
@@ -398,13 +407,9 @@ public class IncluirEnsaioView extends Stage {
 
         e.setId((tfId.getText()!=null && !tfId.getText().isEmpty() ? Integer.parseInt(tfId.getText()): null));
         e.setVersion(tfVersion.getText() !=null && !tfVersion.getText().isEmpty() ? Integer.parseInt(tfVersion.getText()) : null);
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        try {
-            e.setData((Date) df.parse(tfData.getText()));
-        } catch (ParseException ex) {
-            Logger.getLogger(IncluirEnsaioView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+//            e.setData((Date) df.parse(tfData.getText()));
+        e.setData(dpData.getSelectedDate());
+ 
         return e;
     }
 
