@@ -1,6 +1,6 @@
 /build/
 /dist/
 /nbproject/
-doutorado.log
-doutorado.script
-doutorado.properties
+database.log
+database.script
+database.properties
