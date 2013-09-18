@@ -1,22 +1,11 @@
 package dr.ui.coleta;
 
-import dr.ui.ensaio.*;
 import dr.model.Coleta;
-import dr.model.Ensaio;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 
 /**
  * <code>TableView</code> adaptada para apresentar objetos <code>Coleta</code>.

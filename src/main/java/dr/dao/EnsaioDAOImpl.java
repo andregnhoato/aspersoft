@@ -103,7 +103,7 @@ public class EnsaioDAOImpl implements EnsaioDAO {
     public Collection<Ensaio> findAll() throws Exception {
         String query = "SELECT en FROM ensaio en ORDER BY en.descricao ASC";
         try {
-            em.getTransaction().begin();
+//            em.getTransaction().begin();
             return this.em.createQuery(query, Ensaio.class).getResultList();
         } catch (NoResultException e) {
             return new ArrayList<Ensaio>(0);

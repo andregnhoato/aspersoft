@@ -45,7 +45,7 @@ public class ColetaDAOImpl implements ColetaDAO {
             throw new Exception("O objeto Coleta está nulo.");
 //            return null;
         }
-        Query query = em.createQuery("SELECT co FROM coleta co WHERE co.ensaio.id = :id");
+        Query query = em.createQuery("SELECT co FROM coleta co WHERE co.ensaio.id = :id ORDER BY co.linha, co.coluna");
         query.setParameter("id", e.getId());
         return (List<Coleta>) query.getResultList();
     }
