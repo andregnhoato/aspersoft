@@ -10,7 +10,6 @@ import dr.ui.coleta.ColetaTableView.ColetaItem;
 import dr.ui.table.cell.NumericEditableTableCell;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,7 +80,6 @@ public class ColetaTable extends VBox {
         table.getSelectionModel().setCellSelectionEnabled(true);
         
         
-        Coleta coleta;
         if(ensaio !=null && ensaio.getGridLargura()!=null){
             char alphabet = 'A';
             

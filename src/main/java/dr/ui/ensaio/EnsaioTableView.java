@@ -1,6 +1,7 @@
 package dr.ui.ensaio;
 
 import dr.model.Ensaio;
+import dr.util.DateUtil;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -232,16 +233,22 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         }
 
         private String formatDate(Date data) {
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            return df.format(data);
+            if(data!= null){
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                return df.format(data);
+            }else{
+                return null;
+            }
         }
         
         private Date formatDate(String data){
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            try {
-                return df.parse(data);
-            } catch (ParseException ex) {
-                Logger.getLogger(EnsaioTableView.class.getName()).log(Level.SEVERE, null, ex);
+            if(data != null && data != ""){
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    return df.parse(data);
+                } catch (ParseException ex) {
+                    Logger.getLogger(EnsaioTableView.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             return null;
             

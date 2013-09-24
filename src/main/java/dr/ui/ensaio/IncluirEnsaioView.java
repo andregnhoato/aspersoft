@@ -282,7 +282,8 @@ public class IncluirEnsaioView extends Stage {
         dpData.getCalendarView().todayButtonTextProperty().set("Hoje");
         dpData.getCalendarView().setShowWeeks(true);
         dpData.getStylesheets().add("datePicker.css");
-
+        
+            
         GridFormBuilder grid = new GridFormBuilder();
         grid.addRow(new Label("Id: "), tfId)
                 .addRow(new Label("Descrição: "), tfDescricao)

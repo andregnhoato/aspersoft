@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -19,7 +20,7 @@ import javax.validation.constraints.NotNull;
  * os valores x e y representam o posicionameno da coleta no grid
  */
 
-@Table
+@Table//(uniqueConstraints=@UniqueConstraint(columnNames={"linha, coluna"}))
 @Entity(name = "coleta")
 public class Coleta implements Bean, Serializable {
 

@@ -60,17 +60,14 @@ public class EnsaioDAOImpl implements EnsaioDAO {
             if (object.getId() != null) {
                 return this.update(object);
             } else {
+               
                 this.em.getTransaction();
-//                if(object.getData()==null){
-//                    java.util.Calendar cal = java.util.Calendar.getInstance();
-//                    java.util.Date utilDate = cal.getTime();
-//                    object.setData(new Date(utilDate.getTime()));
-//                }
                 this.em.persist(object);
                 this.em.flush();
                 return object;
             }
         } catch (PersistenceException e) {
+//            this.em.getTransaction().rollback();
             throw new PersistenceException(e);
         }
     }

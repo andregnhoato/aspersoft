@@ -66,6 +66,7 @@ public class ColetaDAOImpl implements ColetaDAO {
                 return object;
             }
         } catch (PersistenceException e) {
+            this.em.getTransaction().rollback();
             throw new PersistenceException(e);
         }
     }

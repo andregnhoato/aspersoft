@@ -52,7 +52,7 @@ public class Ensaio implements Bean, Serializable {
     @Column(name = "grid_largura")
     private Integer gridLargura;
     
-    //@NotNull
+    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date data;
     
