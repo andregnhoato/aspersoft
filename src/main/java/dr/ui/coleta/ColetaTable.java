@@ -8,12 +8,16 @@ import dr.ui.ensaio.*;
 import dr.model.Ensaio;
 import dr.ui.coleta.ColetaTableView.ColetaItem;
 import dr.ui.table.cell.NumericEditableTableCell;
+import java.lang.reflect.Field;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -39,34 +43,29 @@ public class ColetaTable extends VBox {
     private ObservableList coletas;
     private Ensaio e = null;
     PersistenceController pe = new PersistenceController();
+    final ColetaDAO dao;
     
     public ColetaTable(){
         table = new ColetaTableView();
-        
+        dao = new ColetaDAOImpl(pe.getPersistenceContext());
         this.getChildren().addAll(table);
         this.setPadding(new Insets(10, 10, 10, 10));//css
         
 
     }
     
-    /*public void reload(List<Ensaio> ensaios) {
-        table.reload(ensaios);
-    }*/
-
-    //public void setMouseEvent(EventHandler<MouseEvent> event) {
-    //    table.setOnMouseClicked(event);
-    //}
-    
     public void reRenderTable(Ensaio ensaio){
-        
-        ColetaDAO dao = new ColetaDAOImpl(pe.getPersistenceContext());
-        ArrayList<Coleta> clts;
-//       System.out.println("***** valor da coleta: "+e.getId());
+        ArrayList<Coleta> clts = null;
         try {
             clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
-            System.out.println("tamanho do array"+clts.size());
+            System.out.println("tamanho do array: "+clts.size());
+            insertEmptyColetas(clts, ensaio);
+            clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
+            System.out.println("tamanho do array: "+clts.size());
+            int i = 0;
             for (Coleta c : clts) {
-                System.out.println("***** valor da coleta: "+c.getValor());
+                System.out.println(i+"***** valor da coleta: "+c.getValor());
+                i++;
             }
         } catch (Exception ex) {
             Logger.getLogger(ColetaTable.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,42 +99,101 @@ public class ColetaTable extends VBox {
             }
             table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.autosize();
-            table.setItems(getColetasfromDatabase());
+            coletas = FXCollections.observableArrayList();
+            getColetasfromDatabase();
+            table.setItems(coletas);
+            
+//            table.setItems(coletas);
+            //table.setItems(getColetasfromDatabase());
         }
         this.getChildren().addAll(table);
     }
+    /*método responsável por inserir todas as coletas vazias, é executado uma unica vez para cada ensaio*/
+
+    public void insertEmptyColetas(ArrayList<Coleta> clts, Ensaio ensaio) {
+        try {
+            if (dao != null) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (clts.size() <= 0) {
+                                for (int linha = 0; linha < ensaio.getGridAltura(); linha++) {
+                                    for (int coluna = 0; coluna < ensaio.getGridLargura(); coluna++) {
+                                        Coleta c = new Coleta();
+                                        c.setColuna(coluna);
+                                        c.setLinha(linha);
+                                        c.setEnsaio(ensaio);
+                                        c.setValor(0F);
+                                        try {
+                                            dao.save(c);
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(ColetaTable.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                });
+                
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+}
     
     private ObservableList getColetasfromDatabase(){
-        final ColetaDAO dao = new ColetaDAOImpl(pe.getPersistenceContext());
-        coletas = FXCollections.observableArrayList();
-        try {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
+//        coletas = FXCollections.observableArrayList();
+//        try {
+//            Platform.runLater(new Runnable() {
+//                @Override
+//                public void run() {
                     try {
                         List<Coleta> clts = dao.findColetasByEnsaio(e);
                         if (clts.size() > 0){
                             for (Coleta c : clts) {
-                                ColetaItem ci = new ColetaItem(c.getValor());
-                                coletas.add(ci);
+                                setValue(c.getLinha(), c.getColuna(), c.getValor());
                             }
-                        } else {
-                            ColetaTableView.ColetaItem c = new ColetaTableView.ColetaItem(0F);
-                            c.setValor(0F);
-                            coletas.add(c);
-                           
                         }
+                        
                     } catch (Exception ex) {
                         Logger.getLogger(ColetaTable.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-            });
+//                }
+//            });
             
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
         return coletas;
+    }
+    
+    public void setValue(int row, int col, Float val) {
+        System.out.println("Linha: "+row+" Coluna: "+col+"Valor: "+val);
+        try {
+            final ColetaItem selectedRow = table.getItems().get(row);
+            final TableColumn<ColetaItem, ?> selectedColumn = table.getColumns().get(col);
+            // Lookup the propery name for this column
+            final String propertyName = ((PropertyValueFactory) selectedColumn.getCellValueFactory()).getProperty();
+        
+            // Use reflection to get the property
+            final Field f = ColetaItem.class.getField(propertyName);
+            final Object o = f.get(selectedRow);
+
+            // Modify the value based on the type of property
+            if (o instanceof SimpleFloatProperty) {
+                ((SimpleFloatProperty) o).setValue(val);
+            } else if (o instanceof SimpleIntegerProperty) {
+                System.err.print("Nothing to say.... did`nt work!!!! sad");
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     
     
@@ -143,10 +201,7 @@ public class ColetaTable extends VBox {
     private TableColumn createColumns(Callback<TableColumn, TableCell> numericFactory, String columnName) {
         //Somente valores númericos.
         TableColumn column = new TableColumn(columnName);
-        //column.setMinWidth(15);
-        //column.setMaxWidth(20);
         column.setSortable(false);
-        //column.setResizable(false);
         column.setCellValueFactory(new PropertyValueFactory<ColetaTableView.ColetaItem, Float>("valor"));
         column.setCellFactory(numericFactory);
         
@@ -162,7 +217,7 @@ public class ColetaTable extends VBox {
                 c.setLinha(t.getTablePosition().getRow());
                 c.setColuna(t.getTablePosition().getColumn());
 
-                final ColetaDAO dao = new ColetaDAOImpl(pe.getPersistenceContext());
+                //final ColetaDAO dao = new ColetaDAOImpl(pe.getPersistenceContext());
                 
                 try{
                     if(dao!=null){

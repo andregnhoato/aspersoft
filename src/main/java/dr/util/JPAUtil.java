@@ -43,7 +43,7 @@ public class JPAUtil {
 
             } catch (Throwable ex) {
                 log.error("Não conseguiu carregar a EntityManagerFactory: " + ex.getMessage());
-                throw new ExceptionInInitializerError(ex);
+                //throw new ExceptionInInitializerError(ex);
             }
 
         }

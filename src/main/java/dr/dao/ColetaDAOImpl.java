@@ -90,7 +90,10 @@ public class ColetaDAOImpl implements ColetaDAO {
         if (object == null) {
             throw new Exception("O objeto Coleta está nulo.");
         }
+        this.em.getTransaction().begin();
         this.em.remove(object);
+        this.em.flush();
+        this.em.getTransaction().commit();
 
         return true;
     }
