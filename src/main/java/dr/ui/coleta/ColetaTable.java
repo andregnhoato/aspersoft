@@ -206,9 +206,9 @@ public class ColetaTable extends VBox {
             @Override
             public void handle(CellEditEvent<ColetaTableView.ColetaItem, Float> t) {
                 Float valor = t.getNewValue().floatValue();
-                ((ColetaTableView.ColetaItem) t.getTableView().getItems().get(t.getTablePosition().getRow())).setValor(t.getTablePosition().getColumn(), valor);
+                ((ColetaTableView.ColetaItem) t.getTableView().getItems().get(t.getTablePosition().getRow())).setValor(valor);
                 // = new Coleta();
-                final Coleta c = ((ColetaTableView.ColetaItem) t.getTableView().getItems().get(t.getTablePosition().getRow())).toColeta(t.getTablePosition().getColumn());
+                final Coleta c = ((ColetaTableView.ColetaItem) t.getTableView().getItems().get(t.getTablePosition().getRow())).toColeta();
                 c.setEnsaio(e);
                 c.setLinha(t.getTablePosition().getRow());
                 c.setColuna(t.getTablePosition().getColumn());

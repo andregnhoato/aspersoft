@@ -49,30 +49,31 @@ public class ColetaTableView extends TableView<ColetaTableView.ColetaItem> {
 
     /**
      * Item da tabela, faz o binding da <code>coleta</code> com <code>TableView</code>.
+     * this object represent a table cell or should represent
     */
     public static class ColetaItem {
 
-        private final ListProperty<SimpleFloatProperty> valores;
+        private final SimpleFloatProperty valor;
 
         public ColetaItem() {
-            this.valores = new SimpleListProperty<>();
+            this.valor = new SimpleFloatProperty();
         }
         
-        public void addValor(Float valor){
-            this.valores.add(new SimpleFloatProperty(valor));
-        }
-
-//        public Float getValor() {
-//            return valor.get();
+//        public void addValor(Float valor){
+//            this.valores.add(new SimpleFloatProperty(valor));
 //        }
-        
-        public void setValor(int pos,Float valor){
-            this.valores.get(pos).set(valor);
+
+        public Float getValor() {
+            return valor.get();
         }
         
-        public Coleta toColeta(int pos){
+        public void setValor(Float valor){
+            this.valor.set(valor);
+        }
+        
+        public Coleta toColeta(){
             Coleta c = new Coleta();
-            c.setValor(this.valores.get(pos).get());
+            c.setValor(this.valor.get());
 
             return c;
         }
