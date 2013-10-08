@@ -1,6 +1,6 @@
 /build/
 /dist/
-/nbproject/
+/nbproject/*
 database.log
 database.script
 database.properties
