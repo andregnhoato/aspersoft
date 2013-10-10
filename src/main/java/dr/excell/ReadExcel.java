@@ -1,5 +1,12 @@
 package dr.excell;
 
+import dr.controller.PersistenceController;
+import dr.dao.ColetaDAO;
+import dr.dao.ColetaDAOImpl;
+import dr.dao.EnsaioDAO;
+import dr.dao.EnsaioDAOImpl;
+import dr.model.Coleta;
+import dr.model.Ensaio;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,7 +29,14 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class ReadExcel {
+public class ReadExcel extends PersistenceController{
+    public static ColetaDAO cdao;
+    public static EnsaioDAO edao;
+    
+     public ReadExcel() {
+        this.cdao = new ColetaDAOImpl(getPersistenceContext());
+        this.edao = new EnsaioDAOImpl(getPersistenceContext());
+    }
 
     public static void readXLSFile() throws IOException {
         InputStream ExcelFileToRead = new FileInputStream("C:/Test.xls");
@@ -83,7 +97,7 @@ public class ReadExcel {
         fileOut.close();
     }
 
-    public static void readXLSXFile() throws IOException {
+    public static void readXLSXFileGenerateTxtFile() throws IOException {
         int ensaios = 0;
 
         String caminho = "/Users/andregnhoato/Dropbox/ensaios/";
@@ -121,7 +135,7 @@ public class ReadExcel {
                     sb.append(df.format(Double.parseDouble(evaluator.evaluate(sheet.getRow(23).getCell(1)).formatAsString().replaceAll("\"", ""))));
                     sb.append(";");
                     //direcao do vento MODA
-                    sb.append(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", ""));
+                    sb.append(getWindDegree(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", "")));
                     sb.append(";");
 
                     Iterator rows = sheet.rowIterator();
@@ -155,6 +169,154 @@ public class ReadExcel {
         writeTxtFile(sb.toString());
 
     }
+    
+    public static void readXLSXFileUpdateDataBaseFile() throws IOException {
+        
+        int ensaios = 0;
+
+        String caminho = "/Users/andregnhoato/Dropbox/ensaios/";
+        StringBuilder sb = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("0.00");
+        
+
+        int linha = 1;
+        while (linha <= 9) {
+            int repeticao = 1;
+            while (repeticao <= 3) {
+                //System.out.print(ensaios + " - " + caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx\n");
+                InputStream ExcelFileToRead = new FileInputStream(caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx");
+
+                XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
+
+                int pages = 0;
+                while (pages < 4) {
+                    Ensaio e = new Ensaio();
+                    int cellcont = 0;
+                    FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                    XSSFSheet sheet = wb.getSheetAt(pages);
+                    XSSFRow row;
+                    XSSFCell cell;
+                    e.setDescricao("Ensaio linha "+linha+" repeticao "+ repeticao);
+                    //bocal pequeno
+                    e.setBocal(sheet.getRow(19).getCell(1).getStringCellValue().trim());
+                    //bocal grande
+                    e.setQuebraJato(sheet.getRow(21).getCell(1).getStringCellValue().trim().replace(",", "."));                   
+                    //pressao
+                    e.setPressao(sheet.getRow(20).getCell(1).getStringCellValue().trim().replace(",", "."));
+                    //velocidade vento
+                    e.setVelocidadeVento(Float.parseFloat(evaluator.evaluate(sheet.getRow(23).getCell(1)).formatAsString().replaceAll("\"", "")));
+                    //direcao do vento MODA
+                    e.setDirecaoVento(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", ""));
+                    
+                    e.setData(sheet.getRow(22).getCell(1).getDateCellValue());
+                    e.setInicio(sheet.getRow(17).getCell(1).getNumericCellValue()+"");
+                    e.setEspacamentoPluviometro(1.5F);
+//                    e.setEvaporacao((sheet.getRow(19).getCell(3)!=null ? (float) sheet.getRow(19).getCell(3).getNumericCellValue() :0));
+                    e.setEvaporacao(0);
+                    e.setVazao((sheet.getRow(22).getCell(3) != null ? (float) sheet.getRow(22).getCell(3).getNumericCellValue() :0));
+                    e.setGridAltura(16);
+                    e.setGridLargura(16);
+                    e.setDuracao("2 horas");
+                    try {
+                        e = edao.save(e);
+                    } catch (Exception ex) {
+                        Logger.getLogger(ReadExcel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    Iterator rows = sheet.rowIterator();
+                    //coleta
+                    while (rows.hasNext()) {
+                        row = (XSSFRow) rows.next();
+                        if (row.getRowNum() <= 15) {
+                            Iterator cells = row.cellIterator();
+                            while (cells.hasNext()) {
+                                cell = (XSSFCell) cells.next();
+                                Coleta c = new Coleta();
+                                c.setEnsaio(e);
+                                c.setColuna(cell.getColumnIndex());
+                                c.setLinha(cell.getRowIndex());
+                                c.setValor((float)cell.getNumericCellValue());
+                                try {
+                                    cdao.save(c);
+                                } catch (Exception ex) {
+                                    Logger.getLogger(ReadExcel.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+
+                        }
+                    }
+                    
+                    pages++;
+                }
+                repeticao++;
+            }
+            linha++;
+        }
+
+
+
+        System.out.print(sb.toString().replaceAll(",", "."));
+        writeTxtFile(sb.toString());
+
+    }
+    
+//    0-N
+//		22,5-NNE
+//	45-NE
+//		67,5-ENE
+//90-E
+//		112,5-ESE
+//	135-SE
+//		157,5-SSE
+//180-S
+//		202,5-SSW
+//	225-SW
+//		247,5 WSW
+//270-W
+//		292,5-WNW
+//	315-NW
+//		337,5-NNW
+    public static double getWindDegree(String wind){
+        
+        switch(wind){
+            case "N":
+                return 0;
+            case "NNE":
+                return 22.5;
+            case "NE":
+                return 45;
+            case "ENE":
+                return 67.5;
+            case "E":
+                return 90;
+            case "ESE":
+                return 112.5;
+            case "SE":
+                return 135;
+            case "SSE":
+                return 157.5;
+            case "S":
+                return 180;
+            case "SSW":
+                return 202.5;
+            case "SW":
+                return 225;
+            case "WSW":
+                return 247.5;
+            case "W":
+                return 270;
+            case "WNW":
+                return 292.5;
+            case "NW":
+                return 315;
+            case "NNW":
+                return 337.5;
+            default:
+                return 360;                
+        }
+
+    }
+
 
     public static void writeXLSXFile() throws IOException {
 
@@ -200,12 +362,14 @@ public class ReadExcel {
     }
 
     public static void main(String[] args) throws IOException {
-
+        ReadExcel re = new ReadExcel();
+        re.readXLSXFileUpdateDataBaseFile();
+        
 //        writeXLSFile();
 //        readXLSFile();
 
 //        writeXLSXFile();
-        readXLSXFile();
+//        readXLSXFile();
 
     }
 }

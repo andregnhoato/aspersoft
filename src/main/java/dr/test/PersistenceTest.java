@@ -29,15 +29,28 @@ public class PersistenceTest extends PersistenceController {
     public static void main(String[] args) throws Exception{
         
         PersistenceTest pt = new PersistenceTest();
-        pt.listarColetasByEnsaio(1);
-        pt.qtdeColetasByEnsaio(1);
-        pt.removeColetasByEnsaio(1);
-        pt.qtdeColetasByEnsaio(1);
-        
+//        pt.listarColetasByEnsaio(1);
+//        pt.qtdeColetasByEnsaio(1);
+//        pt.removeColetasByEnsaio(1);
+//        pt.qtdeColetasByEnsaio(1);
+        pt.atualizarColeta(2, 0, 0);
 
        
         
        
+    }
+    
+    public void atualizarColeta(int idEnsaio, int linha, int coluna){
+        Ensaio e;
+        
+        try{
+            e = edao.findById(idEnsaio);
+            Coleta c = cdao.findColetaByPosicao(e, linha, coluna);
+            c.setValor(8F);
+            cdao.update(c);
+        }catch(Exception ex){
+            Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     //remove as coletas de um determinado ensaio param id do ensaio
