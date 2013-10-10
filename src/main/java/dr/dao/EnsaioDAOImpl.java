@@ -60,10 +60,11 @@ public class EnsaioDAOImpl implements EnsaioDAO {
             if (object.getId() != null) {
                 return this.update(object);
             } else {
-               
-                this.em.getTransaction();
+                if(!this.em.getTransaction().isActive())
+                    this.em.getTransaction().begin();
                 this.em.persist(object);
                 this.em.flush();
+                this.em.getTransaction().commit();
                 return object;
             }
         } catch (PersistenceException e) {

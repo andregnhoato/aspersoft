@@ -40,7 +40,7 @@ public class ColetaDAOImpl implements ColetaDAO {
      * @see dao.ColetaDAO#getColetasByEnsaio(java.lang.Integer)
      */
     @Override
-    public List<Coleta> findColetasByEnsaio(Ensaio e) throws Exception{
+    public List<Coleta> findColetasByEnsaio(Ensaio e) throws Exception {
         if (e == null && e.getId() != null) {
             throw new Exception("O objeto Coleta está nulo.");
 //            return null;
@@ -76,7 +76,10 @@ public class ColetaDAOImpl implements ColetaDAO {
         if (object == null) {
             throw new Exception("O objeto Coleta está nulo.");
         }
+        this.em.getTransaction().begin();
         Coleta c = this.em.merge(object);
+        this.em.flush();
+        this.em.getTransaction().commit();
         return c;
     }
 
@@ -107,5 +110,13 @@ public class ColetaDAOImpl implements ColetaDAO {
         } catch (NoResultException e) {
             return new ArrayList<Coleta>(0);
         }
+    }
+
+    @Override
+    public Coleta findColetaByPosicao(Ensaio e, int linha, int coluna) throws Exception {
+        Query query = em.createQuery("SELECT co FROM coleta co where co.linha = :linha and co.coluna = :coluna and co.ensaio.id = :id");
+        query.setParameter("id", e.getId()).setParameter("linha", linha).setParameter("coluna", coluna);
+        return (Coleta) query.getSingleResult();
+
     }
 }

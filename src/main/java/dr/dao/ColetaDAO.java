@@ -17,7 +17,8 @@ public interface ColetaDAO extends AbstractDAO<Coleta>{
      * @return Lista de coletas com filtro em nome.
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
-    List<Coleta> findColetasByEnsaio(Ensaio e)throws Exception;;
+    List<Coleta> findColetasByEnsaio(Ensaio e)throws Exception;
+    Coleta findColetaByPosicao(Ensaio e, int linha, int coluna)throws Exception;
 
    
 }
