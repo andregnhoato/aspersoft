@@ -1,13 +1,9 @@
 package dr.ui.coleta;
 
 import dr.model.Coleta;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 

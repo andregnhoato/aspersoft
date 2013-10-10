@@ -85,9 +85,6 @@ public class NumericEditableTableCell<S extends Object, T extends Number> extend
             ParsePosition position = new ParsePosition(startIndex);
             Number parsedNumber = /*format.parse(*/ Float.parseFloat(input) /*, position)*/;
             
-            Coleta c = new Coleta();
-            c.setValor((Float) parsedNumber);
-            
             
             
             

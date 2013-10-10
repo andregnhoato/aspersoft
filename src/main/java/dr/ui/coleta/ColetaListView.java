@@ -34,7 +34,7 @@ public class ColetaListView extends Stage{
         panel.getChildren().addAll(table);
         
         Scene scene = new Scene(panel);
-        scene.getStylesheets().add("style.css");
+//        scene.getStylesheets().add("style.css");
         this.setScene(scene);
         
     }
