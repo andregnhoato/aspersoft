@@ -92,6 +92,9 @@ public class EnsaioDAOImpl implements EnsaioDAO {
         if (object == null) {
             throw new Exception("O objeto Ensaio está nulo.");
         }
+        Query query = this.em.createQuery("delete from coleta co where co.ensaio.id = :idEnsaio");
+        query.setParameter("idEnsaio", object.getId());
+        query.executeUpdate();
         this.em.remove(object);
 
         return true;
