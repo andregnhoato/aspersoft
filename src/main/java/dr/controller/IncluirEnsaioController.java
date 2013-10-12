@@ -16,24 +16,29 @@ import dr.validation.Validator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 
 /**
- * Define a <code>Controller</code> responsável por gerir a tela de inclusão/edição de <code>Ensaio</code>.
- * 
+ * Define a
+ * <code>Controller</code> responsável por gerir a tela de inclusão/edição de
+ * <code>Ensaio</code>.
+ *
  * @see controller.PersistenceController
- * 
- * @author @Andre
+ *
+ * @author
+ * @Andre
  */
 public class IncluirEnsaioController extends PersistenceController {
-    
+
     private IncluirEnsaioView view;
     private Validator<Ensaio> validador = new EnsaioValidator();
-    
+    Boolean dialog;
+
     public IncluirEnsaioController(AbstractController parent) {
         super(parent);
-        
+
         this.view = new IncluirEnsaioView();
         this.view.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
             @Override
@@ -41,7 +46,7 @@ public class IncluirEnsaioController extends PersistenceController {
                 IncluirEnsaioController.this.cleanUp();
             }
         });
-        
+
         registerAction(this.view.getCancelButton(), new AbstractAction() {
             @Override
             protected void action() {
@@ -53,98 +58,123 @@ public class IncluirEnsaioController extends PersistenceController {
                 });
             }
         });
-        
-        registerAction(this.view.getSaveButton(), 
+
+        registerAction(this.view.getSaveButton(),
                 ConditionalAction.build()
-                    .addConditional(new BooleanExpression() {
-                        @Override
-                        public boolean conditional() {
-                            Ensaio e = view.getEnsaio();
-                            String msg = validador.validate(e);
-                            if (!"".equals(msg == null ? "" : msg)) {
-                                Dialog.showInfo("Validacão", msg, view);
-                                return false;
-                            }
-                                                
-                            return true;
-                        }
-                    })
-                    .addAction(
-                        TransactionalAction.build()
-                            .persistenceCtxOwner(IncluirEnsaioController.this)
-                            .addAction(new AbstractAction() {
-                                private Ensaio e;
+                .addConditional(new BooleanExpression() {
+            @Override
+            public boolean conditional() {
+                Ensaio e = view.getEnsaio();
+                String msg = validador.validate(e);
+                if (!"".equals(msg == null ? "" : msg)) {
+                    Dialog.showInfo("Validacão", msg, view);
+                    return false;
+                }
 
-                                @Override
-                                protected void action() {
-                                    e = view.getEnsaio();
-                                    EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
-                                    try {
-                                        e = dao.save(e);
-                                    } catch (Exception ex) {
-                                        Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                }
-
-                                @Override
-                                protected void posAction() {
-                                    Platform.runLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            view.hide();
-                                        }
-                                    });
-                                    fireEvent(new IncluirEnsaioEvent(e));
-                                }
-                            })));
-        
-        registerAction(view.getRemoveButton(), 
+                return true;
+            }
+        })
+                .addAction(
                 TransactionalAction.build()
-                    .persistenceCtxOwner(IncluirEnsaioController.this)
-                    .addAction(new AbstractAction() {
-                        private Ensaio e;
-                        
-                        @Override
-                        protected void action() {
-                            Integer id = view.getEnsaioId();
-                            if (id != null) {
-                                try {
-                                    EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
-                                    e = dao.findById(id);
-                                    if (e != null) { 
-                                        dao.remove(e);
-                                    }
-                                } catch (Exception ex) {
-                                    Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                                
-                            }
+                .persistenceCtxOwner(IncluirEnsaioController.this)
+                .addAction(new AbstractAction() {
+            private Ensaio e;
+
+            @Override
+            protected void action() {
+                e = view.getEnsaio();
+                EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                try {
+                    e = dao.save(e);
+                } catch (Exception ex) {
+                    Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            protected void posAction() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.hide();
+                    }
+                });
+                fireEvent(new IncluirEnsaioEvent(e));
+            }
+        })));
+
+        registerAction(view.getRemoveButton(),
+                ConditionalAction.build()
+                .addConditional(new BooleanExpression() {
+            @Override
+            public boolean conditional() {
+
+                Dialog.buildConfirmation("Confirmação", "Deseja remover este Ensaio e todas as coletas relacionadas?", view).addYesButton(new EventHandler() {
+                    Boolean result;
+
+                    @Override
+                    public void handle(Event t) {
+                        dialog = true;
+                    }
+                }).addNoButton(new EventHandler() {
+                    @Override
+                    public void handle(Event t) {
+                        dialog = false;
+                    }
+                }).build()
+                        .show();
+                return dialog;
+            }
+        }).addAction(
+                TransactionalAction.build()
+                .persistenceCtxOwner(IncluirEnsaioController.this)
+                .addAction(new AbstractAction() {
+            private Ensaio e;
+
+            @Override
+            protected void action() {
+
+                Integer id = view.getEnsaioId();
+                if (id != null) {
+                    try {
+
+                        EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                        e = dao.findById(id);
+                        if (e != null) {
+                            dao.remove(e);
                         }
-                        
-                        @Override
-                        public void posAction() {
-                            view.hide();
-                            fireEvent(new RemoveEnsaioEvent(e));
-                        }
-                    }));
+                    } catch (Exception ex) {
+                        Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void posAction() {
+                view.hide();
+                fireEvent(new RemoveEnsaioEvent(e));
+            }
+        })));
     }
-    
+
     public void show() {
         loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
         view.show();
     }
-    
+
     public void show(Ensaio e) {
         view.setEnsaio(e);
         view.setTitle("Editar Ensaio");
         show();
     }
-    
+
     @Override
     protected void cleanUp() {
         view.setTitle("Incluir Ensaio");
         view.resetForm();
-        
+
         super.cleanUp();
     }
 }
