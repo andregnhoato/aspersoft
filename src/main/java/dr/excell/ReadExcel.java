@@ -15,7 +15,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -178,6 +181,8 @@ public class ReadExcel extends PersistenceController {
         String caminho = "/Users/andregnhoato/Dropbox/ensaios/";
         StringBuilder sb = new StringBuilder();
         DecimalFormat df = new DecimalFormat("0.00");
+        SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
+        Calendar time = Calendar.getInstance();
 
 
         int linha = 1;
@@ -210,9 +215,11 @@ public class ReadExcel extends PersistenceController {
                         e.setVelocidadeVento(Float.parseFloat(evaluator.evaluate(sheet.getRow(23).getCell(1)).formatAsString().replaceAll("\"", "")));
                         //direcao do vento MODA
                         e.setDirecaoVento(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", ""));
-
+                        //data e hora de inicio
                         e.setData(sheet.getRow(22).getCell(1).getDateCellValue());
-                        e.setInicio(sheet.getRow(17).getCell(1).getNumericCellValue() + "");
+                        time.setTime(sheet.getRow(17).getCell(1).getDateCellValue());
+                        e.setInicio(f.format(time.getTime()));
+
                         e.setEspacamentoPluviometro(1.5F);
 //                    e.setEvaporacao((sheet.getRow(19).getCell(3)!=null ? (float) sheet.getRow(19).getCell(3).getNumericCellValue() :0));
                         e.setEvaporacao(0);
