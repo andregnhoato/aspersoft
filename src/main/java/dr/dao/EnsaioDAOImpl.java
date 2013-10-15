@@ -1,9 +1,7 @@
 package dr.dao;
 
 import dr.model.Ensaio;
-import dr.model.Ensaio;
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,13 +12,16 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 /**
- * Implementa o contrato de persistência da entidade <code>Ensaio</code>. 
- * Utiliza a herança para <code>AbstractDAO</code> para resolver as operações básicas de cadastro com <code>JPA</code>.
- * 
+ * Implementa o contrato de persistência da entidade
+ * <code>Ensaio</code>. Utiliza a herança para
+ * <code>AbstractDAO</code> para resolver as operações básicas de cadastro com
+ * <code>JPA</code>.
+ *
  * @see dao.EnsaioDAO
  * @see dao.AbstractDAO
- * 
- * @author @andre
+ *
+ * @author
+ * @andre
  */
 public class EnsaioDAOImpl implements EnsaioDAO {
 
@@ -33,7 +34,7 @@ public class EnsaioDAOImpl implements EnsaioDAO {
         super();
         this.em = em;
     }
-    
+
     /**
      * Reliza a pesquisa ensaios com filtro no nome (via operador
      * <code>like</code>).
@@ -50,7 +51,7 @@ public class EnsaioDAOImpl implements EnsaioDAO {
         query.setParameter("descricao", nm.concat(descricao).concat("%"));
         return (List<Ensaio>) query.getResultList();
     }
-    
+
     @Override
     public Ensaio save(Ensaio object) throws Exception {
         if (object == null) {
@@ -60,8 +61,9 @@ public class EnsaioDAOImpl implements EnsaioDAO {
             if (object.getId() != null) {
                 return this.update(object);
             } else {
-                if(!this.em.getTransaction().isActive())
+                if (!this.em.getTransaction().isActive()) {
                     this.em.getTransaction().begin();
+                }
                 this.em.persist(object);
                 this.em.flush();
                 this.em.getTransaction().commit();
@@ -70,6 +72,7 @@ public class EnsaioDAOImpl implements EnsaioDAO {
         } catch (PersistenceException e) {
 //            this.em.getTransaction().rollback();
             throw new PersistenceException(e);
+            
         }
     }
 
@@ -79,6 +82,8 @@ public class EnsaioDAOImpl implements EnsaioDAO {
             throw new Exception("O objeto Ensaio está nulo.");
         }
         Ensaio c = this.em.merge(object);
+        this.em.flush();
+        
         return c;
     }
 
@@ -110,6 +115,4 @@ public class EnsaioDAOImpl implements EnsaioDAO {
             return new ArrayList<Ensaio>(0);
         }
     }
-
-
 }
