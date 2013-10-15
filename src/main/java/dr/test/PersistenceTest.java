@@ -10,7 +10,7 @@ import dr.dao.ColetaDAOImpl;
 import dr.dao.EnsaioDAO;
 import dr.dao.EnsaioDAOImpl;
 import dr.model.*;
-import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,7 +33,8 @@ public class PersistenceTest extends PersistenceController {
 //        pt.qtdeColetasByEnsaio(1);
 //        pt.removeColetasByEnsaio(1);
 //        pt.qtdeColetasByEnsaio(1);
-        pt.atualizarColeta(2, 0, 0);
+        pt.qtdeEnsaios();
+        pt.sobreposicao(29, 12, 12);
 
        
         
@@ -102,6 +103,63 @@ public class PersistenceTest extends PersistenceController {
             Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
             
+    }
+    
+    public void qtdeEnsaios(){
+        try {
+            List<Ensaio> ensaios = (List<Ensaio>) edao.findAll();            
+            System.out.println("Quantidade de ensaios: " + ensaios.size());
+            
+        } catch (Exception ex) {
+            Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+    }
+    
+    public void sobreposicao(int idEnsaio, int gridSobreposicaoX, int gridSobreposicaoY ){
+        try {
+            Ensaio e = edao.findById(idEnsaio);
+            float sobreposicao = 0;
+            boolean perfeito = false;
+            if(gridSobreposicaoX == gridSobreposicaoY){
+                sobreposicao = gridSobreposicaoX / e.getEspacamentoPluviometro();
+            }
+            //coletas
+            List<Coleta> coletas = (List<Coleta>) cdao.findColetasByEnsaio(e);
+            if(coletas.size()<(e.getGridAltura()*e.getGridLargura())){
+                throw new Exception("Invalid length array");
+            }
+            
+            //identificando a localização do aspersor ** verificar com Paulo
+            int posAspersor = e.getGridAltura() / 2;
+            if(posAspersor == sobreposicao)
+                perfeito = true;
+            //armazenar os valores sobrepostos em coletas
+            ArrayList<Coleta> sobreposicoes  = new ArrayList();
+            if (perfeito){
+                for (int i = 0; i < (sobreposicao*sobreposicao); i++) {
+                    Coleta c = new Coleta();
+                    float sobre = 0;
+                    sobre = coletas.get(i).getValor()+
+                               coletas.get(i+(int)sobreposicao).getValor()+
+                               coletas.get(i+(int)(sobreposicao*e.getGridLargura())).getValor()+
+                               coletas.get(i+(int)(sobreposicao+(sobreposicao*e.getGridLargura()))).getValor();
+                    
+                    System.out.println(i+ "valor sobreposição"+sobre+"/n" );
+                    
+                }
+            }
+       
+            System.out.println("grid altura: " + e.getGridAltura() + " grid largura: "+ e.getGridLargura());
+            System.out.println("espaçamento: " + e.getEspacamentoPluviometro());
+            System.out.println("Quantidade de coletas: " + coletas.size());
+            
+            
+            
+        } catch (Exception e) {
+            Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
     }
      
     public PersistenceTest() {
