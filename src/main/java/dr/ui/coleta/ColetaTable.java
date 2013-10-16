@@ -65,7 +65,6 @@ public class ColetaTable extends VBox {
         }
 
         this.e = ensaio;
-        List<TableColumn> columns = new ArrayList<>();
         this.getChildren().remove(table);
         table = new ColetaTableView();
         table.setEditable(true);
@@ -88,6 +87,7 @@ public class ColetaTable extends VBox {
 
                 TableColumn col = new TableColumn(alphabet + "");
                 col.setCellFactory(numericFactory);
+                
 
                 col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList, Float>, ObservableValue<Float>>() {
                     public ObservableValue call(CellDataFeatures<ObservableList, Float> param) {
@@ -97,7 +97,7 @@ public class ColetaTable extends VBox {
                     }
                 });
                 col.setSortable(false);
-
+                col.setPrefWidth(40);
                 //Evento disparado após editar a celula atualiza coleta na base
                 col.setOnEditCommit(new EventHandler<CellEditEvent<ObservableValue, Float>>() {
                     @Override
@@ -128,11 +128,11 @@ public class ColetaTable extends VBox {
                         }
                     }
                 });
-
+               
                 table.getColumns().add(col);
                 alphabet++;
             }
-            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+//            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.autosize();
             table.setItems(getColetasfromDatabase());
 
