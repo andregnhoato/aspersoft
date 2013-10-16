@@ -33,6 +33,7 @@ public class ListaEnsaioController extends PersistenceController {
     private IncluirEnsaioController addEnsaioController;
     private BuscarEnsaioController buscarController;
     private ListaColetaController coletaController;
+    private UniformidadeController uniformidadeController;
 
     public ListaEnsaioController(AbstractController parent) {
         super(parent);
@@ -41,6 +42,7 @@ public class ListaEnsaioController extends PersistenceController {
         this.addEnsaioController = new IncluirEnsaioController(this);
         this.buscarController = new BuscarEnsaioController(this);
         this.coletaController = new ListaColetaController(this);
+        this.uniformidadeController = new UniformidadeController(this);
         
         
         registerAction(view.getNewButton(), new AbstractAction() {
@@ -74,6 +76,22 @@ public class ListaEnsaioController extends PersistenceController {
                         ListaEnsaioController.this.coletaController.setEnsaio(e);
                         ListaEnsaioController.this.coletaController.reRenderTable();
                         ListaEnsaioController.this.coletaController.show();
+                    }else{
+                        Dialog.showInfo("Validacão", "Selecione um Ensaio", view);
+                    }
+            }
+        });
+        
+        registerAction(view.getUniformidadeButton(), new AbstractAction() {
+
+            @Override
+            protected void action() {
+                Ensaio e = view.getTable().getEnsaioSelected();
+                    if (e != null) {
+                        /*alterar pelo controller de coleta ainda não implementado*/
+                        ListaEnsaioController.this.uniformidadeController.setEnsaio(e);
+                        ListaEnsaioController.this.uniformidadeController.reRenderTable();
+                        ListaEnsaioController.this.uniformidadeController.show();
                     }else{
                         Dialog.showInfo("Validacão", "Selecione um Ensaio", view);
                     }
@@ -142,7 +160,6 @@ public class ListaEnsaioController extends PersistenceController {
     }
     
     private void refreshTable(List<Ensaio> list) {
-        //view.addTransition();
         if (list != null) {
             view.refreshTable(list);
             return;
