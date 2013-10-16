@@ -8,9 +8,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Tela principal da aplicação. Apresenta uma lista com as ensaios cadastradas. 
+ * Tela principal da aplicação. Apresenta uma lista com as coletas. 
  * 
- * <p>A partir dessa tela é possível criar/editar ou pesquisar ensaio.</p>
+ * <p>A partir dessa tela é possível atualizar/editar as coletas.</p>
  * 
  * @author @Andre
  */

@@ -23,7 +23,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -54,8 +53,8 @@ public class ColetaTable extends VBox {
     }
 
     public void reRenderTable(Ensaio ensaio) {
-        ArrayList<Coleta> clts = null;
         try {
+            ArrayList<Coleta> clts;
             clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
             if (clts.size() <= 0) {
                 insertEmptyColetas(clts, ensaio);
@@ -90,6 +89,7 @@ public class ColetaTable extends VBox {
                 
 
                 col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList, Float>, ObservableValue<Float>>() {
+                    @Override
                     public ObservableValue call(CellDataFeatures<ObservableList, Float> param) {
 
                         return new SimpleFloatProperty((Float)param.getValue().get(j));
@@ -164,13 +164,13 @@ public class ColetaTable extends VBox {
                             }
 
                         } catch (Exception e) {
-                            System.out.println(e.getMessage());
+                            System.err.println(e.getMessage());
                         }
                     }
                 });
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.err.println(ex.getMessage());
         }
     }
 
