@@ -34,7 +34,7 @@ public class IncluirEnsaioController extends PersistenceController {
 
     private IncluirEnsaioView view;
     private Validator<Ensaio> validador = new EnsaioValidator();
-    Boolean dialog;
+    static Boolean dialog;
 
     public IncluirEnsaioController(AbstractController parent) {
         super(parent);
@@ -110,8 +110,7 @@ public class IncluirEnsaioController extends PersistenceController {
             public boolean conditional() {
 
                 Dialog.buildConfirmation("Confirmação", "Deseja remover este Ensaio e todas as coletas relacionadas?", view).addYesButton(new EventHandler() {
-                    Boolean result;
-
+                    
                     @Override
                     public void handle(Event t) {
                         dialog = true;

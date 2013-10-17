@@ -18,11 +18,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 /**
  * Reune os componentes para formar uma tabela de
@@ -50,38 +55,75 @@ public class UniformidadeTable extends VBox {
 
     }
 
-    public void reRenderTable(Ensaio ensaio) {
-        ArrayList<Coleta> clts = null;
-        try {
-            clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
-        } catch (Exception ex) {
-            Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
+    public void renderTable() {
+        table = new UniformidadeTableView();
+
+        int contador = 0;
+        for (int linha = 0; linha < e.getGridAltura() / 2; linha++) {
+            ObservableList<Float> row = FXCollections.observableArrayList();
+            for (int coluna = 0; coluna < e.getGridAltura() / 2; coluna++) {
+                row.add(0F);
+                contador++;
+            }
+            sobreposicoes.add(row);
+
         }
 
-        this.e = ensaio;
-        this.getChildren().remove(table);
-        table = new UniformidadeTableView();
-        table.setEditable(true);
-        table.getSelectionModel().setCellSelectionEnabled(true);
+        table.setItems(sobreposicoes);
+        this.getChildren().addAll(table);
 
-        //chamar método que calcula sobreposição
+    }
+
+    public void reRenderTable(Ensaio ensaio, String espacamento) {
+        if (espacamento != null) {
+
+            ArrayList<Coleta> clts = null;
+            try {
+                clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
+            } catch (Exception ex) {
+                Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            int espacamentoX = Integer.parseInt(espacamento.substring(0, 2));
+            int espacamentoY = Integer.parseInt(espacamento.substring(3, 5));
+
+
+            this.e = ensaio;
+            this.getChildren().remove(table);
+            table = new UniformidadeTableView();
+//        table.setEditable(true);
+            table.getSelectionModel().setCellSelectionEnabled(true);
+
+            //chamar método que calcula sobreposição
 //        this.calculaSobreposicao(12,12, clts);
 
-        if (ensaio != null && ensaio.getGridLargura() != null) {
-            char alphabet = 'A';
-            
-            for (int i = 0; i < (e.getGridAltura()/2); i++) {
-                TableColumn col = new TableColumn(alphabet + "");
-                col.setSortable(false);
-                col.setPrefWidth(40);
-                table.getColumns().add(col);
-                alphabet++;
-            }
-            table.autosize();
-            table.setItems(calculaSobreposicao(12, 12, clts));
+            if (ensaio != null && ensaio.getGridLargura() != null) {
+                char alphabet = 'A';
 
+                for (int i = 0; i < (e.getGridAltura() / 2); i++) {
+                    TableColumn col = new TableColumn(alphabet + "");
+                    col.setSortable(false);
+                    col.setPrefWidth(45);
+                    final int j = i;
+
+                    col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList, Float>, ObservableValue<Float>>() {
+                    @Override
+                    public ObservableValue call(CellDataFeatures<ObservableList, Float> param) {
+
+                        return new SimpleFloatProperty((Float)param.getValue().get(j));
+
+                    }
+                });
+
+
+                    table.getColumns().add(col);
+                    alphabet++;
+                }
+                table.autosize();
+                table.setItems(calculaSobreposicao(espacamentoX, espacamentoY, clts));
+
+            }
+            this.getChildren().addAll(table);
         }
-        this.getChildren().addAll(table);
     }
 
     private ObservableList calculaSobreposicao(int espacamentoX, int espacamentoY, List<Coleta> coletas) {
@@ -142,6 +184,7 @@ public class UniformidadeTable extends VBox {
                 for (int j = 0; j < (sobreposicaoX * sobreposicaoY); j++) {
                     Float soma;
                     soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
+                    soma = (float) (Math.round(soma * 100.0) / 100.0);
                     sp.add(soma);
                 }
 
@@ -202,6 +245,7 @@ public class UniformidadeTable extends VBox {
                 for (int j = 0; j < (sobreposicaoX * sobreposicaoY); j++) {
                     Float soma;
                     soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
+                    soma = (float) (Math.round(soma * 100.0) / 100.0);
                     sp.add(soma);
                 }
 

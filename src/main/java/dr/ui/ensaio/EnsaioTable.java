@@ -20,8 +20,10 @@ public class EnsaioTable extends VBox {
     
     public EnsaioTable(){
         table = new EnsaioTableView();
+        table.setMaxSize(890, 490);
+        
         this.getChildren().addAll(table);
-        this.setPadding(new Insets(30, 0, 0, 10));//css
+        this.setPadding(new Insets(30, 10, 10, 10));//css
     }
     
     public void reload(List<Ensaio> ensaios) {

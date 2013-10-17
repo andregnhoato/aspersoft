@@ -11,6 +11,7 @@ import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ButtonBase;
+import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.MenuItem;
 import org.apache.log4j.Logger;
 
@@ -63,6 +64,12 @@ public class AbstractController implements EventHandler<ActionEvent> {
      */
     protected void registerAction(ButtonBase source, AbstractAction action) {
         log.debug("Registrando action: " + action.getClass().getName() + " para o botão: " + source.getText());
+        registerAction(source.getId(), action);
+        source.setOnAction(this);
+    }
+    
+    protected void registerAction(ComboBoxBase source, AbstractAction action) {
+        log.debug("Registrando action: " + action.getClass().getName() + " para o combobox: " + source.getValue());
         registerAction(source.getId(), action);
         source.setOnAction(this);
     }
@@ -137,6 +144,14 @@ public class AbstractController implements EventHandler<ActionEvent> {
                 MenuItem menu = (MenuItem) evt.getSource();
                 actionCommand = menu.getId();
             }
+        }
+        
+        if (actionCommand == null){
+            if (evt.getSource() instanceof ComboBoxBase){
+                ComboBoxBase combo = (ComboBoxBase) evt.getSource();
+                actionCommand = combo.getId();
+            }
+                
         }
         
         if (actionCommand == null) {

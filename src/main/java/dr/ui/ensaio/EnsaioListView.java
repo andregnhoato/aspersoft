@@ -28,9 +28,10 @@ public class EnsaioListView extends Stage{
     
     public EnsaioListView() {
         setTitle("Ensaios");
-        setWidth(900);
-        setHeight(500);
-        setResizable(true);
+        setWidth(920);
+        setHeight(520);
+        setResizable(false);
+  
         initModality(Modality.APPLICATION_MODAL);
         
         inicializaComponentes();
