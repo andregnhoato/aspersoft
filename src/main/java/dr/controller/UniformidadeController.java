@@ -14,7 +14,7 @@ import javafx.application.Platform;
  */
 public class UniformidadeController extends PersistenceController {
     
-    private UniformidadeListView uniformidadeView;
+    private UniformidadeListView uniformidadeView;  
 
     public UniformidadeController(AbstractController parent) {
         this.uniformidadeView = new UniformidadeListView();

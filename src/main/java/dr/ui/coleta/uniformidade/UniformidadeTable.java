@@ -6,9 +6,6 @@ import dr.dao.ColetaDAOImpl;
 import dr.model.Coleta;
 import dr.ui.ensaio.*;
 import dr.model.Ensaio;
-import dr.test.PersistenceTest;
-import static dr.test.PersistenceTest.cdao;
-import static dr.test.PersistenceTest.edao;
 import java.text.DecimalFormat;
 
 import java.util.ArrayList;
@@ -19,7 +16,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,7 +38,7 @@ public class UniformidadeTable extends VBox {
 
     private UniformidadeTableView table;
     private ObservableList<ObservableList> sobreposicoes;
-    private Ensaio e = null;
+    private Ensaio ensaio = null;
     PersistenceController pe = new PersistenceController();
     final ColetaDAO dao;
 
@@ -59,9 +55,9 @@ public class UniformidadeTable extends VBox {
         table = new UniformidadeTableView();
 
         int contador = 0;
-        for (int linha = 0; linha < e.getGridAltura() / 2; linha++) {
+        for (int linha = 0; linha < ensaio.getGridAltura() / 2; linha++) {
             ObservableList<Float> row = FXCollections.observableArrayList();
-            for (int coluna = 0; coluna < e.getGridAltura() / 2; coluna++) {
+            for (int coluna = 0; coluna < ensaio.getGridAltura() / 2; coluna++) {
                 row.add(0F);
                 contador++;
             }
@@ -87,7 +83,7 @@ public class UniformidadeTable extends VBox {
             int espacamentoY = Integer.parseInt(espacamento.substring(3, 5));
 
 
-            this.e = ensaio;
+            this.ensaio = ensaio;
             this.getChildren().remove(table);
             table = new UniformidadeTableView();
 //        table.setEditable(true);
@@ -99,7 +95,7 @@ public class UniformidadeTable extends VBox {
             if (ensaio != null && ensaio.getGridLargura() != null) {
                 char alphabet = 'A';
 
-                for (int i = 0; i < (e.getGridAltura() / 2); i++) {
+                for (int i = 0; i < (this.ensaio.getGridAltura() / 2); i++) {
                     TableColumn col = new TableColumn(alphabet + "");
                     col.setSortable(false);
                     col.setPrefWidth(45);
@@ -125,11 +121,16 @@ public class UniformidadeTable extends VBox {
             this.getChildren().addAll(table);
         }
     }
+    
+    public Ensaio getEnsaio(){
+        return this.ensaio;
+                
+    }
 
     private ObservableList calculaSobreposicao(int espacamentoX, int espacamentoY, List<Coleta> coletas) {
         sobreposicoes = FXCollections.observableArrayList();
         try {
-            List<Coleta> clts = dao.findColetasByEnsaio(e);
+            List<Coleta> clts = dao.findColetasByEnsaio(ensaio);
             DecimalFormat df = new DecimalFormat("0.00");
             float sobreposicaoX;
             float sobreposicaoY;
@@ -138,16 +139,16 @@ public class UniformidadeTable extends VBox {
 
             //coletas
             //List<Coleta> coletas = clts;
-            if (coletas.size() < (e.getGridAltura() * e.getGridLargura())) {
+            if (coletas.size() < (ensaio.getGridAltura() * ensaio.getGridLargura())) {
                 throw new Exception("Invalid length array");
             }
             //1 identificando a localização do aspersor ** verificar com Paulo
-            int posAspersorX = e.getGridAltura() / 2;
-            int posAspersorY = e.getGridLargura() / 2;
+            int posAspersorX = ensaio.getGridAltura() / 2;
+            int posAspersorY = ensaio.getGridLargura() / 2;
 
             //2 identificando se a sobreposição compreende 1/4 do grid
-            sobreposicaoX = espacamentoX / e.getEspacamentoPluviometro();
-            sobreposicaoY = espacamentoY / e.getEspacamentoPluviometro();
+            sobreposicaoX = espacamentoX / ensaio.getEspacamentoPluviometro();
+            sobreposicaoY = espacamentoY / ensaio.getEspacamentoPluviometro();
 
             if (posAspersorX == posAspersorY) {
                 if (posAspersorX == sobreposicaoX && posAspersorY == sobreposicaoY) {
