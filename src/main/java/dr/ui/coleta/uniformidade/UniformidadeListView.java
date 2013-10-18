@@ -46,6 +46,7 @@ public class UniformidadeListView extends Stage {
     private SimpleStringProperty dv;
     private Label espacamento;
     private SimpleStringProperty esp;
+   
 
     public UniformidadeListView() {
 
@@ -76,8 +77,8 @@ public class UniformidadeListView extends Stage {
         grid.add(espacamento, 1, 4);
         grid.add(new Label("Tamanho grid: "), 2, 4);
         grid.add(metros, 3, 4);
-
-        grid.add(table, 0, 5, 3, 1);
+//        grid.add(new Label("CUC: "), 0,5);
+        grid.add(table, 0, 5, 4, 1);
 
 
         Group panel = new Group();
@@ -101,6 +102,7 @@ public class UniformidadeListView extends Stage {
         espacamento = new Label("--");
         inicio = new Label("--");
         metros = new Label("--");
+        
       
     }
 
@@ -137,6 +139,7 @@ public class UniformidadeListView extends Stage {
         esp = new SimpleStringProperty(e.getEspacamentoPluviometro() + "");
         ini = new SimpleStringProperty(e.getInicio());
         m = new SimpleStringProperty(mQuad + " m2");
+        
 
 
         descricao.textProperty().bind(desc);
@@ -147,6 +150,7 @@ public class UniformidadeListView extends Stage {
         espacamento.textProperty().bind(esp);
         inicio.textProperty().bind(ini);
         metros.textProperty().bind(m);
+        
 
     }
 

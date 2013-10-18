@@ -1,5 +1,6 @@
 package dr.ui.coleta.uniformidade;
 
+import com.sun.prism.paint.Color;
 import dr.controller.PersistenceController;
 import dr.dao.ColetaDAO;
 import dr.dao.ColetaDAOImpl;
@@ -16,12 +17,15 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -37,15 +41,45 @@ import javafx.util.Callback;
 public class UniformidadeTable extends VBox {
 
     private UniformidadeTableView table;
+    GridPane grid;
+    ;
     private ObservableList<ObservableList> sobreposicoes;
     private Ensaio ensaio = null;
     PersistenceController pe = new PersistenceController();
     final ColetaDAO dao;
+    private Label cuc;
+    private SimpleStringProperty Cuc;
+    Float CUC;
+    private Label cud;
+    private SimpleStringProperty Cud;
+    Float CUD;
+    private Label cue;
+    private SimpleStringProperty Cue;
+    Float CUE;
 
     public UniformidadeTable() {
         table = new UniformidadeTableView();
         dao = new ColetaDAOImpl(pe.getPersistenceContext());
-        this.getChildren().addAll(table);
+        grid = new GridPane();
+        grid.setVgap(6);
+        grid.setHgap(2);
+        grid.setPadding(new Insets(5, 5, 5, 5));
+        CUC = 0F;
+        cuc = new Label("--");
+//        cuc.setTextFill(Color.web("#0076a3"));
+        cud = new Label("--");
+//        cud.setTextFill(Color.web("#0076a3"));
+        cue = new Label("--");
+//        cue.setTextFill(Color.web("#0076a3"));
+        grid.add(new Label("CUC: "), 0, 0);
+        grid.add(cuc, 1, 0);
+        grid.add(new Label("CUD: "), 2, 0);
+        grid.add(cud, 3, 0);
+        grid.add(new Label("CUE: "), 4, 0);
+        grid.add(cue, 5, 0);
+        
+        grid.add(table, 0, 1, 6, 1);
+        this.getChildren().addAll(grid);
         this.setPadding(new Insets(10, 10, 10, 10));//css
 
 
@@ -65,8 +99,20 @@ public class UniformidadeTable extends VBox {
 
         }
 
+        grid = new GridPane();
+        grid.setVgap(1);
+        grid.setHgap(2);
+        grid.setPadding(new Insets(5, 5, 5, 5));
+
         table.setItems(sobreposicoes);
-        this.getChildren().addAll(table);
+        grid.add(new Label("CUC: "), 0, 0);
+        grid.add(cuc, 1, 0);
+        grid.add(table, 0, 1, 6, 1);
+        grid.add(new Label("CUD: "), 2, 0);
+        grid.add(new Label("--"), 3, 0);
+        grid.add(new Label("CUE: "), 4, 0);
+        grid.add(new Label("-- "), 5, 0);
+        this.getChildren().addAll(grid);
 
     }
 
@@ -84,14 +130,15 @@ public class UniformidadeTable extends VBox {
 
 
             this.ensaio = ensaio;
-            this.getChildren().remove(table);
+            this.getChildren().remove(grid);
             table = new UniformidadeTableView();
+            
 //        table.setEditable(true);
             table.getSelectionModel().setCellSelectionEnabled(true);
 
             //chamar método que calcula sobreposição
 //        this.calculaSobreposicao(12,12, clts);
-
+            int contador = 0;
             if (ensaio != null && ensaio.getGridLargura() != null) {
                 char alphabet = 'A';
 
@@ -100,37 +147,58 @@ public class UniformidadeTable extends VBox {
                     col.setSortable(false);
                     col.setPrefWidth(45);
                     final int j = i;
+                    contador++;
 
                     col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList, Float>, ObservableValue<Float>>() {
-                    @Override
-                    public ObservableValue call(CellDataFeatures<ObservableList, Float> param) {
+                        @Override
+                        public ObservableValue call(CellDataFeatures<ObservableList, Float> param) {
 
-                        return new SimpleFloatProperty((Float)param.getValue().get(j));
+                            return new SimpleFloatProperty((Float) param.getValue().get(j));
 
-                    }
-                });
+                        }
+                    });
 
 
                     table.getColumns().add(col);
                     alphabet++;
                 }
-                table.autosize();
+                table.setMaxSize(contador * 45.5, contador * 28);
                 table.setItems(calculaSobreposicao(espacamentoX, espacamentoY, clts));
 
             }
-            this.getChildren().addAll(table);
+            grid = new GridPane();
+            grid.setVgap(1);
+            grid.setHgap(2);
+//            grid.setPadding(new Insets(5, 5, 5, 5));
+            grid.add(new Label("CUC: "), 0, 0);
+            grid.add(cuc, 1, 0);
+            grid.add(new Label("CUD:"), 2, 0);
+            grid.add(cud, 3,0);
+            grid.add(new Label("CUE:"), 4, 0);
+            grid.add(cue, 5,0);
+            
+            grid.add(table, 0, 1, 6, 1);
+            this.getChildren().addAll(grid);
+            
         }
     }
-    
-    public Ensaio getEnsaio(){
+
+    public Ensaio getEnsaio() {
         return this.ensaio;
-                
+
     }
 
+    /**
+     *
+     * @param espacamentoX altura ou espaçamento entre aspersores
+     * @param espacamentoY largura das laterais
+     * @param coletas listagem de todas as coletas do ensaio
+     * @return
+     */
     private ObservableList calculaSobreposicao(int espacamentoX, int espacamentoY, List<Coleta> coletas) {
         sobreposicoes = FXCollections.observableArrayList();
         try {
-            List<Coleta> clts = dao.findColetasByEnsaio(ensaio);
+//            List<Coleta> clts = dao.findColetasByEnsaio(ensaio); chamada redundante
             DecimalFormat df = new DecimalFormat("0.00");
             float sobreposicaoX;
             float sobreposicaoY;
@@ -139,12 +207,17 @@ public class UniformidadeTable extends VBox {
 
             //coletas
             //List<Coleta> coletas = clts;
+            //TO DO ALTERAR ESSA VALIDAÇÃO PARA QUE APÓS ALTERADO EM METROS O CADASTRO DE GRID ALTURA E LARGURA PARA METROS
+            //SEJA REALIZADO A VALIDAÇÃO DE if (coletas.size() < (ensaio.getGridAltura() * ensaio.getGridLargura()) * ensaio.getEspacamentoPluviometro) {
+
+
             if (coletas.size() < (ensaio.getGridAltura() * ensaio.getGridLargura())) {
                 throw new Exception("Invalid length array");
             }
             //1 identificando a localização do aspersor ** verificar com Paulo
-            int posAspersorX = ensaio.getGridAltura() / 2;
-            int posAspersorY = ensaio.getGridLargura() / 2;
+            //CORRIGIR EM UMA SITUAÇÃO ONDE 24X30 DEFINI-SE QUE 24 É Y (ALTURA OU ESPAÇAMENTO ENTRE ASPERSORES) E 30 É X (LARGURA LATERAIS)
+            int posAspersorX = ensaio.getGridLargura() / 2;
+            int posAspersorY = ensaio.getGridAltura() / 2;
 
             //2 identificando se a sobreposição compreende 1/4 do grid
             sobreposicaoX = espacamentoX / ensaio.getEspacamentoPluviometro();
@@ -211,6 +284,10 @@ public class UniformidadeTable extends VBox {
 
                 }
 
+                calculoCuc(sobreposicaoX, sobreposicaoY);
+
+
+
 
             } else {//FINALIZAR NÃO ESTÁ COMPLETO
                 //4 sobreposição imperfeita separar os arrays adicionando zero nos espaços a serem completados
@@ -243,7 +320,9 @@ public class UniformidadeTable extends VBox {
                         }
                     }
                 }
+                System.out.println(celulas.toString());
                 for (int j = 0; j < (sobreposicaoX * sobreposicaoY); j++) {
+
                     Float soma;
                     soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
                     soma = (float) (Math.round(soma * 100.0) / 100.0);
@@ -260,5 +339,62 @@ public class UniformidadeTable extends VBox {
             Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sobreposicoes;
+    }
+
+    /**
+     *
+     * @param sp lista de sobreposiçoes
+     * @param sx sobreposição eixo x laterais
+     * @param sy sobreposição eixo y aspersores
+     */
+    public List<Float> ordenaSobreposicao(ObservableList<ObservableList> sp, float sx, float sy) {
+        List<Float> order = new ArrayList();
+        for (int i = 0; i < sy; i++) {
+
+            for (int j = 0; j < sx; j++) {
+                order.add((float) sp.get(i).get(j));
+            }
+        }
+        return order;
+    }
+
+    /**
+     * @param sobreposicaoOrdenada array com as sobreposições
+     * @formula cuc possivel visualizar a formula em
+     * https://dl.dropboxusercontent.com/u/10055997/cuc.gif
+     */
+    public void calculoCuc(float sobreposicaoX, float sobreposicaoY) {
+        //chama a ordenação
+        List<Float> arrayOrdenado = ordenaSobreposicao(sobreposicoes, sobreposicaoX, sobreposicaoY);
+        Float media = 0F;
+        Float somatoria = 0F;
+        Float somatoriaAbsolutos = 0F;
+        //somatória da sobreposiçao
+        for (int i = 0; i < arrayOrdenado.size(); i++) {
+            somatoria += arrayOrdenado.get(i);
+        }
+        System.out.println("somatória: " + somatoria);
+        media = somatoria / arrayOrdenado.size();
+        System.out.println("media: " + media);
+
+        List<Float> valoresAbsolutos = new ArrayList();
+        for (int i = 0; i < arrayOrdenado.size(); i++) {
+            valoresAbsolutos.add(Math.abs(arrayOrdenado.get(i) - media));
+        }
+        for (int i = 0; i < valoresAbsolutos.size(); i++) {
+            somatoriaAbsolutos += valoresAbsolutos.get(i);
+        }
+
+        System.out.println("valores absolutos: " + valoresAbsolutos.toString());
+        CUC = 1 - (somatoriaAbsolutos / (valoresAbsolutos.size() * media));
+        Cuc = new SimpleStringProperty(CUC + "");
+        cuc.textProperty().bind(Cuc);
+        Cud = new SimpleStringProperty("--");
+        cud.textProperty().bind(Cud);
+        Cue = new SimpleStringProperty("--");
+        cue.textProperty().bind(Cue);
+        System.out.println("CUC: " + CUC);
+
+
     }
 }
