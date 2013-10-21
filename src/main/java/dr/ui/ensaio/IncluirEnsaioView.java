@@ -240,9 +240,9 @@ public class IncluirEnsaioView extends Stage {
                 }
             }
         };
-        tfGridAltura.setPromptText("*");
-        tfGridAltura.setMinWidth(40);
-        tfGridAltura.setMaxWidth(40);
+        tfGridAltura.setPromptText("metros");
+        tfGridAltura.setMinWidth(60);
+        tfGridAltura.setMaxWidth(60);
 
         tfGridLargura = new TextField() {
             @Override
@@ -268,9 +268,9 @@ public class IncluirEnsaioView extends Stage {
                 }
             }
         };
-        tfGridLargura.setPromptText("*");
-        tfGridLargura.setMinWidth(40);
-        tfGridLargura.setMaxWidth(40);
+        tfGridLargura.setPromptText("metros");
+        tfGridLargura.setMinWidth(60);
+        tfGridLargura.setMaxWidth(60);
 
 
         tfVersion = new TextField();

@@ -58,14 +58,14 @@ public class TransactionalAction extends AbstractAction {
             throw new IllegalArgumentException("Sem referencia para o gerenciador de persistencia.");
         }
 
-        EntityTransaction tx = em.getTransaction();
+        ;
         try {
-            tx.begin();
+            em.getTransaction().begin();
             action.action();
-            tx.commit();
+            em.getTransaction().commit();
         } catch (Exception ex) {
-            if (tx.isActive()) {
-                tx.rollback();
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
             }
             throw new RuntimeException(ex);
         }

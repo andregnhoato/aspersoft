@@ -5,7 +5,6 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -25,12 +24,14 @@ public class EnsaioListView extends Stage{
     private Button bRefreshList;
     private Button bFindEnsaio;
     private Button bColeta;
+    private Button bUniformidade;
     
     public EnsaioListView() {
         setTitle("Ensaios");
-        setWidth(900);
-        setHeight(500);
-        setResizable(true);
+        setWidth(920);
+        setHeight(520);
+        setResizable(false);
+  
         initModality(Modality.APPLICATION_MODAL);
         
         inicializaComponentes();
@@ -60,29 +61,16 @@ public class EnsaioListView extends Stage{
         bColeta = new Button("Coleta");
         bColeta.getStyleClass().add("buttonLarge");
         bColeta.setId("addColeta");
+        bUniformidade = new Button("Uniformidade");
+        bUniformidade.getStyleClass().add("buttonLarge");
+        bUniformidade.setId("showUniformidade");
         
           
     }
     
-    /*public void addTransition() {
-        disableButtonBar(true);
-        FadeTransition ft = new FadeTransition(Duration.millis(2000), tabela);
-        ft.setFromValue(0.2);
-        ft.setToValue(1);
-        ft.setAutoReverse(true);
-        ft.play();
-        
-        ft.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                disableButtonBar(false);
-            }
-        });
-    }*/
-    
     private HBox getButtonsBox() {
         HBox box = new HBox();
-        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList, bColeta);
+        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList, bColeta, bUniformidade);
         box.getStyleClass().add("buttonBarMain");
         return box;
     }
@@ -102,6 +90,10 @@ public class EnsaioListView extends Stage{
     public Button getColetaButton() {
         return bColeta;
     }
+    
+    public Button getUniformidadeButton(){
+        return bUniformidade;
+    }
 
     public EnsaioTable getTable() {
         return table;
@@ -116,5 +108,6 @@ public class EnsaioListView extends Stage{
         bFindEnsaio.setDisable(disable);
         bRefreshList.setDisable(disable);
         bColeta.setDisable(disable);
+        bUniformidade.setDisable(disable);
     }
 }

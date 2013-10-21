@@ -63,7 +63,7 @@ public class BuscarEnsaioView extends Stage {
     
     private GridPane buildInputs() {
         tfNome = new TextField();
-        tfNome.setPromptText("filtro nome");
+        tfNome.setPromptText("filtro descrição");
         tfNome.setMinWidth(180);
         tfNome.setMaxWidth(180);
         

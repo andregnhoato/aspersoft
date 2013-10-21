@@ -23,7 +23,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
@@ -54,8 +53,8 @@ public class ColetaTable extends VBox {
     }
 
     public void reRenderTable(Ensaio ensaio) {
-        ArrayList<Coleta> clts = null;
         try {
+            ArrayList<Coleta> clts;
             clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
             if (clts.size() <= 0) {
                 insertEmptyColetas(clts, ensaio);
@@ -65,7 +64,6 @@ public class ColetaTable extends VBox {
         }
 
         this.e = ensaio;
-        List<TableColumn> columns = new ArrayList<>();
         this.getChildren().remove(table);
         table = new ColetaTableView();
         table.setEditable(true);
@@ -82,14 +80,16 @@ public class ColetaTable extends VBox {
                 }
             };
 
-            for (int i = 0; i < ensaio.getGridLargura(); i++) {
+            for (int i = 0; i < (ensaio.getGridLargura()/ensaio.getEspacamentoPluviometro()); i++) {
 
                 final int j = i;
 
                 TableColumn col = new TableColumn(alphabet + "");
                 col.setCellFactory(numericFactory);
+                
 
                 col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList, Float>, ObservableValue<Float>>() {
+                    @Override
                     public ObservableValue call(CellDataFeatures<ObservableList, Float> param) {
 
                         return new SimpleFloatProperty((Float)param.getValue().get(j));
@@ -97,7 +97,7 @@ public class ColetaTable extends VBox {
                     }
                 });
                 col.setSortable(false);
-
+                col.setPrefWidth(40);
                 //Evento disparado após editar a celula atualiza coleta na base
                 col.setOnEditCommit(new EventHandler<CellEditEvent<ObservableValue, Float>>() {
                     @Override
@@ -128,11 +128,11 @@ public class ColetaTable extends VBox {
                         }
                     }
                 });
-
+               
                 table.getColumns().add(col);
                 alphabet++;
             }
-            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+//            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.autosize();
             table.setItems(getColetasfromDatabase());
 
@@ -148,8 +148,8 @@ public class ColetaTable extends VBox {
                     @Override
                     public void run() {
                         try {
-                            for (int linha = 0; linha < ensaio.getGridAltura(); linha++) {
-                                for (int coluna = 0; coluna < ensaio.getGridLargura(); coluna++) {
+                            for (int linha = 0; linha < (ensaio.getGridAltura()/ensaio.getEspacamentoPluviometro()); linha++) {
+                                for (int coluna = 0; coluna < (ensaio.getGridLargura()/ensaio.getEspacamentoPluviometro()); coluna++) {
                                     Coleta c = new Coleta();
                                     c.setColuna(coluna);
                                     c.setLinha(linha);
@@ -164,13 +164,13 @@ public class ColetaTable extends VBox {
                             }
 
                         } catch (Exception e) {
-                            System.out.println(e.getMessage());
+                            System.err.println(e.getMessage());
                         }
                     }
                 });
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            System.err.println(ex.getMessage());
         }
     }
 
@@ -180,9 +180,9 @@ public class ColetaTable extends VBox {
             List<Coleta> clts = dao.findColetasByEnsaio(e);
             if (clts.size() > 0) {
                 int contador = 0;
-                for (int linha = 0; linha < e.getGridAltura(); linha++) {
+                for (int linha = 0; linha < (e.getGridAltura()/e.getEspacamentoPluviometro()); linha++) {
                     ObservableList<Float> row = FXCollections.observableArrayList();
-                    for (int coluna = 0; coluna < e.getGridLargura(); coluna++) {
+                    for (int coluna = 0; coluna < (e.getGridLargura()/e.getEspacamentoPluviometro()); coluna++) {
                         row.add(clts.get(contador).getValor());
                         contador++;
                     }

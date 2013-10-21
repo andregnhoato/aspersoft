@@ -85,6 +85,6 @@ public class BuscarEnsaioController extends PersistenceController {
     @Override
     protected void cleanUp() {
         view.resetForm();
-	super.cleanUp();
+//	super.cleanUp();
     }
 }
