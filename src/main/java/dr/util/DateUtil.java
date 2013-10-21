@@ -37,12 +37,34 @@ public abstract class DateUtil {
             return null;
         }
     }
+    
+    public static String formatHora(Date data) {
+        if (data != null) {
+            DateFormat df = new SimpleDateFormat("HH:mm:ss");
+            return df.format(data);
+        } else {
+            return null;
+        }
+    }
 
     public static Date formatDate(String data) {
         if (data != null && data != "") {
             DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
             try {
                 return df.parse(data);
+            } catch (ParseException ex) {
+                Logger.getLogger(DateUtil.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+
+    }
+    
+    public static String formatHora(String hora) {
+        if (hora != null && hora != "") {
+            DateFormat df = new SimpleDateFormat("HH:mm:ss");
+            try {
+                return df.parse(hora)+"";
             } catch (ParseException ex) {
                 Logger.getLogger(DateUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
