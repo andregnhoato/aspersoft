@@ -129,7 +129,7 @@ public class UniformidadeListView extends Stage {
         this.ensaio = e;
 
 
-        float mQuad = (e.getEspacamentoPluviometro() * e.getGridAltura()) * (e.getEspacamentoPluviometro() * e.getGridLargura());
+        float mQuad = (e.getGridAltura() * e.getGridLargura());
         
         desc = new SimpleStringProperty(e.getDescricao());
         pre = new SimpleStringProperty(e.getPressao());

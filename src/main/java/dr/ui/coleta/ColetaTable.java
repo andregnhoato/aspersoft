@@ -80,7 +80,7 @@ public class ColetaTable extends VBox {
                 }
             };
 
-            for (int i = 0; i < ensaio.getGridLargura(); i++) {
+            for (int i = 0; i < (ensaio.getGridLargura()/ensaio.getEspacamentoPluviometro()); i++) {
 
                 final int j = i;
 
@@ -148,8 +148,8 @@ public class ColetaTable extends VBox {
                     @Override
                     public void run() {
                         try {
-                            for (int linha = 0; linha < ensaio.getGridAltura(); linha++) {
-                                for (int coluna = 0; coluna < ensaio.getGridLargura(); coluna++) {
+                            for (int linha = 0; linha < (ensaio.getGridAltura()/ensaio.getEspacamentoPluviometro()); linha++) {
+                                for (int coluna = 0; coluna < (ensaio.getGridLargura()/ensaio.getEspacamentoPluviometro()); coluna++) {
                                     Coleta c = new Coleta();
                                     c.setColuna(coluna);
                                     c.setLinha(linha);
@@ -180,9 +180,9 @@ public class ColetaTable extends VBox {
             List<Coleta> clts = dao.findColetasByEnsaio(e);
             if (clts.size() > 0) {
                 int contador = 0;
-                for (int linha = 0; linha < e.getGridAltura(); linha++) {
+                for (int linha = 0; linha < (e.getGridAltura()/e.getEspacamentoPluviometro()); linha++) {
                     ObservableList<Float> row = FXCollections.observableArrayList();
-                    for (int coluna = 0; coluna < e.getGridLargura(); coluna++) {
+                    for (int coluna = 0; coluna < (e.getGridLargura()/e.getEspacamentoPluviometro()); coluna++) {
                         row.add(clts.get(contador).getValor());
                         contador++;
                     }

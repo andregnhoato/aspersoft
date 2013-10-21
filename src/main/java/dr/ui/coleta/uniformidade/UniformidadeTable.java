@@ -89,9 +89,9 @@ public class UniformidadeTable extends VBox {
         table = new UniformidadeTableView();
 
         int contador = 0;
-        for (int linha = 0; linha < ensaio.getGridAltura() / 2; linha++) {
+        for (int linha = 0; linha < (ensaio.getGridAltura()/ensaio.getEspacamentoPluviometro()) / 2; linha++) {
             ObservableList<Float> row = FXCollections.observableArrayList();
-            for (int coluna = 0; coluna < ensaio.getGridAltura() / 2; coluna++) {
+            for (int coluna = 0; coluna < (ensaio.getGridAltura()/ensaio.getEspacamentoPluviometro()) / 2; coluna++) {
                 row.add(0F);
                 contador++;
             }
@@ -142,7 +142,7 @@ public class UniformidadeTable extends VBox {
             if (ensaio != null && ensaio.getGridLargura() != null) {
                 char alphabet = 'A';
 
-                for (int i = 0; i < (this.ensaio.getGridAltura() / 2); i++) {
+                for (int i = 0; i < ((this.ensaio.getGridAltura() / ensaio.getEspacamentoPluviometro()) / 2); i++) {
                     TableColumn col = new TableColumn(alphabet + "");
                     col.setSortable(false);
                     col.setPrefWidth(45);
@@ -204,20 +204,17 @@ public class UniformidadeTable extends VBox {
             float sobreposicaoY;
             boolean perfeito = false;
 
+            //transformando a metragem em unidade
+            float gridAltura = ensaio.getGridAltura() / ensaio.getEspacamentoPluviometro();
+            float gridLargura = ensaio.getGridLargura()/ ensaio.getEspacamentoPluviometro();
 
-            //coletas
-            //List<Coleta> coletas = clts;
-            //TO DO ALTERAR ESSA VALIDAÇÃO PARA QUE APÓS ALTERADO EM METROS O CADASTRO DE GRID ALTURA E LARGURA PARA METROS
-            //SEJA REALIZADO A VALIDAÇÃO DE if (coletas.size() < (ensaio.getGridAltura() * ensaio.getGridLargura()) * ensaio.getEspacamentoPluviometro) {
-
-
-            if (coletas.size() < (ensaio.getGridAltura() * ensaio.getGridLargura())) {
+            if (coletas.size() < (gridAltura * gridLargura)) {
                 throw new Exception("Invalid length array");
             }
             //1 identificando a localização do aspersor ** verificar com Paulo
             //CORRIGIR EM UMA SITUAÇÃO ONDE 24X30 DEFINI-SE QUE 24 É Y (ALTURA OU ESPAÇAMENTO ENTRE ASPERSORES) E 30 É X (LARGURA LATERAIS)
-            int posAspersorX = ensaio.getGridLargura() / 2;
-            int posAspersorY = ensaio.getGridAltura() / 2;
+            float posAspersorX = gridLargura / 2;
+            float posAspersorY = gridAltura / 2;
 
             //2 identificando se a sobreposição compreende 1/4 do grid
             sobreposicaoX = espacamentoX / ensaio.getEspacamentoPluviometro();
