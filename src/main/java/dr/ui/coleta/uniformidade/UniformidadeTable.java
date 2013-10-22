@@ -1,15 +1,16 @@
 package dr.ui.coleta.uniformidade;
 
-import com.sun.prism.paint.Color;
 import dr.controller.PersistenceController;
 import dr.dao.ColetaDAO;
 import dr.dao.ColetaDAOImpl;
 import dr.model.Coleta;
 import dr.ui.ensaio.*;
 import dr.model.Ensaio;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +28,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Callback;
 
 /**
@@ -132,12 +135,9 @@ public class UniformidadeTable extends VBox {
             this.ensaio = ensaio;
             this.getChildren().remove(grid);
             table = new UniformidadeTableView();
-            
-//        table.setEditable(true);
             table.getSelectionModel().setCellSelectionEnabled(true);
 
             //chamar método que calcula sobreposição
-//        this.calculaSobreposicao(12,12, clts);
             int contador = 0;
             if (ensaio != null && ensaio.getGridLargura() != null) {
                 char alphabet = 'A';
@@ -259,15 +259,15 @@ public class UniformidadeTable extends VBox {
                     sp.add(soma);
                 }
 
-                System.out.println("Quad1: " + quad1.toString());
-                System.out.println("Quad1 size: " + quad1.size());
-                System.out.println("Quad2: " + quad2.toString());
-                System.out.println("Quad2 size: " + quad2.size());
-                System.out.println("Quad3: " + quad3.toString());
-                System.out.println("Quad3 size: " + quad3.size());
-                System.out.println("Quad4: " + quad4.toString());
-                System.out.println("Quad4 size: " + quad4.size());
-                System.out.println("VALORES SOBREPOSTOS: " + sp.toString());
+//                System.out.println("Quad1: " + quad1.toString());
+//                System.out.println("Quad1 size: " + quad1.size());
+//                System.out.println("Quad2: " + quad2.toString());
+//                System.out.println("Quad2 size: " + quad2.size());
+//                System.out.println("Quad3: " + quad3.toString());
+//                System.out.println("Quad3 size: " + quad3.size());
+//                System.out.println("Quad4: " + quad4.toString());
+//                System.out.println("Quad4 size: " + quad4.size());
+//                System.out.println("VALORES SOBREPOSTOS: " + sp.toString());
 
 
                 int contador = 0;
@@ -344,10 +344,9 @@ public class UniformidadeTable extends VBox {
      * @param sx sobreposição eixo x laterais
      * @param sy sobreposição eixo y aspersores
      */
-    public List<Float> ordenaSobreposicao(ObservableList<ObservableList> sp, float sx, float sy) {
+    public List<Float> listaSobreposicao(ObservableList<ObservableList> sp, float sx, float sy) {
         List<Float> order = new ArrayList();
         for (int i = 0; i < sy; i++) {
-
             for (int j = 0; j < sx; j++) {
                 order.add((float) sp.get(i).get(j));
             }
@@ -356,42 +355,94 @@ public class UniformidadeTable extends VBox {
     }
 
     /**
-     * @param sobreposicaoOrdenada array com as sobreposições
+     * @param sobreposicaoX sobreposição eixo x laterais
+     * @param sobreposicaoY sobreposição eixo y aspersores
      * @formula cuc possivel visualizar a formula em
      * https://dl.dropboxusercontent.com/u/10055997/cuc.gif
      */
     public void calculoCuc(float sobreposicaoX, float sobreposicaoY) {
-        //chama a ordenação
-        List<Float> arrayOrdenado = ordenaSobreposicao(sobreposicoes, sobreposicaoX, sobreposicaoY);
-        Float media = 0F;
+        //organiza em um array os valores sobrepostos
+        List<Float> listaSobreposicao = listaSobreposicao(sobreposicoes, sobreposicaoX, sobreposicaoY);
+        Float mediaSobreposicao;
         Float somatoria = 0F;
         Float somatoriaAbsolutos = 0F;
         //somatória da sobreposiçao
-        for (int i = 0; i < arrayOrdenado.size(); i++) {
-            somatoria += arrayOrdenado.get(i);
+        for (int i = 0; i < listaSobreposicao.size(); i++) {
+            somatoria += listaSobreposicao.get(i);
         }
-        System.out.println("somatória: " + somatoria);
-        media = somatoria / arrayOrdenado.size();
-        System.out.println("media: " + media);
-
+        
+        mediaSobreposicao = somatoria / listaSobreposicao.size();
+        
         List<Float> valoresAbsolutos = new ArrayList();
-        for (int i = 0; i < arrayOrdenado.size(); i++) {
-            valoresAbsolutos.add(Math.abs(arrayOrdenado.get(i) - media));
+        for (int i = 0; i < listaSobreposicao.size(); i++) {
+            valoresAbsolutos.add(Math.abs(listaSobreposicao.get(i) - mediaSobreposicao));
         }
         for (int i = 0; i < valoresAbsolutos.size(); i++) {
             somatoriaAbsolutos += valoresAbsolutos.get(i);
         }
-
-        System.out.println("valores absolutos: " + valoresAbsolutos.toString());
-        CUC = 1 - (somatoriaAbsolutos / (valoresAbsolutos.size() * media));
+        
+        CUC = round(1 - (somatoriaAbsolutos / (valoresAbsolutos.size() * mediaSobreposicao)) ,4);
+        CUD = round(calculoCud(listaSobreposicao, mediaSobreposicao),4);
+        CUE = round(CalculoCue(listaSobreposicao, mediaSobreposicao),4);
+        
+        
         Cuc = new SimpleStringProperty(CUC + "");
         cuc.textProperty().bind(Cuc);
-        Cud = new SimpleStringProperty("--");
+        cuc.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        Cud = new SimpleStringProperty(CUD+"");
         cud.textProperty().bind(Cud);
-        Cue = new SimpleStringProperty("--");
+        cud.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        
+        Cue = new SimpleStringProperty(CUE+"");
         cue.textProperty().bind(Cue);
-        System.out.println("CUC: " + CUC);
-
-
+        cue.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        
+    }
+    
+    /**
+     * @param listaSobreposicoes lista com as sobreposições
+     * @param mediaSobreposicoes media dos valores sobrepostos
+     * @see Calculo cud corresponde a somatória dos 25% menores valores divido pela media geral das sobreposições
+     * @return CUD
+     */
+    public Float calculoCud(List<Float> listaSobreposicoes, float mediaSobreposicoes){
+        //ordena a listagem
+        Collections.sort(listaSobreposicoes);
+        //armazenando o valor de 1/4 do array
+        float quarto = listaSobreposicoes.size() / 4;
+        float somatoria = 0;
+        for(int i = 0; i < quarto; i++){
+            somatoria += listaSobreposicoes.get(i);
+        }
+        
+        //calcula media de 1/4
+        float quartil = somatoria / quarto;
+        //calcula cud media de 1/4 dividido pela media geral
+        return (quartil / mediaSobreposicoes);
+        
+    }
+    
+    /**
+     * 
+     * @param listaSobreposicoes lista com os valores sobrepostos
+     * @param mediaSobreposicoes media dos valores sobrepostos
+     * @return CUE
+     */
+    public Float CalculoCue(List<Float> listaSobreposicoes, float mediaSobreposicoes){
+        
+        //1 calcular o desvio padrão = valor sopreposição - media geral elevado ao quadrado e realizar a somatória dos valores
+        Float soma = 0F;
+        for (Float valor : listaSobreposicoes) {
+            double a = valor - mediaSobreposicoes;
+            soma =+ (float)Math.pow(a, 2);   
+        }
+        //2 calcular cue = 1 - raiz quadrada(soma / ((quantidade sobreposições -1 ) * media sobreposições ao quadrado
+        return 1-(float)Math.sqrt(soma/((listaSobreposicoes.size() - 1) * (float) Math.pow(mediaSobreposicoes, 2)));
+    }
+    
+    public static Float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);       
+        return bd.floatValue();
     }
 }
