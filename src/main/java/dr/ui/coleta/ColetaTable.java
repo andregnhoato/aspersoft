@@ -132,7 +132,6 @@ public class ColetaTable extends VBox {
                 table.getColumns().add(col);
                 alphabet++;
             }
-//            table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             table.autosize();
             table.setItems(getColetasfromDatabase());
 
