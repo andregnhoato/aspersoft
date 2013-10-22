@@ -62,6 +62,7 @@ public class Ensaio implements Bean, Serializable {
     @Column(name = "direcao_vento")
     private String direcaoVento;
     
+    @NotNull
     @Column(name = "espacamento_pluviometro")
     private float espacamentoPluviometro;
     
