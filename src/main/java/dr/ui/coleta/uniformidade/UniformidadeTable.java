@@ -126,8 +126,8 @@ public class UniformidadeTable extends VBox {
             } catch (Exception ex) {
                 Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
             }
-            int espacamentoX = Integer.parseInt(espacamento.substring(0, 2));
-            int espacamentoY = Integer.parseInt(espacamento.substring(3, 5));
+            int espacamentoX = Integer.parseInt(espacamento.substring(3, 5));
+            int espacamentoY = Integer.parseInt(espacamento.substring(0, 2));
 
 
             this.ensaio = ensaio;
