@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dr.util;
 
 import dr.model.Coleta;
@@ -18,6 +14,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
+ * Classe que implementa a interface IUniformidades responsável por realizar
+ * todos os calculos referente a uniformidades dos Ensaios
  *
  * @author andregnhoato
  */
@@ -63,149 +61,78 @@ public class UniformidadesImpl implements IUniformidades {
                 }
             }
 
-            //armazenar os valores sobrepostos em coletas
-//            ArrayList<Coleta> sobreposicoes  = new ArrayList();
             //3 se sobreposição é perfeita separar os quadrantes para realizar a soma
             if (perfeito) {
-                LinkedList<Float> quad1 = new LinkedList<>();
-                LinkedList<Float> quad2 = new LinkedList<>();
-                LinkedList<Float> quad3 = new LinkedList<>();
-                LinkedList<Float> quad4 = new LinkedList<>();
-                LinkedList<Float> sp = new LinkedList<>();
 
+                ajustaSobreposicaoParaTabela(sobreposicaoQuadrantes(coletas));
 
-                for (Coleta c : coletas) {
-                    if (c.getLinha() < posAspersorX && c.getColuna() < posAspersorX) {
-                        quad1.add(c.getValor());
-                    } else {
-                        if (c.getLinha() < posAspersorX && c.getColuna() >= posAspersorX) {
-                            quad2.add(c.getValor());
-                        } else {
-                            if (c.getLinha() >= posAspersorX && c.getColuna() < posAspersorX) {
-                                quad3.add(c.getValor());
-                            } else {
-                                quad4.add(c.getValor());
-                            }
-                        }
-                    }
-                }
-                for (int j = 0; j < (sobreposicaoX * sobreposicaoY); j++) {
-                    Float soma;
-                    soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
-                    soma = (float) (Math.round(soma * 100.0) / 100.0);
-                    sp.add(soma);
-                }
-
-                int contador = 0;
-                for (int linha = 0; linha < sobreposicaoX; linha++) {
-                    ObservableList<Float> row = FXCollections.observableArrayList();
-                    for (int coluna = 0; coluna < sobreposicaoY; coluna++) {
-                        row.add(sp.get(contador));
-                        contador++;
-                    }
-                    sobreposicoes.add(row);
-
-                }
-
-            } else {//FINALIZAR NÃO ESTÁ COMPLETO
+            } else {
                 //4 sobreposição imperfeita separar os arrays adicionando zero nos espaços a serem completados
                 List<Coleta> coletasAjustadas = ajustaTamanhoColetas(coletas, (sobreposicaoY - posAspersorY), (sobreposicaoX - posAspersorX), gridAltura, gridLargura);
-                LinkedList<Float> quad1 = new LinkedList<>();
-                LinkedList<Float> quad2 = new LinkedList<>();
-                LinkedList<Float> quad3 = new LinkedList<>();
-                LinkedList<Float> quad4 = new LinkedList<>();
-                LinkedList<Float> sp = new LinkedList<>();
 
-
-                for (Coleta c : coletasAjustadas) {
-                    if (c.getLinha() < posAspersorX && c.getColuna() < posAspersorY) {
-                        quad1.add(c.getValor());
-                    } else {
-                        if (c.getLinha() < posAspersorX && c.getColuna() >= posAspersorY) {
-                            quad2.add(c.getValor());
-                        } else {
-                            if (c.getLinha() >= posAspersorX && c.getColuna() < posAspersorY) {
-                                quad3.add(c.getValor());
-                            } else {
-                                quad4.add(c.getValor());
-                            }
-                        }
-                    }
-                }
-                System.out.println("tamanho quad1: "+quad1.size());
-                System.out.println("tamanho quad2: "+quad2.size());
-                System.out.println("tamanho quad3: "+quad3.size());
-                System.out.println("tamanho quad4: "+quad4.size());
-                System.out.println("quad1: "+quad1.toString());
-                System.out.println("quad2: "+quad2.toString());
-                System.out.println("quad3: "+quad3.toString());
-                System.out.println("quad4: "+quad4.toString());
-                
-                for (int j = 0; j < (sobreposicaoX * sobreposicaoY); j++) {
-                    Float soma;
-                    soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
-                    soma = (float) (Math.round(soma * 100.0) / 100.0);
-                    sp.add(soma);
-                }
-                System.out.println("Valores sobrepostos: "+ sp.toString());
-
-                int contador = 0;
-                for (int linha = 0; linha < sobreposicaoX; linha++) {
-                    ObservableList<Float> row = FXCollections.observableArrayList();
-                    for (int coluna = 0; coluna < sobreposicaoY; coluna++) {
-                        row.add(sp.get(contador));
-                        contador++;
-                    }
-                    sobreposicoes.add(row);
-
-                }
-
-//                switch (espacamentoY) {
-//                    case 12:
-//                        switch (espacamentoX) {
-//                            case 12:
-//                                sobreposicao12x12(sobreposicaoX, sobreposicaoY);
-//                                break;
-//                            case 18:
-//                                sobreposicao12x18();
-//                                break;
-//                            case 24:
-//                                sobreposicao12x24();
-//                                break;
-//
-//                        }
-//                    case 18:
-//                        switch (espacamentoX) {
-//                            case 18:
-//                                sobreposicao18x18();
-//                                break;
-//                            case 24:
-//                                sobreposicao18x24();
-//                                break;
-//                            case 30:
-//                                sobreposicao18x30();
-//                                break;
-//                        }
-//                    case 24:
-//                        switch (espacamentoX) {
-//                            case 24:
-//                                sobreposicao24x24();
-//                                break;
-//                            case 30:
-//                                sobreposicao24x30();
-//                                break;
-//                        }
-//                    case 30:
-//                        sobreposicao30x30();
-//                        break;
-//                }
+                ajustaSobreposicaoParaTabela(sobreposicaoQuadrantes(coletasAjustadas));
             }
         } catch (Exception ex) {
             Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sobreposicoes;
+    }
 
+    /**
+     * Método que realiza a divisão dos quandrantes e realiza as sobreposições
+     *
+     * @param coletas listagem de coletas
+     * @return valores sobrepostos
+     */
+    public LinkedList<Float> sobreposicaoQuadrantes(List<Coleta> coletas) {
+        LinkedList<Float> quad1 = new LinkedList<>();
+        LinkedList<Float> quad2 = new LinkedList<>();
+        LinkedList<Float> quad3 = new LinkedList<>();
+        LinkedList<Float> quad4 = new LinkedList<>();
+        LinkedList<Float> sp = new LinkedList<>();
 
+        for (Coleta c : coletas) {
+            if (c.getLinha() < posAspersorX && c.getColuna() < posAspersorY) {
+                quad1.add(c.getValor());
+            } else {
+                if (c.getLinha() < posAspersorX && c.getColuna() >= posAspersorY) {
+                    quad2.add(c.getValor());
+                } else {
+                    if (c.getLinha() >= posAspersorX && c.getColuna() < posAspersorY) {
+                        quad3.add(c.getValor());
+                    } else {
+                        quad4.add(c.getValor());
+                    }
+                }
+            }
+        }
+        for (int j = 0; j < (sobreposicaoX * sobreposicaoY); j++) {
+            Float soma;
+            soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
+            soma = (float) (Math.round(soma * 100.0) / 100.0);
+            sp.add(soma);
+        }
+
+        return sp;
+    }
+
+    /**
+     * Método responsável por orgarnizar o array de sobreposições para a tabela
+     * que irá listar na tela de uniformidades já seta no array sobreposicoes da
+     * classe
+     *
+     * @param sp sobreposiçoes calculadas
+     */
+    public void ajustaSobreposicaoParaTabela(LinkedList<Float> sp) {
+        int contador = 0;
+        for (int linha = 0; linha < posAspersorX; linha++) {
+            ObservableList<Float> row = FXCollections.observableArrayList();
+            for (int coluna = 0; coluna < posAspersorY; coluna++) {
+                row.add(sp.get(contador));
+                contador++;
+            }
+            sobreposicoes.add(row);
+        }
     }
 
     /**
@@ -258,7 +185,7 @@ public class UniformidadesImpl implements IUniformidades {
         float quartil = somatoria / quarto;
         //calcula cud media de 1/4 dividido pela media geral
 
-        return round((quartil / this.mediaSobreposicao), 4);
+        return round((quartil / UniformidadesImpl.mediaSobreposicao), 4);
 
     }
 
@@ -309,7 +236,6 @@ public class UniformidadesImpl implements IUniformidades {
 
         List<Float> rowArray = new LinkedList<>();
         List<Float> columnArray = new LinkedList<>();
-
 
         if (y != 0) {
             //reposicionar aspersor
@@ -367,14 +293,10 @@ public class UniformidadesImpl implements IUniformidades {
                 list.addAll(rowArray);
             }
         }
-        System.out.println("array original" + coletas.size());
-        System.out.println("Array alterado" + list.size());
-        System.out.println("Tamanho que era pra ficar o array" + coletas.toString());
-        System.out.println("Tamanho que era pra ficar o array" + list.toString());
-        
+
         List<Coleta> clts = new LinkedList<>();
-        int cont =0;
-        for (int linha = 0; linha < (posAspersorX*2); linha++) {
+        int cont = 0;
+        for (int linha = 0; linha < (posAspersorX * 2); linha++) {
             for (int coluna = 0; coluna < (posAspersorY * 2); coluna++) {
                 Coleta c = new Coleta();
                 c.setColuna(coluna);
@@ -382,125 +304,9 @@ public class UniformidadesImpl implements IUniformidades {
                 c.setEnsaio(ensaio);
                 c.setValor(list.get(cont));
                 clts.add(c);
-                cont ++;
+                cont++;
             }
         }
-
-        
-
         return clts;
     }
-
-    public void sobreposicao12x12(float sobreposicaoX, float sobreposicaoY) {
-        //1 passo adicionar as linhas e colunas extras se necessário
-//        ajustaTamanhoColetas(sobreposicaoX, sobreposicaoY, gridAltura, gridLargura);
-//        LinkedList<Float> quad1 = new LinkedList<>();
-//        LinkedList<Float> quad2 = new LinkedList<>();
-//           LinkedList<Float> quad3 = new LinkedList<>();
-//                LinkedList<Float> quad4 = new LinkedList<>();
-//                LinkedList<Float> sp = new LinkedList<>();
-//                Map<Integer, Integer> celulas = new HashMap<>();
-//
-//
-//                for (Coleta c : coletas) {
-//                    if (c.getLinha() < posAspersorX && c.getColuna() < posAspersorX) {
-//                        quad1.add(c.getValor());
-//                        celulas.put(c.getLinha(), c.getColuna());
-//                    } else {
-//                        if (c.getLinha() < posAspersorX && c.getColuna() >= posAspersorX) {
-//                            quad2.add(c.getValor());
-//                            celulas.put(c.getLinha(), c.getColuna());
-//                        } else {
-//                            if (c.getLinha() >= posAspersorX && c.getColuna() < posAspersorX) {
-//                                quad3.add(c.getValor());
-//                                celulas.put(c.getLinha(), c.getColuna());
-//                            } else {
-//                                if (c.getLinha() >= posAspersorX && c.getColuna() > posAspersorX) {
-//                                    quad4.add(c.getValor());
-//                                    celulas.put(c.getLinha(), c.getColuna());
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                System.out.println(celulas.toString());
-//                for (int j = 0; j < (sobreposicaoX * sobreposicaoY); j++) {
-//
-//                    Float soma;
-//                    soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
-//                    soma = (float) (Math.round(soma * 100.0) / 100.0);
-//                    sp.add(soma);
-//                }
-    }
-
-    public void sobreposicao12x18() {
-    }
-
-    public void sobreposicao12x24() {
-    }
-
-    public void sobreposicao18x18() {
-    }
-
-    public void sobreposicao18x24() {
-    }
-
-    public void sobreposicao18x30() {
-    }
-
-    public void sobreposicao24x24() {
-    }
-
-    public void sobreposicao24x30() {
-    }
-
-    public void sobreposicao30x30() {
-    }
-    //            } else {//FINALIZAR NÃO ESTÁ COMPLETO
-//                //4 sobreposição imperfeita separar os arrays adicionando zero nos espaços a serem completados
-//
-//                switch (espacamentoY) {
-//                    case 12:
-//                        switch (espacamentoX) {
-//                            case 12:
-//                                sobreposicao12x12(sobreposicaoX, sobreposicaoY);
-//                                break;
-//                            case 18:
-//                                sobreposicao12x18();
-//                                break;
-//                            case 24:
-//                                sobreposicao12x24();
-//                                break;
-//
-//                        }
-//                    case 18:
-//                        switch (espacamentoX) {
-//                            case 18:
-//                                sobreposicao18x18();
-//                                break;
-//                            case 24:
-//                                sobreposicao18x24();
-//                                break;
-//                            case 30:
-//                                sobreposicao18x30();
-//                                break;
-//                        }
-//                    case 24:
-//                        switch (espacamentoX) {
-//                            case 24:
-//                                sobreposicao24x24();
-//                                break;
-//                            case 30:
-//                                sobreposicao24x30();
-//                                break;
-//                        }
-//                    case 30:
-//                        sobreposicao30x30();
-//                        break;
-//                }
-//            }
-//        } catch (Exception ex) {
-//            Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return sobreposicoes;
 }
