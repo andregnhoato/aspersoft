@@ -140,7 +140,7 @@ public class UniformidadeTable extends VBox {
             if (ensaio != null && ensaio.getGridLargura() != null) {
                 char alphabet = 'A';
 
-                for (int i = 0; i < ((this.ensaio.getGridAltura() / ensaio.getEspacamentoPluviometro()) / 2); i++) {
+                for (int i = 0; i < (espacamentoY / ensaio.getEspacamentoPluviometro()); i++) {
                     TableColumn col = new TableColumn(alphabet + "");
                     col.setSortable(false);
                     col.setPrefWidth(45);

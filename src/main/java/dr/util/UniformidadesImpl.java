@@ -147,6 +147,7 @@ public class UniformidadesImpl implements IUniformidades {
                     soma = (float) (Math.round(soma * 100.0) / 100.0);
                     sp.add(soma);
                 }
+                System.out.println("Valores sobrepostos: "+ sp.toString());
 
                 int contador = 0;
                 for (int linha = 0; linha < sobreposicaoX; linha++) {
