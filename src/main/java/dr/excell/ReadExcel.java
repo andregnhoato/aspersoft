@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -138,8 +137,11 @@ public class ReadExcel extends PersistenceController {
                     //velocidade vento
                     sb.append(df.format(Double.parseDouble(evaluator.evaluate(sheet.getRow(23).getCell(1)).formatAsString().replaceAll("\"", ""))));
                     sb.append(";");
-                    //direcao do vento MODA
-                    sb.append(getWindDegree(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", "")));
+//                    //direcao do vento MODA
+//                    sb.append(getWindDegree(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", "")));
+//                    sb.append(";");
+//                  //direcao do vento valor medio
+                    sb.append(evaluator.evaluate(sheet.getRow(25).getCell(1)).formatAsString().replaceAll("\"", ""));
                     sb.append(";");
 
                     Iterator rows = sheet.rowIterator();
@@ -361,7 +363,7 @@ public class ReadExcel extends PersistenceController {
     public static void writeTxtFile(String text) {
         PrintWriter writer;
         try {
-            writer = new PrintWriter("EnsaiosGeral.txt", "UTF-8");
+            writer = new PrintWriter("EnsaiosGeral2.txt", "UTF-8");
             writer.println(text);
             writer.close();
         } catch (FileNotFoundException ex) {
@@ -374,7 +376,9 @@ public class ReadExcel extends PersistenceController {
 
     public static void main(String[] args) throws IOException {
         ReadExcel re = new ReadExcel();
-        re.readXLSXFileUpdateDataBaseFile();
+//        re.readXLSXFileUpdateDataBaseFile();
+        re.readXLSXFileGenerateTxtFile();
+       
 
 //        writeXLSFile();
 //        readXLSFile();
