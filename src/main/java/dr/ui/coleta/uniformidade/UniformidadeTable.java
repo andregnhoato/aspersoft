@@ -8,7 +8,6 @@ import dr.ui.ensaio.*;
 import dr.model.Ensaio;
 import dr.util.IUniformidades;
 import dr.util.UniformidadesImpl;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -178,9 +177,9 @@ public class UniformidadeTable extends VBox {
                 }
 
                 if ((espacamentoX / ensaio.getEspacamentoPluviometro()) == espacamentoY / ensaio.getEspacamentoPluviometro()) {
-                    table.setMaxSize(contador * 45.5, contador * 28);
+                    table.setMaxSize(contador * 45.5, contador * 35);
                 } else {
-                    table.setMaxSize(contador * 45.5, 30 * (espacamentoX / ensaio.getEspacamentoPluviometro()));
+                    table.setMaxSize(contador * 45.5, 35 * (espacamentoX / ensaio.getEspacamentoPluviometro()));
                 }
 
                 table.setItems(calculaSobreposicao(espacamentoX, espacamentoY, clts));

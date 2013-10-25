@@ -31,6 +31,7 @@ public class UniformidadesImpl implements IUniformidades {
     private float posAspersorX;
     private float posAspersorY;
     private static Float mediaSobreposicao;
+    private boolean reSobrepoe = false;
 
     @Override
     public ObservableList calculaSobreposicoes(int espacamentoX, int espacamentoY, List<Coleta> coletas, Ensaio e) {
@@ -55,11 +56,21 @@ public class UniformidadesImpl implements IUniformidades {
             sobreposicaoX = espacamentoX / ensaio.getEspacamentoPluviometro();
             sobreposicaoY = espacamentoY / ensaio.getEspacamentoPluviometro();
 
+            float sobreMenorX;
+            float sobreMenorY;
             if (posAspersorX == posAspersorY) {
                 if (posAspersorX == sobreposicaoX && posAspersorY == sobreposicaoY) {
                     perfeito = true;
+                } else {
+                    if (posAspersorX > sobreposicaoX) {
+                        reSobrepoe = true;
+                    }
+                    if (posAspersorY > sobreposicaoY) {
+                        reSobrepoe = true;
+                    }
                 }
             }
+
 
             //3 se sobreposição é perfeita separar os quadrantes para realizar a soma
             if (perfeito) {
@@ -69,8 +80,29 @@ public class UniformidadesImpl implements IUniformidades {
             } else {
                 //4 sobreposição imperfeita separar os arrays adicionando zero nos espaços a serem completados
                 List<Coleta> coletasAjustadas = ajustaTamanhoColetas(coletas, (sobreposicaoY - posAspersorY), (sobreposicaoX - posAspersorX), gridAltura, gridLargura);
+                if (reSobrepoe) {
+                    List<Float> sobre1 = sobreposicaoQuadrantes(coletasAjustadas);
 
-                ajustaSobreposicaoParaTabela(sobreposicaoQuadrantes(coletasAjustadas));
+                    List<Coleta> clts = new LinkedList<>();
+                    int cont = 0;
+                    for (int linha = 0; linha < posAspersorX * 2; linha++) {
+                        for (int coluna = 0; coluna < posAspersorY * 2; coluna++) {
+                            Coleta c = new Coleta();
+                            c.setColuna(coluna);
+                            c.setLinha(linha);
+                            c.setEnsaio(ensaio);
+                            c.setValor(sobre1.get(cont));
+                            clts.add(c);
+                            cont++;
+                        }
+                    }
+                    reSobrepoe = false;
+                    ajustaSobreposicaoParaTabela(sobreposicaoQuadrantes(clts));
+                } else {
+                    ajustaSobreposicaoParaTabela(sobreposicaoQuadrantes(coletasAjustadas));
+                }
+
+
             }
         } catch (Exception ex) {
             Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
@@ -92,13 +124,13 @@ public class UniformidadesImpl implements IUniformidades {
         LinkedList<Float> sp = new LinkedList<>();
 
         for (Coleta c : coletas) {
-            if (c.getLinha() < posAspersorX && c.getColuna() < posAspersorY) {
+            if (c.getLinha() < (reSobrepoe ? (posAspersorX * 2) : (posAspersorX)) && c.getColuna() < (reSobrepoe ? (posAspersorY * 2) : (posAspersorY))) {
                 quad1.add(c.getValor());
             } else {
-                if (c.getLinha() < posAspersorX && c.getColuna() >= posAspersorY) {
+                if (c.getLinha() < (reSobrepoe ? (posAspersorX * 2) : (posAspersorX)) && c.getColuna() >= (reSobrepoe ? (posAspersorY * 2) : (posAspersorY))) {
                     quad2.add(c.getValor());
                 } else {
-                    if (c.getLinha() >= posAspersorX && c.getColuna() < posAspersorY) {
+                    if (c.getLinha() >= (reSobrepoe ? (posAspersorX * 2) : (posAspersorX)) && c.getColuna() < (reSobrepoe ? (posAspersorY * 2) : (posAspersorY))) {
                         quad3.add(c.getValor());
                     } else {
                         quad4.add(c.getValor());
@@ -106,7 +138,12 @@ public class UniformidadesImpl implements IUniformidades {
                 }
             }
         }
-        for (int j = 0; j < (sobreposicaoX * sobreposicaoY); j++) {
+        System.out.println("Quad1: " + quad1.toString());
+        System.out.println("Quad2: " + quad2.toString());
+        System.out.println("Quad3: " + quad3.toString());
+        System.out.println("Quad4: " + quad4.toString());
+
+        for (int j = 0; j < ((reSobrepoe ? (posAspersorX * 2) : (posAspersorX)) * (reSobrepoe ? (posAspersorY * 2) : (posAspersorY))); j++) {
             Float soma;
             soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
             soma = (float) (Math.round(soma * 100.0) / 100.0);
@@ -232,14 +269,21 @@ public class UniformidadesImpl implements IUniformidades {
      * = 0
      */
     public List<Coleta> ajustaTamanhoColetas(List<Coleta> coletas, float y, float x, float gridAltura, float gridLargura) {
-        List<Float> list = new LinkedList<>();
 
+
+
+        List<Float> list = new LinkedList<>();
         List<Float> rowArray = new LinkedList<>();
         List<Float> columnArray = new LinkedList<>();
 
         if (y != 0) {
             //reposicionar aspersor
             posAspersorY += y;
+            //verificação caso y e x sejão negativos significa que o espaçamento é menor que a largura do grid e precisa ser resobreposto
+            if (posAspersorY < (gridAltura / 2)) {
+                y = (gridAltura / 2) - (y * (-2));
+            }
+
             //adicionar as colunas 
             for (int j = 0; j < y; j++) {
                 columnArray.add(0F);
@@ -250,6 +294,9 @@ public class UniformidadesImpl implements IUniformidades {
 
             //reposicionar aspersor
             posAspersorX += x;
+            if (posAspersorX < (gridLargura / 2)) {
+                x = (gridLargura / 2) - (x * (-2));
+            }
             if (y != 0) {
                 rowArray.addAll(0, columnArray);
             }
@@ -296,8 +343,8 @@ public class UniformidadesImpl implements IUniformidades {
 
         List<Coleta> clts = new LinkedList<>();
         int cont = 0;
-        for (int linha = 0; linha < (posAspersorX * 2); linha++) {
-            for (int coluna = 0; coluna < (posAspersorY * 2); coluna++) {
+        for (int linha = 0; linha < (reSobrepoe ? (posAspersorX * 4) : (posAspersorX * 2)); linha++) {
+            for (int coluna = 0; coluna < (reSobrepoe ? (posAspersorY * 4) : (posAspersorY * 2)); coluna++) {
                 Coleta c = new Coleta();
                 c.setColuna(coluna);
                 c.setLinha(linha);
