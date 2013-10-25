@@ -53,11 +53,12 @@ public class UniformidadeListView extends Stage {
 
         setTitle("Uniformidade");
         setResizable(true);
+        
         inicializaComponentes(ensaio);
 //        public void add(Node child, int columnIndex, int rowIndex, int colspan, int rowspan)
         GridPane grid = new GridPane();
         grid.setVgap(5);
-        grid.setHgap(6);
+        grid.setHgap(5);
         grid.setPadding(new Insets(5, 5, 5, 5));
         grid.add(new Label("Ensaio:"), 0, 0);
         grid.add(descricao, 1, 0);
@@ -112,9 +113,9 @@ public class UniformidadeListView extends Stage {
 
     }
 
-    public void renderTable() {
-        table.renderTable();
-    }
+//    public void renderTable() {
+//        table.renderTable();
+//    }
 
     public UniformidadeTable getTable() {
         return table;

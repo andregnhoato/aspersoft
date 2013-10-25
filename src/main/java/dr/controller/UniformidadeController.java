@@ -43,10 +43,6 @@ public class UniformidadeController extends PersistenceController {
     void reRenderTable() {
         this.uniformidadeView.reRenderTable();
     }
-    
-    void renderTable(){
-        this.uniformidadeView.renderTable();
-    }
 
     void show() {
         this.uniformidadeView.show();

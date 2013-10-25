@@ -16,12 +16,14 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -57,63 +59,76 @@ public class UniformidadeTable extends VBox {
     float gridAltura;
     float gridLargura;
     IUniformidades uniformidade = new UniformidadesImpl();
+    private Label aspersor;
+    private Label laterais;
 
     public UniformidadeTable() {
         table = new UniformidadeTableView();
         dao = new ColetaDAOImpl(pe.getPersistenceContext());
         grid = new GridPane();
-        grid.setVgap(6);
+        grid.setVgap(0);
         grid.setHgap(2);
-        grid.setPadding(new Insets(5, 5, 5, 5));
+//        grid.setPadding(new Insets(5, 5, 5, 5));
         CUC = 0F;
         cuc = new Label("--");
-//        cuc.setTextFill(Color.web("#0076a3"));
         cud = new Label("--");
-//        cud.setTextFill(Color.web("#0076a3"));
         cue = new Label("--");
-//        cue.setTextFill(Color.web("#0076a3"));
-        grid.add(new Label("CUC: "), 0, 0);
-        grid.add(cuc, 1, 0);
-        grid.add(new Label("CUD: "), 2, 0);
-        grid.add(cud, 3, 0);
-        grid.add(new Label("CUE: "), 4, 0);
-        grid.add(cue, 5, 0);
+        grid.add(new Label("CUC: "), 1, 0);
+        grid.add(cuc, 2, 0);
+        grid.add(new Label("CUD:"), 3, 0);
+        grid.add(cud, 4, 0);
+        grid.add(new Label("CUE:"), 5, 0);
+        grid.add(cue, 6, 0);
 
-        grid.add(table, 0, 1, 6, 1);
-        this.getChildren().addAll(grid);
-        this.setPadding(new Insets(10, 10, 10, 10));//css
-
-
-    }
-
-    public void renderTable() {
-        table = new UniformidadeTableView();
-
-        int contador = 0;
-        for (int linha = 0; linha < (ensaio.getGridAltura() / ensaio.getEspacamentoPluviometro()) / 2; linha++) {
-            ObservableList<Float> row = FXCollections.observableArrayList();
-            for (int coluna = 0; coluna < (ensaio.getGridAltura() / ensaio.getEspacamentoPluviometro()) / 2; coluna++) {
-                row.add(0F);
-                contador++;
+        aspersor = new Label("Espaçamento entre aspersores");
+        aspersor.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                aspersor.setScaleX(3);
+                aspersor.setScaleY(3);
             }
-            sobreposicoes.add(row);
+        });
 
-        }
+        aspersor.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                aspersor.setScaleX(1);
+                aspersor.setScaleY(1);
+            }
+        });
 
-        grid = new GridPane();
-        grid.setVgap(1);
-        grid.setHgap(2);
-        grid.setPadding(new Insets(5, 5, 5, 5));
+        laterais = new Label("Laterais");
+        laterais.setRotate(270);
+        laterais.setTranslateY(50);
+        laterais.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                laterais.setRotate(0);
+                laterais.setTranslateY(0);
+                laterais.setScaleX(1.5);
+                laterais.setScaleY(1.5);
+            }
+        });
 
-        table.setItems(sobreposicoes);
-        grid.add(new Label("CUC: "), 0, 0);
-        grid.add(cuc, 1, 0);
-        grid.add(table, 0, 1, 6, 1);
-        grid.add(new Label("CUD: "), 2, 0);
-        grid.add(new Label("--"), 3, 0);
-        grid.add(new Label("CUE: "), 4, 0);
-        grid.add(new Label("-- "), 5, 0);
+        laterais.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                laterais.setRotate(270);
+                laterais.setTranslateY(50);
+                laterais.setScaleX(1);
+                laterais.setScaleY(1);
+            }
+        });
+
+        laterais.setAlignment(Pos.BASELINE_LEFT);
+        grid.add(laterais, 0, 0, 1, 2);
+        grid.setPadding(new Insets(0, 0, 0, 0));
+        grid.add(table, 1, 1, 6, 1);
+        aspersor.setAlignment(Pos.TOP_CENTER);
+        grid.add(aspersor, 2, 2, 5, 1);
         this.getChildren().addAll(grid);
+//        this.setPadding(new Insets(10, 10, 10, 10));//css
+
 
     }
 
@@ -144,6 +159,7 @@ public class UniformidadeTable extends VBox {
                     TableColumn col = new TableColumn(alphabet + "");
                     col.setSortable(false);
                     col.setPrefWidth(45);
+//                    col.setPrefWidth(60);
                     final int j = i;
                     contador++;
 
@@ -160,24 +176,73 @@ public class UniformidadeTable extends VBox {
                     table.getColumns().add(col);
                     alphabet++;
                 }
-                table.setMaxSize(contador * 45.5, contador * 28);
+
+                if ((espacamentoX / ensaio.getEspacamentoPluviometro()) == espacamentoY / ensaio.getEspacamentoPluviometro()) {
+                    table.setMaxSize(contador * 45.5, contador * 28);
+                } else {
+                    table.setMaxSize(contador * 45.5, 30 * (espacamentoX / ensaio.getEspacamentoPluviometro()));
+                }
+
                 table.setItems(calculaSobreposicao(espacamentoX, espacamentoY, clts));
 
             }
-            calculaCoeficientes(espacamentoX,espacamentoY);
+            calculaCoeficientes(espacamentoX, espacamentoY);
             grid = new GridPane();
-            grid.setVgap(1);
-            grid.setHgap(2);
-//            grid.setPadding(new Insets(5, 5, 5, 5));
-            grid.add(new Label("CUC: "), 0, 0);
-            grid.add(cuc, 1, 0);
-            grid.add(new Label("CUD:"), 2, 0);
-            grid.add(cud, 3, 0);
-            grid.add(new Label("CUE:"), 4, 0);
-            grid.add(cue, 5, 0);
+            grid.setVgap(5);
+            grid.setHgap(5);
+            grid.add(new Label("CUC: "), 1, 0);
+            grid.add(cuc, 2, 0);
+            grid.add(new Label("CUD:"), 3, 0);
+            grid.add(cud, 4, 0);
+            grid.add(new Label("CUE:"), 5, 0);
+            grid.add(cue, 6, 0);
 
-            grid.add(table, 0, 1, 6, 1);
+            aspersor = new Label("Espaçamento entre aspersores");
+            aspersor.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    aspersor.setScaleX(1.5);
+                    aspersor.setScaleY(1.5);
+                }
+            });
+
+            aspersor.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    aspersor.setScaleX(1);
+                    aspersor.setScaleY(1);
+                }
+            });
+
+            laterais = new Label("Laterais");
+            laterais.setRotate(270);
+            laterais.setTranslateY(50);
+            laterais.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    laterais.setScaleX(1.5);
+                    laterais.setScaleY(1.5);
+                }
+            });
+
+            laterais.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    laterais.setScaleX(1);
+                    laterais.setScaleY(1);
+                }
+            });
+            laterais.setAlignment(Pos.BASELINE_LEFT);
+            grid.add(laterais, 0, 0, 1, 2);
+            grid.setPadding(new Insets(0, 0, 0, 0));
+            grid.add(table, 1, 1, 6, 1);
+            aspersor.setAlignment(Pos.TOP_CENTER);
+            grid.add(aspersor, 2, 2, 5, 1);
+
+//            grid.add(table, 0, 1, 6, 1);
+//            this.setPadding();
             this.getChildren().addAll(grid);
+
 
         }
     }
@@ -186,13 +251,15 @@ public class UniformidadeTable extends VBox {
         return this.ensaio;
 
     }
+
     /**
      * Método responável por calcular os coeficientes CUC, CUD e CUE;
+     *
      * @param espacamentoX
-     * @param espacamentoY 
+     * @param espacamentoY
      */
     private void calculaCoeficientes(int espacamentoX, int espacamentoY) {
-        
+
         List<Float> listaSobreposicoes = listaSobreposicao(sobreposicoes, espacamentoX / ensaio.getEspacamentoPluviometro(), espacamentoY / ensaio.getEspacamentoPluviometro());
         CUC = uniformidade.calculoCuc(listaSobreposicoes);
         CUD = uniformidade.calculoCud(listaSobreposicoes);
@@ -224,7 +291,7 @@ public class UniformidadeTable extends VBox {
         this.sobreposicoes = uniformidade.calculaSobreposicoes(espacamentoX, espacamentoY, coletas, ensaio);
         return sobreposicoes;
     }
-  
+
     /**
      *
      * @param sp lista de sobreposiçoes
@@ -240,5 +307,4 @@ public class UniformidadeTable extends VBox {
         }
         return order;
     }
-
 }
