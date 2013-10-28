@@ -83,8 +83,8 @@ public class UniformidadeTable extends VBox {
         aspersor.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                aspersor.setScaleX(3);
-                aspersor.setScaleY(3);
+                aspersor.setScaleX(1.5);
+                aspersor.setScaleY(1.5);
             }
         });
 
@@ -102,8 +102,6 @@ public class UniformidadeTable extends VBox {
         laterais.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                laterais.setRotate(0);
-                laterais.setTranslateY(0);
                 laterais.setScaleX(1.5);
                 laterais.setScaleY(1.5);
             }
@@ -112,8 +110,6 @@ public class UniformidadeTable extends VBox {
         laterais.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                laterais.setRotate(270);
-                laterais.setTranslateY(50);
                 laterais.setScaleX(1);
                 laterais.setScaleY(1);
             }
@@ -177,7 +173,7 @@ public class UniformidadeTable extends VBox {
                 }
 
                 if ((espacamentoX / ensaio.getEspacamentoPluviometro()) == espacamentoY / ensaio.getEspacamentoPluviometro()) {
-                    table.setMaxSize(contador * 45.5, contador * 35);
+                    table.setMaxSize(contador * 45.5, contador * 28);
                 } else {
                     table.setMaxSize(contador * 45.5, 35 * (espacamentoX / ensaio.getEspacamentoPluviometro()));
                 }
