@@ -187,17 +187,18 @@ public class ReadExcel extends PersistenceController {
         Calendar time = Calendar.getInstance();
 
 
-        int linha = 1;
-        while (linha <= 9) {
-            int repeticao = 1;
-            while (repeticao <= 3) {
+//        int linha = 1;
+//        while (linha < 9) {
+//            int repeticao = 1;
+//            while (repeticao <= 3) {
                 //System.out.print(ensaios + " - " + caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx\n");
-                InputStream ExcelFileToRead = new FileInputStream(caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx");
+//                InputStream ExcelFileToRead = new FileInputStream(caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx");
+                InputStream ExcelFileToRead = new FileInputStream(caminho + "SIMULADOS/Ensaios_simulados.xlsx");
 
                 XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
 
                 int pages = 0;
-                while (pages < 4) {
+                while (pages <= 10) {
                     Ensaio e = new Ensaio();
                     try {
 //                        Ensaio e = new Ensaio();
@@ -206,7 +207,7 @@ public class ReadExcel extends PersistenceController {
                         XSSFSheet sheet = wb.getSheetAt(pages);
                         XSSFRow row;
                         XSSFCell cell;
-                        e.setDescricao("Ensaio linha " + linha + " repeticao " + repeticao);
+                        e.setDescricao("Ensaio Simulado " + sheet.getSheetName());
                         //bocal pequeno
                         e.setBocal(sheet.getRow(19).getCell(1).getStringCellValue().trim());
                         //bocal grande
@@ -219,16 +220,17 @@ public class ReadExcel extends PersistenceController {
                         e.setDirecaoVento(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", ""));
                         //data e hora de inicio
                         e.setData(sheet.getRow(22).getCell(1).getDateCellValue());
-                        time.setTime(sheet.getRow(17).getCell(1).getDateCellValue());
-                        e.setInicio(f.format(time.getTime()));
+//                        time.setTime(sheet.getRow(17).getCell(1).getDateCellValue());
+//                        e.setInicio(f.format(time.getTime()));
+                        e.setInicio("00:00:00");
 
                         e.setEspacamentoPluviometro(1.5F);
 //                    e.setEvaporacao((sheet.getRow(19).getCell(3)!=null ? (float) sheet.getRow(19).getCell(3).getNumericCellValue() :0));
                         e.setEvaporacao(0);
                         e.setVazao((sheet.getRow(22).getCell(3) != null ? (float) sheet.getRow(22).getCell(3).getNumericCellValue() : 0));
-                        e.setGridAltura(16);
-                        e.setGridLargura(16);
-                        e.setDuracao("2 horas");
+                        e.setGridAltura(24);
+                        e.setGridLargura(24);
+                        e.setDuracao("simulado 2 horas");
 
                         e = edao.save(e);
 
@@ -261,10 +263,10 @@ public class ReadExcel extends PersistenceController {
                     }
 
                     pages++;
-                }
-                repeticao++;
-            }
-            linha++;
+//                }
+//                repeticao++;
+//            }
+//            linha++;
         }
 
 
@@ -376,8 +378,8 @@ public class ReadExcel extends PersistenceController {
 
     public static void main(String[] args) throws IOException {
         ReadExcel re = new ReadExcel();
-//        re.readXLSXFileUpdateDataBaseFile();
-        re.readXLSXFileGenerateTxtFile();
+        re.readXLSXFileUpdateDataBaseFile();
+//        re.readXLSXFileGenerateTxtFile();
        
 
 //        writeXLSFile();
