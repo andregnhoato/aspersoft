@@ -55,6 +55,15 @@ public class UniformidadeTable extends VBox {
     private Label cue;
     private SimpleStringProperty Cue;
     Float CUE;
+    Float CV;
+    private Label cv;
+    private SimpleStringProperty Cv;
+    Float MMQ;
+    private Label mmq;
+    private SimpleStringProperty Mmq;
+    Float DP;
+    private Label dp;
+    private SimpleStringProperty Dp;
     float gridAltura;
     float gridLargura;
     IUniformidades uniformidade = new UniformidadesImpl();
@@ -72,14 +81,17 @@ public class UniformidadeTable extends VBox {
         cuc = new Label("--");
         cud = new Label("--");
         cue = new Label("--");
-        grid.add(new Label("CUC: "), 1, 0);
-        grid.add(cuc, 2, 0);
-        grid.add(new Label("CUD:"), 3, 0);
-        grid.add(cud, 4, 0);
-        grid.add(new Label("CUE:"), 5, 0);
-        grid.add(cue, 6, 0);
+        dp = new Label("--");
+        cv = new Label("--");
+        mmq = new Label("--");
+        grid.add(new Label("Desvio Padrão: "), 1, 1);
+        grid.add(dp, 2, 1);
+        grid.add(new Label("Média Menor Quartil: "), 3, 1);
+        grid.add(mmq, 4, 1);
+        grid.add(new Label("Coeficiente de Variação: "), 5, 1);
+        grid.add(cv, 6, 1);
 
-        aspersor = new Label("Espaçamento entre aspersores");
+        aspersor = new Label("Espaçamento entre aspersores  metros");
         aspersor.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -96,7 +108,7 @@ public class UniformidadeTable extends VBox {
             }
         });
 
-        laterais = new Label("Laterais");
+        laterais = new Label("Laterais  metros");
         laterais.setRotate(270);
         laterais.setTranslateY(50);
         laterais.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -114,13 +126,12 @@ public class UniformidadeTable extends VBox {
                 laterais.setScaleY(1);
             }
         });
-
         laterais.setAlignment(Pos.BASELINE_LEFT);
         grid.add(laterais, 0, 0, 1, 2);
         grid.setPadding(new Insets(0, 0, 0, 0));
-        grid.add(table, 1, 1, 6, 1);
+        grid.add(table, 1, 2, 6, 1);
         aspersor.setAlignment(Pos.TOP_CENTER);
-        grid.add(aspersor, 2, 2, 5, 1);
+        grid.add(aspersor, 2, 3, 5, 1);
         this.getChildren().addAll(grid);
 //        this.setPadding(new Insets(10, 10, 10, 10));//css
 
@@ -191,8 +202,15 @@ public class UniformidadeTable extends VBox {
             grid.add(cud, 4, 0);
             grid.add(new Label("CUE:"), 5, 0);
             grid.add(cue, 6, 0);
-            
-            aspersor = new Label("Espaçamento entre aspersores "+espacamentoY+" metros");
+
+            grid.add(new Label("Desvio Padrão: "), 1, 1);
+            grid.add(dp, 2, 1);
+            grid.add(new Label("Média Menor Quartil: "), 3, 1);
+            grid.add(mmq, 4, 1);
+            grid.add(new Label("Coeficiente de Variação: "), 5, 1);
+            grid.add(cv, 6, 1);
+
+            aspersor = new Label("Espaçamento entre aspersores " + espacamentoY + " metros");
             aspersor.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
@@ -209,7 +227,7 @@ public class UniformidadeTable extends VBox {
                 }
             });
 
-            laterais = new Label("Laterais "+espacamentoX+" metros");
+            laterais = new Label("Laterais " + espacamentoX + " metros");
             laterais.setRotate(270);
             laterais.setTranslateY(50);
             laterais.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -228,11 +246,11 @@ public class UniformidadeTable extends VBox {
                 }
             });
             laterais.setAlignment(Pos.BASELINE_LEFT);
-            grid.add(laterais, 0, 0, 1, 2);
-            grid.setPadding(new Insets(0, 0, 0, 0));
-            grid.add(table, 1, 1, 6, 1);
+            grid.add(laterais, 0, 1, 1, 2);
+//            grid.setPadding(new Insets(0, 0, 0, 0));
+            grid.add(table, 1, 2, 6, 1);
             aspersor.setAlignment(Pos.TOP_CENTER);
-            grid.add(aspersor, 2, 2, 5, 1);
+            grid.add(aspersor, 2, 3, 5, 1);
 
 //            grid.add(table, 0, 1, 6, 1);
 //            this.setPadding();
@@ -259,13 +277,18 @@ public class UniformidadeTable extends VBox {
         CUC = uniformidade.calculoCuc(listaSobreposicoes);
         CUD = uniformidade.calculoCud(listaSobreposicoes);
         CUE = uniformidade.calculoCue(listaSobreposicoes);
-        
+
+        DP = uniformidade.getDesvioPadrao();
+        MMQ = uniformidade.getMediaMenorQuartil();
+        CV = uniformidade.getCoeficienteVariacao();
+
         //        chamar aqui o calculo do perfil de distribuição
         uniformidade.calculaPerfilDistribuicao();
 
         Cuc = new SimpleStringProperty(CUC + "");
         cuc.textProperty().bind(Cuc);
         cuc.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
         Cud = new SimpleStringProperty(CUD + "");
         cud.textProperty().bind(Cud);
         cud.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
@@ -274,9 +297,20 @@ public class UniformidadeTable extends VBox {
         cue.textProperty().bind(Cue);
         cue.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
+        Dp = new SimpleStringProperty(DP + "");
+        dp.textProperty().bind(Dp);
+        dp.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        Cv = new SimpleStringProperty(CV + "%");
+        cv.textProperty().bind(Cv);
+        cv.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        Mmq = new SimpleStringProperty(MMQ + "");
+        mmq.textProperty().bind(Mmq);
+        mmq.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
     }
-    
+
     /**
      *
      * @param espacamentoX altura ou espaçamento entre aspersores
