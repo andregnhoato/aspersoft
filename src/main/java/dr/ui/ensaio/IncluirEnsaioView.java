@@ -320,6 +320,8 @@ public class IncluirEnsaioView extends Stage {
         tfGridAltura.setText("");
         tfGridLargura.setText("");
         tfVersion.setText("");
+        tfGridAltura.setEditable(true);
+        tfGridLargura.setEditable(true);
         bRemove.setVisible(false);
     }
 
@@ -337,7 +339,9 @@ public class IncluirEnsaioView extends Stage {
         tfVazao.setText(e.getVazao() + "");
         tfEvaporacao.setText(e.getEvaporacao() + "");
         tfGridAltura.setText(e.getGridAltura().toString());
+        tfGridAltura.setEditable(false);
         tfGridLargura.setText(e.getGridLargura().toString());
+        tfGridLargura.setEditable(false);
         tfVersion.setText(e.getVersion() == null ? "0" : e.getVersion().toString());
         dpData.setSelectedDate(e.getData());
 
@@ -419,6 +423,7 @@ public class IncluirEnsaioView extends Stage {
             bRemove.setVisible(true);
         }
     }
+    
 
     public Integer getEnsaioId() {
         try {
