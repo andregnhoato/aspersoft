@@ -40,7 +40,13 @@ public interface IUniformidades {
      * @return valor do CUD
      */
     public Float calculoCue(List<Float> sobreposicoes);
-
     
+    /**
+     * Método responsavel por calcular e retornar a listagem com os perfis de distribuição do ensaio
+     * @param coletas
+     * @return perfils
+     */
+    public List<Float> calculaPerfilDistribuicao();
+
     
 }
