@@ -47,6 +47,10 @@ public interface IUniformidades {
      * @return perfils
      */
     public List<Float> calculaPerfilDistribuicao();
+    
+    public Float getDesvioPadrao();
+    public Float getCoeficienteVariacao();
+    public Float getMediaMenorQuartil();
 
     
 }

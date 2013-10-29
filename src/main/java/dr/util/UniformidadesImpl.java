@@ -34,6 +34,9 @@ public class UniformidadesImpl implements IUniformidades {
     private boolean reSobrepoeX = false;
     private boolean reSobrepoeY = false;
     List<Coleta> coletas;
+    private Float desvioPadrao;
+    private Float mediaMenorQuartil;
+    private Float coeficienteVariacao;
 
     @Override
     public ObservableList calculaSobreposicoes(int espacamentoX, int espacamentoY, List<Coleta> coletas, Ensaio e) {
@@ -88,7 +91,7 @@ public class UniformidadesImpl implements IUniformidades {
 
                     List<Coleta> clts = new LinkedList<>();
                     int cont = 0;
-                    for (int linha = 0; linha < (reSobrepoeX ? posAspersorX * 2:posAspersorX); linha++) {
+                    for (int linha = 0; linha < (reSobrepoeX ? posAspersorX * 2 : posAspersorX); linha++) {
                         for (int coluna = 0; coluna < (reSobrepoeY ? (posAspersorY * 2) : posAspersorY); coluna++) {
                             Coleta c = new Coleta();
                             c.setColuna(coluna);
@@ -225,8 +228,8 @@ public class UniformidadesImpl implements IUniformidades {
         for (int i = 0; i < valoresAbsolutos.size(); i++) {
             somatoriaAbsolutos += valoresAbsolutos.get(i);
         }
-        
-        float ccc = 1- somatoriaAbsolutos / (valoresAbsolutos.size() * mediaSobreposicao);
+
+        float ccc = 1 - somatoriaAbsolutos / (valoresAbsolutos.size() * mediaSobreposicao);
 
         return round(ccc, 4);
     }
@@ -240,6 +243,7 @@ public class UniformidadesImpl implements IUniformidades {
      */
     @Override
     public Float calculoCud(List<Float> listaSobreposicoes) {
+        mediaMenorQuartil = 0F;
         //ordena a listagem
         Collections.sort(listaSobreposicoes);
         //armazenando o valor de 1/4 do array
@@ -250,10 +254,10 @@ public class UniformidadesImpl implements IUniformidades {
         }
 
         //calcula media de 1/4
-        float quartil = somatoria / quarto;
+        mediaMenorQuartil = somatoria / quarto;
         //calcula cud media de 1/4 dividido pela media geral
 
-        return round((quartil / UniformidadesImpl.mediaSobreposicao), 4);
+        return round((mediaMenorQuartil / UniformidadesImpl.mediaSobreposicao), 4);
 
     }
 
@@ -265,15 +269,21 @@ public class UniformidadesImpl implements IUniformidades {
      */
     @Override
     public Float calculoCue(List<Float> listaSobreposicoes) {
-
+        coeficienteVariacao = 0F;
+        desvioPadrao = 0F;
         //1 calcular o desvio padrão = valor sopreposição - media geral elevado ao quadrado e realizar a somatória dos valores
-        Float soma = 0F;
         for (Float valor : listaSobreposicoes) {
-            double a = valor - mediaSobreposicao;
-            soma = +(float) Math.pow(a, 2);
+
+            double a = valor - UniformidadesImpl.mediaSobreposicao;
+            float desvio = (float) Math.pow(a, 2);
+
+            desvioPadrao += desvio;
+
         }
+        coeficienteVariacao = (desvioPadrao / UniformidadesImpl.mediaSobreposicao) /** 100*/;
+
         //2 calcular cue = 1 - raiz quadrada(soma / ((quantidade sobreposições -1 ) * media sobreposições ao quadrado
-        return round(1 - (float) Math.sqrt(soma / ((listaSobreposicoes.size() - 1) * (float) Math.pow(mediaSobreposicao, 2))), 4);
+        return round(1 - (float) Math.sqrt((desvioPadrao / ((listaSobreposicoes.size() - 1) * (float) Math.pow(UniformidadesImpl.mediaSobreposicao, 2)))), 4);
     }
 
     /**
@@ -397,13 +407,13 @@ public class UniformidadesImpl implements IUniformidades {
         LinkedList<Float> sp = new LinkedList<>();
 
         for (Coleta c : coletas) {
-            if (c.getLinha() < (gridLargura /2)&& c.getColuna() < (gridAltura/2)) {
+            if (c.getLinha() < (gridLargura / 2) && c.getColuna() < (gridAltura / 2)) {
                 quad1.add(c.getValor());
             } else {
-                if (c.getLinha() < (gridLargura /2) && c.getColuna() >= (gridAltura/2)) {
+                if (c.getLinha() < (gridLargura / 2) && c.getColuna() >= (gridAltura / 2)) {
                     quad2.add(c.getValor());
                 } else {
-                    if (c.getLinha() >= (gridLargura /2) && c.getColuna() < (gridAltura/2)) {
+                    if (c.getLinha() >= (gridLargura / 2) && c.getColuna() < (gridAltura / 2)) {
                         quad3.add(c.getValor());
                     } else {
                         quad4.add(c.getValor());
@@ -417,26 +427,42 @@ public class UniformidadesImpl implements IUniformidades {
         System.out.println("Quad4: " + quad4.toString());
 
 
-        for (int j = 0; j < (gridAltura/2) * (gridLargura/2); j++) {
+        for (int j = 0; j < (gridAltura / 2) * (gridLargura / 2); j++) {
             Float soma;
             soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
             soma = (float) (Math.round(soma * 100.0) / 100.0);
             sp.add(soma);
         }
-        
+
         List<Float> dist = new LinkedList<>();
         int cont = 0;
-        for (int i = 0; i < (gridLargura/2); i++) {
-            for (int j = 0; j < (gridAltura/2); j++) {
-                if(i==j)
+        for (int i = 0; i < (gridLargura / 2); i++) {
+            for (int j = 0; j < (gridAltura / 2); j++) {
+                if (i == j) {
                     dist.add(sp.get(cont));
+                }
                 cont++;
             }
-            
+
         }
-        System.out.println("perfil de distribuição:" +dist.toString());
-        
+        System.out.println("perfil de distribuição:" + dist.toString());
+
         return null;
-        
+
+    }
+
+    @Override
+    public Float getDesvioPadrao() {
+        return round((desvioPadrao != null ? desvioPadrao : 0), 4);
+    }
+
+    @Override
+    public Float getMediaMenorQuartil() {
+        return round((mediaMenorQuartil != null ? mediaMenorQuartil : 0), 4);
+    }
+
+    @Override
+    public Float getCoeficienteVariacao() {
+        return round((coeficienteVariacao != null ? coeficienteVariacao : 0), 0);
     }
 }
