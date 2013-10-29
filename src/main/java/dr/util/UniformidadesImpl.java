@@ -271,19 +271,23 @@ public class UniformidadesImpl implements IUniformidades {
     public Float calculoCue(List<Float> listaSobreposicoes) {
         coeficienteVariacao = 0F;
         desvioPadrao = 0F;
+        float soma = 0F;
         //1 calcular o desvio padrão = valor sopreposição - media geral elevado ao quadrado e realizar a somatória dos valores
         for (Float valor : listaSobreposicoes) {
 
             double a = valor - UniformidadesImpl.mediaSobreposicao;
             float desvio = (float) Math.pow(a, 2);
 
-            desvioPadrao += desvio;
+            soma += desvio;
 
         }
-        coeficienteVariacao = (desvioPadrao / UniformidadesImpl.mediaSobreposicao) /** 100*/;
+        //desvio padrão é = raiz quadradada(somatória dos desvios / tamanho das lista de sobreposições -1)
+        desvioPadrao = (float) Math.sqrt(soma /(listaSobreposicoes.size()-1));
+        //
+        coeficienteVariacao = (soma / UniformidadesImpl.mediaSobreposicao) /** 100*/;
 
         //2 calcular cue = 1 - raiz quadrada(soma / ((quantidade sobreposições -1 ) * media sobreposições ao quadrado
-        return round(1 - (float) Math.sqrt((desvioPadrao / ((listaSobreposicoes.size() - 1) * (float) Math.pow(UniformidadesImpl.mediaSobreposicao, 2)))), 4);
+        return round(1 - (float) Math.sqrt((soma / ((listaSobreposicoes.size() - 1) * (float) Math.pow(UniformidadesImpl.mediaSobreposicao, 2)))), 4);
     }
 
     /**
