@@ -191,8 +191,8 @@ public class UniformidadeTable extends VBox {
             grid.add(cud, 4, 0);
             grid.add(new Label("CUE:"), 5, 0);
             grid.add(cue, 6, 0);
-
-            aspersor = new Label("Espaçamento entre aspersores");
+            
+            aspersor = new Label("Espaçamento entre aspersores "+espacamentoY+" metros");
             aspersor.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
@@ -209,7 +209,7 @@ public class UniformidadeTable extends VBox {
                 }
             });
 
-            laterais = new Label("Laterais");
+            laterais = new Label("Laterais "+espacamentoX+" metros");
             laterais.setRotate(270);
             laterais.setTranslateY(50);
             laterais.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -259,7 +259,9 @@ public class UniformidadeTable extends VBox {
         CUC = uniformidade.calculoCuc(listaSobreposicoes);
         CUD = uniformidade.calculoCud(listaSobreposicoes);
         CUE = uniformidade.calculoCue(listaSobreposicoes);
-
+        
+        //        chamar aqui o calculo do perfil de distribuição
+        uniformidade.calculaPerfilDistribuicao();
 
         Cuc = new SimpleStringProperty(CUC + "");
         cuc.textProperty().bind(Cuc);
@@ -274,7 +276,7 @@ public class UniformidadeTable extends VBox {
 
 
     }
-
+    
     /**
      *
      * @param espacamentoX altura ou espaçamento entre aspersores
