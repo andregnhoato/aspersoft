@@ -1,7 +1,6 @@
 package dr.util;
 
 import dr.model.Coleta;
-import dr.model.Ensaio;
 import java.util.List;
 import javafx.collections.ObservableList;
 
@@ -18,7 +17,7 @@ public interface IUniformidades {
      * @param e Ensaio
      * @return  Lista com os valores sobrepostos preparada para setar na tabela
      */
-    public ObservableList calculaSobreposicoes(int espacamentoX, int espacamentoY, List<Coleta> coletas, Ensaio e);
+    public ObservableList calculaSobreposicoes(int espacamentoX, int espacamentoY, List<Coleta> coletas);
     
     /**
      * Metodo reponsável por calcular o CUC

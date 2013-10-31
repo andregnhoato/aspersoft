@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.layout.GridPane;
@@ -47,24 +46,19 @@ public class UniformidadeTable extends VBox {
     private Float DP;
     float gridAltura;
     float gridLargura;
-    IUniformidades uniformidade = new UniformidadesImpl();
-    private Label aspersor;
-    private Label laterais;
+    IUniformidades uniformidade;
+    
 
     public UniformidadeTable() {
         table = new UniformidadeTableView();
         dao = new ColetaDAOImpl(pe.getPersistenceContext());
         CUC = 0F;
-
         this.getChildren().addAll(table);
-
-
-
     }
 
     public void reRenderTable(Ensaio ensaio, String espacamento) {
         if (espacamento != null) {
-
+            uniformidade = new UniformidadesImpl(ensaio);
             ArrayList<Coleta> clts = null;
             try {
                 clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
@@ -144,12 +138,7 @@ public class UniformidadeTable extends VBox {
         DP = uniformidade.getDesvioPadrao();
         MMQ = uniformidade.getMediaMenorQuartil();
         CV = uniformidade.getCoeficienteVariacao();
-
-        //        chamar aqui o calculo do perfil de distribuição
-        uniformidade.calculaPerfilDistribuicao();
-
-
-    }
+}
 
     /**
      *
@@ -159,7 +148,7 @@ public class UniformidadeTable extends VBox {
      * @return
      */
     private ObservableList calculaSobreposicao(int espacamentoX, int espacamentoY, List<Coleta> coletas) {
-        this.sobreposicoes = uniformidade.calculaSobreposicoes(espacamentoX, espacamentoY, coletas, ensaio);
+        this.sobreposicoes = uniformidade.calculaSobreposicoes(espacamentoX, espacamentoY, coletas);
         return sobreposicoes;
     }
 

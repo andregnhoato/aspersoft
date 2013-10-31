@@ -2,6 +2,8 @@ package dr.ui.coleta.uniformidade;
 
 import dr.model.Ensaio;
 import dr.util.DateUtil;
+import dr.util.IUniformidades;
+import dr.util.UniformidadesImpl;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -9,7 +11,12 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -32,7 +39,7 @@ import javafx.stage.Stage;
  * @author
  * @Andre
  */
-public class UniformidadeListView extends Stage {
+public final class UniformidadeListView extends Stage {
 
     private Scene subScene;
     private UniformidadeTable table;
@@ -69,12 +76,49 @@ public class UniformidadeListView extends Stage {
     private SimpleStringProperty Dp;
     private Label aspersor;
     private Label laterais;
+    IUniformidades uniformidade;
+    private GridPane gridGrafico;
+    private TitledPane tdGrafico;
+    private LineChart<Number, Number> grafico;
 
+    //espacamentoX = Integer.parseInt(espacamento.substring(3, 5));
+    //espacamentoY = Integer.parseInt(espacamento.substring(0, 2));
     public UniformidadeListView() {
 
+        this.uniformidade = new UniformidadesImpl(ensaio);
+
+
+
+        initModality(Modality.APPLICATION_MODAL);
+        this.setFullScreen(true);
+        this.setScene(inicializaAll());
+
+    }
+
+    private void inicializaComponentes(Ensaio e) {
+        table = new UniformidadeTable();
+        cbEspacamento = new ComboBox(getEspacamentos());
+        cbEspacamento.setId("comboEspacamento");
+        descricao = new Label("--");
+        pressao = new Label("--");
+        data = new Label("--");
+        velVento = new Label("--");
+        dirVento = new Label("--");
+        espacamento = new Label("--");
+        inicio = new Label("--");
+        metros = new Label("--");
+        cuc = new Label("--");
+        cud = new Label("--");
+        cue = new Label("--");
+        mmq = new Label("--");
+        dp = new Label("--");
+        cv = new Label("--");
+
+    }
+
+    public Scene inicializaAll() {
 
         GridPane geral = new GridPane();
-
         setTitle("Analise dos Dados");
         setResizable(true);
 
@@ -109,27 +153,41 @@ public class UniformidadeListView extends Stage {
         td.setExpanded(true);
         geral.add(td, 0, 0);
 
+        //defining the axes
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        //creating the chart
+        grafico = new LineChart<Number, Number>(xAxis, yAxis);
+
+        grafico.setTitle("Perfil de distribuição");
+        //defining a series
+        XYChart.Series series = new XYChart.Series();
+        series.setName("perfil");
+        //populating the series with data
+
+        grafico.getYAxis().setAutoRanging(true);
+        grafico.getXAxis().setAutoRanging(true);
+        grafico.getData().add(series);
+
+        Label cursorCoords = createCursorGraphCoordsMonitorLabel(grafico);
+        cursorCoords.setAlignment(Pos.CENTER);
         grid = new GridPane();
         td = new TitledPane();
-        grid.add(new Label("Desvio Padrã0:"), 0, 0);
-        grid.add(new Label("-----"), 1, 0);
-        grid.add(new Label("Média Menor Quartil:"), 2, 0);
-        grid.add(new Label("-----"), 3, 0);
-        grid.add(new Label("Coeficiente de Variação:"), 4, 0);
-        grid.add(new Label("-----"), 5, 0);
+        grid.add(this.grafico, 0 , 0);
+        grid.add(cursorCoords, 0, 1);
         td.setText("Perfil de distribuição");
         td.setContent(grid);
         geral.add(td, 0, 1);
 
         td = new TitledPane();
         grid = new GridPane();
-        grid.getColumnConstraints().add(new ColumnConstraints(20,20, Double.MAX_VALUE));
+        grid.getColumnConstraints().add(new ColumnConstraints(50, 50, Double.MAX_VALUE));
         grid.setVgap(5);
         grid.setHgap(5);
-        grid.add(new Label("Selecione o Espaçamento para visualizar a sobreposição: "), 0, 0,2,1);
-        grid.add(cbEspacamento, 3,0);
-        
-        aspersor = new Label("Espaçamento entre aspersores  metros");
+        grid.add(new Label("Selecione o Espaçamento para visualizar a sobreposição: "), 0, 0, 2, 1);
+        grid.add(cbEspacamento, 3, 0);
+
+        aspersor = new Label("Espaçamento entre aspersores");
         aspersor.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -146,7 +204,7 @@ public class UniformidadeListView extends Stage {
             }
         });
 
-        laterais = new Label("Laterais  metros");
+        laterais = new Label("Laterais");
         laterais.setRotate(270);
         laterais.setTranslateY(50);
         laterais.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -166,10 +224,10 @@ public class UniformidadeListView extends Stage {
         });
         laterais.setAlignment(Pos.BASELINE_LEFT);
         grid.add(laterais, 0, 1);
-        grid.add(table, 1, 1,3,1);
+        grid.add(table, 1, 1, 3, 1);
         aspersor.setAlignment(Pos.TOP_CENTER);
-        grid.add(aspersor, 1, 2,3,1);
-        
+        grid.add(aspersor, 1, 2, 3, 1);
+
 //        grid.add(table, 0, 1, 2, 1);
         td.setText("Sobreposição");
         td.setContent(grid);
@@ -197,9 +255,9 @@ public class UniformidadeListView extends Stage {
         grid.setHgap(5);
         grid.add(new Label("Desvio Padrão:"), 0, 0);
         grid.add(dp, 1, 0);
-        grid.add(new Label("Média Menor Quartil:"), 0, 1);
+        grid.add(new Label("Média 1º quartil:"), 0, 1);
         grid.add(mmq, 1, 1);
-        grid.add(new Label("Coeficiente de Variação:"), 0, 2);
+        grid.add(new Label("CV:"), 0, 2);
         grid.add(cv, 1, 2);
         td.setText("Dados Estatísticos");
         td.setContent(grid);
@@ -216,37 +274,104 @@ public class UniformidadeListView extends Stage {
 
         Scene scene = new Scene(sp);
         scene.getStylesheets().add("style.css");
-        initModality(Modality.APPLICATION_MODAL);
-        this.setFullScreen(true);
-        this.setScene(scene);
+
+        return scene;
 
     }
 
-    private void inicializaComponentes(Ensaio e) {
-        table = new UniformidadeTable();
-        cbEspacamento = new ComboBox(getEspacamentos());
-        cbEspacamento.setId("comboEspacamento");
-        descricao = new Label("--");
-        pressao = new Label("--");
-        data = new Label("--");
-        velVento = new Label("--");
-        dirVento = new Label("--");
-        espacamento = new Label("--");
-        inicio = new Label("--");
-        metros = new Label("--");
-        cuc = new Label("--");
-        cud = new Label("--");
-        cue = new Label("--");
-        mmq = new Label("--");
-        dp = new Label("--");
-        cv = new Label("--");
+    private Label createCursorGraphCoordsMonitorLabel(LineChart<Number, Number> lineChart) {
+        final Axis<Number> xAxis = lineChart.getXAxis();
+        final Axis<Number> yAxis = lineChart.getYAxis();
 
+        final Label cursorCoords = new Label();
+
+        final Node chartBackground = lineChart.lookup(".chart-plot-background");
+        for (Node n : chartBackground.getParent().getChildrenUnmodifiable()) {
+            if (n != chartBackground && n != xAxis && n != yAxis) {
+                n.setMouseTransparent(true);
+            }
+        }
+
+        chartBackground.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cursorCoords.setVisible(true);
+            }
+        });
+
+        chartBackground.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cursorCoords.setText(
+                        String.format(
+                        "(distância %.2f, milímetros %.2f)",
+                        xAxis.getValueForDisplay(mouseEvent.getX()),
+                        yAxis.getValueForDisplay(mouseEvent.getY())));
+            }
+        });
+
+        chartBackground.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cursorCoords.setVisible(false);
+            }
+        });
+
+        xAxis.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cursorCoords.setVisible(true);
+            }
+        });
+
+        xAxis.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cursorCoords.setText(
+                        String.format(
+                        "distância = %.2f",
+                        xAxis.getValueForDisplay(mouseEvent.getX())));
+            }
+        });
+
+        xAxis.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cursorCoords.setVisible(false);
+            }
+        });
+
+        yAxis.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cursorCoords.setVisible(true);
+            }
+        });
+
+        yAxis.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cursorCoords.setText(
+                        String.format(
+                        "milímetros = %.2f",
+                        yAxis.getValueForDisplay(mouseEvent.getY())));
+            }
+        });
+
+        yAxis.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                cursorCoords.setVisible(false);
+            }
+        });
+
+        return cursorCoords;
     }
 
     public void reRenderTable() {
 
         table.reRenderTable(ensaio, (cbEspacamento.getValue() == null ? null : cbEspacamento.getValue().toString()));
-
+        uniformidade = new UniformidadesImpl(ensaio);
         Cuc = new SimpleStringProperty(table.getCUC() + "");
         cuc.textProperty().bind(Cuc);
         cuc.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
@@ -271,6 +396,19 @@ public class UniformidadeListView extends Stage {
         mmq.textProperty().bind(Mmq);
         mmq.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
+
+
+
+        this.grafico.getData().clear();
+        XYChart.Series series = new XYChart.Series();
+        series.setName("distribuição");
+        List<Float> perfil = uniformidade.calculaPerfilDistribuicao();
+        List<Float> distancia = uniformidade.calculaDistanciaPerfilDistribuicao();
+        for (int i = 0; i < perfil.size(); i++) {
+            series.getData().add(new XYChart.Data(distancia.get(i), perfil.get(i)));
+
+        }
+        this.grafico.getData().add(series);
 
     }
 

@@ -1,5 +1,8 @@
 package dr.util;
 
+import dr.controller.PersistenceController;
+import dr.dao.ColetaDAO;
+import dr.dao.ColetaDAOImpl;
 import dr.model.Coleta;
 import dr.model.Ensaio;
 import dr.ui.coleta.uniformidade.UniformidadeTable;
@@ -19,7 +22,7 @@ import javafx.collections.ObservableList;
  *
  * @author andregnhoato
  */
-public class UniformidadesImpl implements IUniformidades {
+public class UniformidadesImpl extends PersistenceController implements IUniformidades {
 
     private Ensaio ensaio;
     private ObservableList<ObservableList> sobreposicoes;
@@ -37,17 +40,33 @@ public class UniformidadesImpl implements IUniformidades {
     private Float desvioPadrao;
     private Float mediaMenorQuartil;
     private Float coeficienteVariacao;
+    private ColetaDAO cDao;
 
-    @Override
-    public ObservableList calculaSobreposicoes(int espacamentoX, int espacamentoY, List<Coleta> coletas, Ensaio e) {
-        sobreposicoes = FXCollections.observableArrayList();
-        this.ensaio = e;
-        perfeito = false;
-        try {
-            this.coletas = coletas;
+    public UniformidadesImpl(Ensaio e) {
+
+        if (e != null) {
+            this.cDao = new ColetaDAOImpl(this.getPersistenceContext());
+            this.ensaio = e;
             //transformando a metragem em unidade
             gridAltura = ensaio.getGridAltura() / ensaio.getEspacamentoPluviometro();
             gridLargura = ensaio.getGridLargura() / ensaio.getEspacamentoPluviometro();
+
+            try {
+                this.coletas = cDao.findColetasByEnsaio(e);
+            } catch (Exception ex) {
+                Logger.getLogger(UniformidadesImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+
+    }
+
+    @Override
+    public ObservableList calculaSobreposicoes(int espacamentoX, int espacamentoY, List<Coleta> coletas) {
+        sobreposicoes = FXCollections.observableArrayList();
+        perfeito = false;
+        try {
+            this.coletas = coletas;
 
             if (coletas.size() < (gridAltura * gridLargura)) {
                 throw new Exception("Invalid length array");
@@ -61,8 +80,6 @@ public class UniformidadesImpl implements IUniformidades {
             sobreposicaoX = espacamentoX / ensaio.getEspacamentoPluviometro();
             sobreposicaoY = espacamentoY / ensaio.getEspacamentoPluviometro();
 
-            float sobreMenorX;
-            float sobreMenorY;
             if (posAspersorX == posAspersorY) {
                 if (posAspersorX == sobreposicaoX && posAspersorY == sobreposicaoY) {
                     perfeito = true;
@@ -102,8 +119,7 @@ public class UniformidadesImpl implements IUniformidades {
                             cont++;
                         }
                     }
-//                    reSobrepoeX = false;
-//                    reSobrepoeY = false;
+
                     if (!reSobrepoeX && reSobrepoeY) {
                         LinkedList<Float> quad1 = new LinkedList<>();
                         LinkedList<Float> quad2 = new LinkedList<>();
@@ -231,7 +247,7 @@ public class UniformidadesImpl implements IUniformidades {
 
         float ccc = 1 - somatoriaAbsolutos / (valoresAbsolutos.size() * mediaSobreposicao);
 
-        return round(ccc, 4);
+        return round(ccc, 3);
     }
 
     /**
@@ -257,7 +273,7 @@ public class UniformidadesImpl implements IUniformidades {
         mediaMenorQuartil = somatoria / quarto;
         //calcula cud media de 1/4 dividido pela media geral
 
-        return round((mediaMenorQuartil / UniformidadesImpl.mediaSobreposicao), 4);
+        return round((mediaMenorQuartil / UniformidadesImpl.mediaSobreposicao), 3);
 
     }
 
@@ -290,7 +306,7 @@ public class UniformidadesImpl implements IUniformidades {
                 ;
 
         //2 calcular cue = 1 - raiz quadrada(soma / ((quantidade sobreposições -1 ) * media sobreposições ao quadrado
-        return round(1 - (float) Math.sqrt((soma / ((listaSobreposicoes.size() - 1) * (float) Math.pow(UniformidadesImpl.mediaSobreposicao, 2)))), 4);
+        return round(1 - (float) Math.sqrt((soma / ((listaSobreposicoes.size() - 1) * (float) Math.pow(UniformidadesImpl.mediaSobreposicao, 2)))), 3);
     }
 
     /**
@@ -404,19 +420,21 @@ public class UniformidadesImpl implements IUniformidades {
         }
         return clts;
     }
-    
+
     @Override
-    public List<Float> calculaDistanciaPerfilDistribuicao(){
+    public List<Float> calculaDistanciaPerfilDistribuicao() {
         List<Float> distancias = new LinkedList<>();
-        float hipotenusa = (float) Math.sqrt(((float) Math.pow((ensaio.getEspacamentoPluviometro()), 2) + (float) Math.pow((ensaio.getEspacamentoPluviometro()), 2)));
-        float somaHipotenusa = 0;
-        for (int i = 0; i < (gridLargura / 2); i++) {
-            somaHipotenusa += hipotenusa;
-            if (i == 0) {
-                distancias.add(hipotenusa / 2);
-                somaHipotenusa = hipotenusa / 2;
-            } else {
-                distancias.add(somaHipotenusa);
+        if (this.ensaio != null) {   
+            float hipotenusa = (float) Math.sqrt(((float) Math.pow((ensaio.getEspacamentoPluviometro()), 2) + (float) Math.pow((ensaio.getEspacamentoPluviometro()), 2)));
+            float somaHipotenusa = 0;
+            for (int i = 0; i < (gridLargura / 2); i++) {
+                somaHipotenusa += hipotenusa;
+                if (i == 0) {
+                    distancias.add(hipotenusa / 2);
+                    somaHipotenusa = hipotenusa / 2;
+                } else {
+                    distancias.add(somaHipotenusa);
+                }
             }
         }
         return distancias;
@@ -424,56 +442,61 @@ public class UniformidadesImpl implements IUniformidades {
 
     @Override
     public List<Float> calculaPerfilDistribuicao() {
-
-        //calculo do perfil
-        int x = 0;
-        int xx = (int) gridAltura - 1;
-        int y = 0;
-        int yy = (int) gridLargura - 1;
         List<Float> vperfil = new LinkedList<>();
         List<List<Float>> perfis = new LinkedList<>();
-        boolean acabou = false;
-        while (!acabou) {
+        if (coletas != null) {
 
-            for (Coleta c : coletas) {
-                if (c.getLinha() == x && c.getColuna() == y) {
-                    vperfil.add(c.getValor());
+            //calculo do perfil
+            int x = 0;
+            int xx = (int) gridAltura - 1;
+            int y = 0;
+            int yy = (int) gridLargura - 1;
+
+            boolean acabou = false;
+            while (!acabou) {
+
+                for (Coleta c : coletas) {
+                    if (c.getLinha() == x && c.getColuna() == y) {
+                        vperfil.add(c.getValor());
+                    }
+                    if (c.getLinha() == x && c.getColuna() == yy) {
+                        vperfil.add(c.getValor());
+                    }
+                    if (c.getLinha() == xx && c.getColuna() == y) {
+                        vperfil.add(c.getValor());
+                    }
+                    if (c.getLinha() == xx && c.getColuna() == yy) {
+                        vperfil.add(c.getValor());
+                    }
+                    if (vperfil.size() == 4) {
+                        perfis.add(vperfil);
+                        vperfil = new ArrayList<>();
+                        break;
+                    }
                 }
-                if (c.getLinha() == x && c.getColuna() == yy) {
-                    vperfil.add(c.getValor());
+                if (perfis.size() == (gridLargura / 2)) {
+                    acabou = true;
                 }
-                if (c.getLinha() == xx && c.getColuna() == y) {
-                    vperfil.add(c.getValor());
-                }
-                if (c.getLinha() == xx && c.getColuna() == yy) {
-                    vperfil.add(c.getValor());
-                }
-                if (vperfil.size() == 4) {
-                    perfis.add(vperfil);
-                    vperfil = new ArrayList<>();
-                    break;
-                }
+                x++;
+                xx--;
+                y++;
+                yy--;
             }
-            if (perfis.size() == (gridLargura / 2)) {
-                acabou = true;
+
+            for (int i = perfis.size() - 1; i >= 0; i--) {
+                float mediaPerfil = 0;
+                for (int j = 0; j < perfis.get(i).size(); j++) {
+                    mediaPerfil += (perfis.get(i).get(j) / 2);
+                }
+                vperfil.add(mediaPerfil / 4);
             }
-            x++;
-            xx--;
-            y++;
-            yy--;
+
         }
 
-        for (int i = perfis.size() - 1; i >= 0; i--) {
-            float mediaPerfil = 0;
-            for (int j = 0; j < perfis.get(i).size(); j++) {
-                mediaPerfil += (perfis.get(i).get(j)/2);
-            }
-            vperfil.add(mediaPerfil/4);
-        }
-   
         return vperfil;
 
     }
+
 
     @Override
     public Float getDesvioPadrao() {
