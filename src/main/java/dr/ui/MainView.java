@@ -38,6 +38,7 @@ public class MainView {
         stage.setWidth(700);
         stage.setHeight(510);
         stage.setScene(mainScene);
+        stage.setFullScreen(true);
         stage.setResizable(true);
         stage.centerOnScreen();
         stage.show();
