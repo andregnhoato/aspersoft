@@ -282,9 +282,12 @@ public class UniformidadesImpl implements IUniformidades {
 
         }
         //desvio padrão é = raiz quadradada(somatória dos desvios / tamanho das lista de sobreposições -1)
-        desvioPadrao = (float) Math.sqrt(soma /(listaSobreposicoes.size()-1));
+        desvioPadrao = (float) Math.sqrt(soma / (listaSobreposicoes.size() - 1));
         //
-        coeficienteVariacao = (soma / UniformidadesImpl.mediaSobreposicao) /** 100*/;
+        coeficienteVariacao = (soma / UniformidadesImpl.mediaSobreposicao) /**
+                 * 100
+                 */
+                ;
 
         //2 calcular cue = 1 - raiz quadrada(soma / ((quantidade sobreposições -1 ) * media sobreposições ao quadrado
         return round(1 - (float) Math.sqrt((soma / ((listaSobreposicoes.size() - 1) * (float) Math.pow(UniformidadesImpl.mediaSobreposicao, 2)))), 4);
@@ -401,57 +404,74 @@ public class UniformidadesImpl implements IUniformidades {
         }
         return clts;
     }
+    
+    @Override
+    public List<Float> calculaDistanciaPerfilDistribuicao(){
+        List<Float> distancias = new LinkedList<>();
+        float hipotenusa = (float) Math.sqrt(((float) Math.pow((ensaio.getEspacamentoPluviometro()), 2) + (float) Math.pow((ensaio.getEspacamentoPluviometro()), 2)));
+        float somaHipotenusa = 0;
+        for (int i = 0; i < (gridLargura / 2); i++) {
+            somaHipotenusa += hipotenusa;
+            if (i == 0) {
+                distancias.add(hipotenusa / 2);
+                somaHipotenusa = hipotenusa / 2;
+            } else {
+                distancias.add(somaHipotenusa);
+            }
+        }
+        return distancias;
+    }
 
     @Override
-    public ObservableList calculaPerfilDistribuicao() {
-        LinkedList<Float> quad1 = new LinkedList<>();
-        LinkedList<Float> quad2 = new LinkedList<>();
-        LinkedList<Float> quad3 = new LinkedList<>();
-        LinkedList<Float> quad4 = new LinkedList<>();
-        LinkedList<Float> sp = new LinkedList<>();
+    public List<Float> calculaPerfilDistribuicao() {
 
-        for (Coleta c : coletas) {
-            if (c.getLinha() < (gridLargura / 2) && c.getColuna() < (gridAltura / 2)) {
-                quad1.add(c.getValor());
-            } else {
-                if (c.getLinha() < (gridLargura / 2) && c.getColuna() >= (gridAltura / 2)) {
-                    quad2.add(c.getValor());
-                } else {
-                    if (c.getLinha() >= (gridLargura / 2) && c.getColuna() < (gridAltura / 2)) {
-                        quad3.add(c.getValor());
-                    } else {
-                        quad4.add(c.getValor());
-                    }
+        //calculo do perfil
+        int x = 0;
+        int xx = (int) gridAltura - 1;
+        int y = 0;
+        int yy = (int) gridLargura - 1;
+        List<Float> vperfil = new LinkedList<>();
+        List<List<Float>> perfis = new LinkedList<>();
+        boolean acabou = false;
+        while (!acabou) {
+
+            for (Coleta c : coletas) {
+                if (c.getLinha() == x && c.getColuna() == y) {
+                    vperfil.add(c.getValor());
+                }
+                if (c.getLinha() == x && c.getColuna() == yy) {
+                    vperfil.add(c.getValor());
+                }
+                if (c.getLinha() == xx && c.getColuna() == y) {
+                    vperfil.add(c.getValor());
+                }
+                if (c.getLinha() == xx && c.getColuna() == yy) {
+                    vperfil.add(c.getValor());
+                }
+                if (vperfil.size() == 4) {
+                    perfis.add(vperfil);
+                    vperfil = new ArrayList<>();
+                    break;
                 }
             }
-        }
-        System.out.println("Quad1: " + quad1.toString());
-        System.out.println("Quad2: " + quad2.toString());
-        System.out.println("Quad3: " + quad3.toString());
-        System.out.println("Quad4: " + quad4.toString());
-
-
-        for (int j = 0; j < (gridAltura / 2) * (gridLargura / 2); j++) {
-            Float soma;
-            soma = quad1.get(j) + quad2.get(j) + quad3.get(j) + quad4.get(j);
-            soma = (float) (Math.round(soma * 100.0) / 100.0);
-            sp.add(soma);
-        }
-
-        List<Float> dist = new LinkedList<>();
-        int cont = 0;
-        for (int i = 0; i < (gridLargura / 2); i++) {
-            for (int j = 0; j < (gridAltura / 2); j++) {
-                if (i == j) {
-                    dist.add(sp.get(cont));
-                }
-                cont++;
+            if (perfis.size() == (gridLargura / 2)) {
+                acabou = true;
             }
-
+            x++;
+            xx--;
+            y++;
+            yy--;
         }
-        System.out.println("perfil de distribuição:" + dist.toString());
 
-        return null;
+        for (int i = perfis.size() - 1; i >= 0; i--) {
+            float mediaPerfil = 0;
+            for (int j = 0; j < perfis.get(i).size(); j++) {
+                mediaPerfil += (perfis.get(i).get(j)/2);
+            }
+            vperfil.add(mediaPerfil/4);
+        }
+   
+        return vperfil;
 
     }
 

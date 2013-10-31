@@ -6,12 +6,20 @@ import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -46,16 +54,36 @@ public class UniformidadeListView extends Stage {
     private SimpleStringProperty dv;
     private Label espacamento;
     private SimpleStringProperty esp;
-   
+    private ScrollPane sp;
+    private Label cuc;
+    private SimpleStringProperty Cuc;
+    private Label cud;
+    private SimpleStringProperty Cud;
+    private Label cue;
+    private SimpleStringProperty Cue;
+    private Label cv;
+    private SimpleStringProperty Cv;
+    private Label mmq;
+    private SimpleStringProperty Mmq;
+    private Label dp;
+    private SimpleStringProperty Dp;
+    private Label aspersor;
+    private Label laterais;
 
     public UniformidadeListView() {
 
 
-        setTitle("Uniformidade");
+        GridPane geral = new GridPane();
+
+        setTitle("Analise dos Dados");
         setResizable(true);
-        
+
         inicializaComponentes(ensaio);
 //        public void add(Node child, int columnIndex, int rowIndex, int colspan, int rowspan)
+
+        //primeiro painel dados do ensaio
+        TitledPane td = new TitledPane();
+        td.setText("Dados do Ensaio");
         GridPane grid = new GridPane();
         grid.setVgap(5);
         grid.setHgap(5);
@@ -76,16 +104,120 @@ public class UniformidadeListView extends Stage {
         grid.add(espacamento, 1, 3);
         grid.add(new Label("Tamanho grid: "), 2, 3);
         grid.add(metros, 3, 3);
-        grid.add(new Label("Selecione o Espaçamento para visualizar a sobreposição: "), 0, 4, 2, 1);
-        grid.add(cbEspacamento, 2, 4,2,1);
-        grid.add(table, 0, 5, 4, 1);
+        td.setContent(grid);
+        td.autosize();
+        td.setExpanded(true);
+        geral.add(td, 0, 0);
+
+        grid = new GridPane();
+        td = new TitledPane();
+        grid.add(new Label("Desvio Padrã0:"), 0, 0);
+        grid.add(new Label("-----"), 1, 0);
+        grid.add(new Label("Média Menor Quartil:"), 2, 0);
+        grid.add(new Label("-----"), 3, 0);
+        grid.add(new Label("Coeficiente de Variação:"), 4, 0);
+        grid.add(new Label("-----"), 5, 0);
+        td.setText("Perfil de distribuição");
+        td.setContent(grid);
+        geral.add(td, 0, 1);
+
+        td = new TitledPane();
+        grid = new GridPane();
+        grid.getColumnConstraints().add(new ColumnConstraints(20,20, Double.MAX_VALUE));
+        grid.setVgap(5);
+        grid.setHgap(5);
+        grid.add(new Label("Selecione o Espaçamento para visualizar a sobreposição: "), 0, 0,2,1);
+        grid.add(cbEspacamento, 3,0);
+        
+        aspersor = new Label("Espaçamento entre aspersores  metros");
+        aspersor.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                aspersor.setScaleX(1.5);
+                aspersor.setScaleY(1.5);
+            }
+        });
+
+        aspersor.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                aspersor.setScaleX(1);
+                aspersor.setScaleY(1);
+            }
+        });
+
+        laterais = new Label("Laterais  metros");
+        laterais.setRotate(270);
+        laterais.setTranslateY(50);
+        laterais.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                laterais.setScaleX(1.5);
+                laterais.setScaleY(1.5);
+            }
+        });
+
+        laterais.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                laterais.setScaleX(1);
+                laterais.setScaleY(1);
+            }
+        });
+        laterais.setAlignment(Pos.BASELINE_LEFT);
+        grid.add(laterais, 0, 1);
+        grid.add(table, 1, 1,3,1);
+        aspersor.setAlignment(Pos.TOP_CENTER);
+        grid.add(aspersor, 1, 2,3,1);
+        
+//        grid.add(table, 0, 1, 2, 1);
+        td.setText("Sobreposição");
+        td.setContent(grid);
+        td.autosize();
+        geral.add(td, 0, 2);
+
+        grid = new GridPane();
+        td = new TitledPane();
+        grid.setVgap(5);
+        grid.setHgap(5);
+        grid.add(new Label("Coeficiente de uniformidade de Christiansen(CUC):"), 0, 0);
+        grid.add(cuc, 1, 0);
+        grid.add(new Label("Coeficiente de uniformidade de distribuição (CUD):"), 0, 1);
+        grid.add(cud, 1, 1);
+        grid.add(new Label("Coeficiente estatístico de uniformidade: (CUE):"), 0, 2);
+        grid.add(cue, 1, 2);
+        td.setText("Uniformidades");
+        td.setContent(grid);
+        td.autosize();
+        geral.add(td, 0, 3);
+
+        grid = new GridPane();
+        td = new TitledPane();
+        grid.setVgap(5);
+        grid.setHgap(5);
+        grid.add(new Label("Desvio Padrão:"), 0, 0);
+        grid.add(dp, 1, 0);
+        grid.add(new Label("Média Menor Quartil:"), 0, 1);
+        grid.add(mmq, 1, 1);
+        grid.add(new Label("Coeficiente de Variação:"), 0, 2);
+        grid.add(cv, 1, 2);
+        td.setText("Dados Estatísticos");
+        td.setContent(grid);
+        td.autosize();
+        geral.add(td, 0, 4);
+        geral.autosize();
 
 
-        Group panel = new Group();
-        panel.getChildren().add(grid);
 
-        Scene scene = new Scene(panel);
+//        Group panel = new Group();
+//        panel.getChildren().add(grid);
+        sp = new ScrollPane();
+        sp.setContent(geral);
+
+        Scene scene = new Scene(sp);
         scene.getStylesheets().add("style.css");
+        initModality(Modality.APPLICATION_MODAL);
+        this.setFullScreen(true);
         this.setScene(scene);
 
     }
@@ -95,27 +227,52 @@ public class UniformidadeListView extends Stage {
         cbEspacamento = new ComboBox(getEspacamentos());
         cbEspacamento.setId("comboEspacamento");
         descricao = new Label("--");
-        pressao= new Label("--");
-        data= new Label("--");
+        pressao = new Label("--");
+        data = new Label("--");
         velVento = new Label("--");
         dirVento = new Label("--");
         espacamento = new Label("--");
         inicio = new Label("--");
         metros = new Label("--");
-        
-      
+        cuc = new Label("--");
+        cud = new Label("--");
+        cue = new Label("--");
+        mmq = new Label("--");
+        dp = new Label("--");
+        cv = new Label("--");
+
     }
 
     public void reRenderTable() {
 
         table.reRenderTable(ensaio, (cbEspacamento.getValue() == null ? null : cbEspacamento.getValue().toString()));
 
+        Cuc = new SimpleStringProperty(table.getCUC() + "");
+        cuc.textProperty().bind(Cuc);
+        cuc.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        Cud = new SimpleStringProperty(table.getCUD() + "");
+        cud.textProperty().bind(Cud);
+        cud.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        Cue = new SimpleStringProperty(table.getCUE() + "");
+        cue.textProperty().bind(Cue);
+        cue.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        Dp = new SimpleStringProperty(table.getDP() + "");
+        dp.textProperty().bind(Dp);
+        dp.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        Cv = new SimpleStringProperty(table.getCV() + "%");
+        cv.textProperty().bind(Cv);
+        cv.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
+        Mmq = new SimpleStringProperty(table.getMMQ() + "");
+        mmq.textProperty().bind(Mmq);
+        mmq.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+
 
     }
-
-//    public void renderTable() {
-//        table.renderTable();
-//    }
 
     public UniformidadeTable getTable() {
         return table;
@@ -130,7 +287,7 @@ public class UniformidadeListView extends Stage {
 
 
         float mQuad = (e.getGridAltura() * e.getGridLargura());
-        
+
         desc = new SimpleStringProperty(e.getDescricao());
         pre = new SimpleStringProperty(e.getPressao());
         dt = new SimpleStringProperty(DateUtil.formatDate(e.getData()));
@@ -139,7 +296,7 @@ public class UniformidadeListView extends Stage {
         esp = new SimpleStringProperty(e.getEspacamentoPluviometro() + "");
         ini = new SimpleStringProperty(e.getInicio());
         m = new SimpleStringProperty(mQuad + " m2");
-        
+
 
 
         descricao.textProperty().bind(desc);
@@ -150,7 +307,7 @@ public class UniformidadeListView extends Stage {
         espacamento.textProperty().bind(esp);
         inicio.textProperty().bind(ini);
         metros.textProperty().bind(m);
-        
+
 
     }
 
@@ -162,8 +319,10 @@ public class UniformidadeListView extends Stage {
         ObservableList<String> espacamentos =
                 FXCollections.observableArrayList(
                 "12x12",
+                "12x15",
                 "12x18",
                 "12x24",
+                "15x15",
                 "18x18",
                 "18x24",
                 "18x30",

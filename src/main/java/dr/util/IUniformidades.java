@@ -48,6 +48,13 @@ public interface IUniformidades {
      */
     public List<Float> calculaPerfilDistribuicao();
     
+    /**
+     * Método responsavel por calcular e retornar a listagem com as distancias do perfis de distribuição do ensaio
+     * @param coletas
+     * @return perfils
+     */
+    public List<Float> calculaDistanciaPerfilDistribuicao();
+    
     public Float getDesvioPadrao();
     public Float getCoeficienteVariacao();
     public Float getMediaMenorQuartil();
