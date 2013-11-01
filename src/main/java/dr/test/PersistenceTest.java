@@ -13,7 +13,6 @@ import dr.model.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +38,23 @@ public class PersistenceTest extends PersistenceController {
         //pt.qtdeEnsaios();
         //pt.sobreposicao(4, 12, 12);
 
-        pt.qtdeColetas();
-
+//        pt.qtdeColetas();
+//        pt.atualizarEnsaio();
+        
+        
+        pt.removeColeta(30320);
+//        pt.removeColeta(30312);
+//        pt.removeColeta(30321);
+//        pt.removeColeta(30322);
+//        pt.removeColeta(30323);
+//        pt.removeColeta(30324);
+//        pt.removeColeta(30325);
+//        pt.removeColeta(30326);
+//        pt.removeColeta(30327);
+        
+        
+        
+        pt.listarColetasByEnsaio(118);
 
 
 
@@ -55,6 +69,21 @@ public class PersistenceTest extends PersistenceController {
             Coleta c = cdao.findColetaByPosicao(e, linha, coluna);
             c.setValor(8F);
             cdao.update(c);
+        } catch (Exception ex) {
+            Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void atualizarEnsaio() {
+        Ensaio e;
+        try {
+            List<Ensaio> ensaios = (List<Ensaio>) edao.findAll();
+            for (Ensaio ensaio : ensaios) {
+                ensaio.setGridAltura(24);
+                ensaio.setGridLargura(24);
+                edao.update(ensaio);
+            }
+           
         } catch (Exception ex) {
             Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -81,19 +110,50 @@ public class PersistenceTest extends PersistenceController {
             Ensaio e = new Ensaio();
             e.setId(idEnsaio);
             List<Coleta> coletas = (List<Coleta>) cdao.findColetasByEnsaio(e);
-            for (Iterator<Coleta> it = coletas.iterator(); it.hasNext();) {
-                Coleta coleta = it.next();
+            System.out.println("tamanho array: "+coletas.size());
+            
+            int linha = 15;
+            int coluna = 8;
+//            for(int i=0; i<=7; i++ ){
+//                Coleta c = new Coleta();
+//                c.setColuna(coluna);
+//                c.setLinha(linha);
+//                c.setValor(0F);
+//                c.setEnsaio(coletas.get(0).getEnsaio());
+//                
+//                cdao.save(c);
+//                coluna++;
+//            }
+            coletas = null;
+            coletas = (List<Coleta>) cdao.findColetasByEnsaio(e);
+            System.out.println("tamanho array: "+coletas.size());
+            for (Coleta cc: coletas) {
+                Coleta coleta = cc;
+                System.out.println("tamanho array: "+coletas.size());
+                
                 System.out.println("coleta id: " + coleta.getId());
                 System.out.println("coleta coluna: " + coleta.getColuna());
                 System.out.println("coleta linha: " + coleta.getLinha());
-                System.out.println("coleta valor" + coleta.getValor());
+                System.out.println("coleta valor: " + coleta.getValor());
                 System.out.println("id ensaio: " + coleta.getEnsaio().getId() + " descricao: " + (coleta.getEnsaio() == null ? "nulo" : coleta.getEnsaio().getDescricao()));
                 System.out.println("=====================================");
+                
             }
         } catch (Exception ex) {
             Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    public void removeColeta(int idColeta){
+        Coleta c = new Coleta();
+        try {
+            c = cdao.findById(idColeta);
+            cdao.remove(c);
+        } catch (Exception ex) {
+            Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
     }
 
     public void qtdeColetas() {
@@ -129,6 +189,8 @@ public class PersistenceTest extends PersistenceController {
         }
 
     }
+    
+    
 
     public void qtdeEnsaios() {
         try {

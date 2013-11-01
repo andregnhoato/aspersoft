@@ -8,6 +8,7 @@ import dr.dao.EnsaioDAOImpl;
 import dr.event.ensaio.BuscarEnsaioEvent;
 import dr.model.Ensaio;
 import dr.ui.ensaio.BuscarEnsaioView;
+import dr.util.DateUtil;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -51,7 +52,8 @@ public class BuscarEnsaioController extends PersistenceController {
                 .addConditional(new BooleanExpression() {
                     @Override
                     public boolean conditional() {
-                        return view.getText().length() > 0;
+                        
+                        return view.getText().length() > 0 || view.getDataInicio()!= null || view.getDataFim()!=null;
                     }
                 })
                 .addAction(new AbstractAction() {
@@ -60,7 +62,17 @@ public class BuscarEnsaioController extends PersistenceController {
                     @Override
                     protected void action() {
                         EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
-                        list = dao.getEnsaiosByDescricao(view.getText());
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("WHERE 1=1 ");
+                        if(view.getText().length()>0)
+                            sb.append(" and e.descricao like ").append("'%").append(view.getText()).append("%'");
+                        if(view.getDataInicio()!=null)
+                            sb.append(" and e.data > ").append(DateUtil.formatDate(view.getDataInicio())).append("'");
+                        if(view.getDataFim()!=null)
+                            sb.append(" and e.data < '").append(DateUtil.formatDate(view.getDataFim())).append("'");
+                        
+                        
+                        list = dao.getEnsaiosByWhere(sb.toString());
                     }
 
                     @Override

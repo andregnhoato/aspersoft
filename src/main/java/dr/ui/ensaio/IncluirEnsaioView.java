@@ -5,6 +5,8 @@ import dr.ui.GridFormBuilder;
 import eu.schudt.javafx.controls.calendar.DatePicker;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -37,6 +39,7 @@ public class IncluirEnsaioView extends Stage {
     private TextField tfDuracao;
     private TextField tfVelocidadeVento;
     private ComboBox cbDirecaoVento;
+    private TextField tfDirecaoVentoGraus;
     private TextField tfGridAltura;
     private TextField tfGridLargura;
     private TextField tfVersion;
@@ -63,13 +66,13 @@ public class IncluirEnsaioView extends Stage {
 
         Scene scene = new Scene(new Group(box));
         scene.getStylesheets().add("style.css");
-        
+
         this.setScene(scene);
         this.resetForm();
     }
 
     private HBox buildButtons() {
-        
+
         bSave = new Button("Salvar");
         bSave.setId("saveEnsaio");
         bSave.setDefaultButton(true);
@@ -90,7 +93,7 @@ public class IncluirEnsaioView extends Stage {
     }
 
     private GridPane buildInputs() {
-        
+
         tfId = new TextField();
         tfId.setPromptText("");
         tfId.setId("0");
@@ -138,7 +141,7 @@ public class IncluirEnsaioView extends Stage {
         tfEspacamentoPluviometro.setPromptText("valor em metros");
         tfEspacamentoPluviometro.setMinWidth(180);
         tfEspacamentoPluviometro.setMaxWidth(180);
-        
+
         tfInicio = new TextField();
         tfInicio.setPromptText("*Campo obrigatório");
         tfInicio.setMinWidth(180);
@@ -169,10 +172,53 @@ public class IncluirEnsaioView extends Stage {
         tfVelocidadeVento.setPromptText("m/s");
         tfVelocidadeVento.setMaxWidth(180);
 
+        tfDirecaoVentoGraus = new TextField() {
+            @Override
+            public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override
+            public void replaceSelection(String text) {
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceSelection(text);
+                }
+            }
+        };
+        tfDirecaoVentoGraus.setMinWidth(180);
+        tfDirecaoVentoGraus.setPromptText("graus em relação N");
+        tfDirecaoVentoGraus.setMaxWidth(180);
+        tfDirecaoVentoGraus.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean old, Boolean novo) {
+                if(novo)
+                    System.err.println("entrou");
+                else
+                    converteGraus(tfDirecaoVentoGraus.getText());
+            }
+        });
+
+
 
         cbDirecaoVento = new ComboBox(getDirecoes());
         cbDirecaoVento.setMinWidth(180);
         cbDirecaoVento.setMaxWidth(180);
+        cbDirecaoVento.focusedProperty().addListener(new ChangeListener<Boolean>(){
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean novo) {
+                String entrada = "";
+                if(novo)
+                    entrada = cbDirecaoVento.getValue().toString();
+                else
+                    if(!entrada.equals(cbDirecaoVento.getValue().toString()))
+                            converteGraus(cbDirecaoVento.getValue().toString());
+            }
+            
+        });
 
         tfVazao = new TextField() {
             @Override
@@ -282,8 +328,8 @@ public class IncluirEnsaioView extends Stage {
         dpData.getCalendarView().todayButtonTextProperty().set("Hoje");
         dpData.getCalendarView().setShowWeeks(true);
         dpData.getStylesheets().add("datePicker.css");
-        
-            
+
+
         GridFormBuilder grid = new GridFormBuilder();
         grid.addRow(new Label("Id: "), tfId)
                 .addRow(new Label("Descrição: "), tfDescricao)
@@ -295,6 +341,7 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Duração em horas:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
                 .addRow(new Label("Direção Vento:"), cbDirecaoVento)
+                .addRow(new Label("Direção Vento em Graus:"), tfDirecaoVentoGraus)
                 .addRow(new Label("Vazão:"), tfVazao)
                 .addRow(new Label("Evaporação:"), tfEvaporacao)
                 .addRow(new Label("Espaço entre Pluviometros:"), tfEspacamentoPluviometro)
@@ -315,11 +362,14 @@ public class IncluirEnsaioView extends Stage {
         tfDuracao.setText("");
         tfVelocidadeVento.setText("");
         cbDirecaoVento.setValue(null);
+        tfDirecaoVentoGraus.setText("");
         tfVazao.setText("");
         tfEvaporacao.setText("");
         tfGridAltura.setText("");
         tfGridLargura.setText("");
         tfVersion.setText("");
+        tfGridAltura.setEditable(true);
+        tfGridLargura.setEditable(true);
         bRemove.setVisible(false);
     }
 
@@ -334,10 +384,13 @@ public class IncluirEnsaioView extends Stage {
         tfDuracao.setText(e.getDuracao());
         tfVelocidadeVento.setText(e.getVelocidadeVento() + "");
         cbDirecaoVento.setValue(e.getDirecaoVento());
+//        tfDirecaoVentoGraus.setText(e.getDirecaoVentoGraus() + "");
         tfVazao.setText(e.getVazao() + "");
         tfEvaporacao.setText(e.getEvaporacao() + "");
         tfGridAltura.setText(e.getGridAltura().toString());
+        tfGridAltura.setEditable(false);
         tfGridLargura.setText(e.getGridLargura().toString());
+        tfGridLargura.setEditable(false);
         tfVersion.setText(e.getVersion() == null ? "0" : e.getVersion().toString());
         dpData.setSelectedDate(e.getData());
 
@@ -391,6 +444,10 @@ public class IncluirEnsaioView extends Stage {
             e.setDirecaoVento(cbDirecaoVento.getValue().toString());
         }
 
+        if (!tfDirecaoVentoGraus.getText().trim().isEmpty()) {
+//            e.setDirecaoVentoGraus(Float.parseFloat(tfVelocidadeVento.getText().trim()));
+        }
+
         try {
             if (!tfGridAltura.getText().trim().isEmpty()) {
                 e.setGridAltura(Integer.valueOf(tfGridAltura.getText()));
@@ -410,8 +467,7 @@ public class IncluirEnsaioView extends Stage {
 
         return e;
     }
-        
-            
+
     public void setEnsaio(Ensaio e) {
         resetForm();
         if (e != null) {
@@ -465,5 +521,17 @@ public class IncluirEnsaioView extends Stage {
                 "NNW");
 
         return direcoes;
+    }
+
+    private String converteGraus(String direcao) {
+        
+//        if(direcao!= cbDirecaoVento)
+//        
+        return null;
+
+    }
+
+    private Float converteDirecao(String graus) {
+        return null;
     }
 }
