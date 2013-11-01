@@ -62,6 +62,9 @@ public class Ensaio implements Bean, Serializable {
     @Column(name = "direcao_vento")
     private String direcaoVento;
     
+//    @Column(name = "direcao_vento_graus")
+//    private float direcaoVentoGraus;
+    
     @NotNull
     @Column(name = "espacamento_pluviometro")
     private float espacamentoPluviometro;
@@ -215,5 +218,13 @@ public class Ensaio implements Bean, Serializable {
     public void setVazao(float vazao) {
         this.vazao = vazao;
     }
+
+//    public float getDirecaoVentoGraus() {
+//        return direcaoVentoGraus;
+//    }
+//
+//    public void setDirecaoVentoGraus(float direcaoVentoGraus) {
+//        this.direcaoVentoGraus = direcaoVentoGraus;
+//    }
     
 }
