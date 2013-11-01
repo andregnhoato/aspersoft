@@ -341,7 +341,7 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Duração em horas:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
                 .addRow(new Label("Direção Vento:"), cbDirecaoVento)
-                .addRow(new Label("Direção Vento em Graus:"), tfDirecaoVentoGraus)
+//                .addRow(new Label("Direção Vento em Graus:"), tfDirecaoVentoGraus)
                 .addRow(new Label("Vazão:"), tfVazao)
                 .addRow(new Label("Evaporação:"), tfEvaporacao)
                 .addRow(new Label("Espaço entre Pluviometros:"), tfEspacamentoPluviometro)
