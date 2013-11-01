@@ -43,7 +43,6 @@ import javafx.stage.Stage;
  */
 public final class UniformidadeListView extends Stage {
 
-    private Scene subScene;
     private UniformidadeTable table;
     private Ensaio ensaio;
     private ComboBox cbEspacamento;
@@ -83,22 +82,12 @@ public final class UniformidadeListView extends Stage {
     private TitledPane tdGrafico;
     private LineChart<Number, Number> grafico;
 
-    //espacamentoX = Integer.parseInt(espacamento.substring(3, 5));
-    //espacamentoY = Integer.parseInt(espacamento.substring(0, 2));
     public UniformidadeListView() {
 
         this.uniformidade = new UniformidadesImpl(ensaio);
 
-
-
         initModality(Modality.APPLICATION_MODAL);
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
 
-        setX(bounds.getMinX());
-        setY(bounds.getMinY());
-        setWidth(bounds.getWidth());
-        setHeight(bounds.getHeight());
         this.setScene(inicializaAll());
 
     }
@@ -125,6 +114,13 @@ public final class UniformidadeListView extends Stage {
     }
 
     public Scene inicializaAll() {
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        setX(bounds.getMinX());
+        setY(bounds.getMinY());
+        setWidth(bounds.getWidth());
+        setHeight(bounds.getHeight());
 
         GridPane geral = new GridPane();
         setTitle("Análise dos Dados");
@@ -133,7 +129,7 @@ public final class UniformidadeListView extends Stage {
         inicializaComponentes(ensaio);
 //        public void add(Node child, int columnIndex, int rowIndex, int colspan, int rowspan)
 
-        //primeiro painel dados do ensaio
+        /* primeiro painel dados do ensaio */
         TitledPane td = new TitledPane();
         td.setText("Dados do Ensaio");
         GridPane grid = new GridPane();
@@ -157,10 +153,11 @@ public final class UniformidadeListView extends Stage {
         grid.add(new Label("Tamanho grid: "), 2, 3);
         grid.add(metros, 3, 3);
         td.setContent(grid);
-        td.autosize();
-        td.setExpanded(true);
+        td.setPrefWidth(bounds.getWidth());
+
         geral.add(td, 0, 0);
 
+        /* segundo painel perfil de distribuição*/
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
@@ -181,12 +178,14 @@ public final class UniformidadeListView extends Stage {
         cursorCoords.setAlignment(Pos.CENTER);
         grid = new GridPane();
         td = new TitledPane();
-        grid.add(this.grafico, 0 , 0);
+        grid.add(this.grafico, 0, 0);
         grid.add(cursorCoords, 0, 1);
         td.setText("Perfil de distribuição");
         td.setContent(grid);
         geral.add(td, 0, 1);
 
+
+        /* terceiro painel superposição*/
         td = new TitledPane();
         grid = new GridPane();
         grid.getColumnConstraints().add(new ColumnConstraints(50, 50, Double.MAX_VALUE));
@@ -242,6 +241,7 @@ public final class UniformidadeListView extends Stage {
         td.autosize();
         geral.add(td, 0, 2);
 
+        /* quarto coeficientes */
         grid = new GridPane();
         td = new TitledPane();
         grid.setVgap(5);
@@ -257,6 +257,7 @@ public final class UniformidadeListView extends Stage {
         td.autosize();
         geral.add(td, 0, 3);
 
+        /*quinto painel estatística*/
         grid = new GridPane();
         td = new TitledPane();
         grid.setVgap(5);
@@ -271,7 +272,7 @@ public final class UniformidadeListView extends Stage {
         td.setContent(grid);
         td.autosize();
         geral.add(td, 0, 4);
-        geral.autosize();
+
 
 
 
