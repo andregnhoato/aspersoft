@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.Axis;
@@ -27,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -90,7 +92,13 @@ public final class UniformidadeListView extends Stage {
 
 
         initModality(Modality.APPLICATION_MODAL);
-        this.setFullScreen(true);
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        setX(bounds.getMinX());
+        setY(bounds.getMinY());
+        setWidth(bounds.getWidth());
+        setHeight(bounds.getHeight());
         this.setScene(inicializaAll());
 
     }
@@ -119,7 +127,7 @@ public final class UniformidadeListView extends Stage {
     public Scene inicializaAll() {
 
         GridPane geral = new GridPane();
-        setTitle("Analise dos Dados");
+        setTitle("Análise dos Dados");
         setResizable(true);
 
         inicializaComponentes(ensaio);
