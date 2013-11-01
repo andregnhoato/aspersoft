@@ -18,4 +18,6 @@ public interface EnsaioDAO extends AbstractDAO<Ensaio>{
      * @throws <code>RuntimeException</code> se algum problema ocorrer.
      */
     List<Ensaio> getEnsaiosByDescricao(String Descricao);
+
+    public List<Ensaio> getEnsaiosByWhere(String text);
 }

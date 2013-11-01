@@ -16,7 +16,6 @@ import dr.validation.Validator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 
@@ -109,53 +108,61 @@ public class IncluirEnsaioController extends PersistenceController {
             @Override
             public boolean conditional() {
 
-                Dialog.buildConfirmation("Confirmação", "Deseja remover este Ensaio e todas as coletas relacionadas?", view).addYesButton(new EventHandler() {
-                    
-                    @Override
-                    public void handle(Event t) {
-                        dialog = true;
-                    }
-                }).addNoButton(new EventHandler() {
-                    @Override
-                    public void handle(Event t) {
-                        dialog = false;
-                    }
-                }).build()
-                        .show();
-                return dialog;
+//                Dialog.buildConfirmation("Confirmação", "Deseja remover este Ensaio e todas as coletas relacionadas?", view).addYesButton(new EventHandler() {
+//                    @Override
+//                    public void handle(Event t) {
+//                        dialog = true;
+//                    }
+//                }).addNoButton(new EventHandler() {
+//                    @Override
+//                    public void handle(Event t) {
+//                        dialog = false;
+//                    }
+//                }).build()
+//                        .show();
+
+
+                return true;
             }
-        }).addAction(
-                TransactionalAction.build()
-                .persistenceCtxOwner(IncluirEnsaioController.this)
-                .addAction(new AbstractAction() {
+        })
+                //                .addAction(
+                //                TransactionalAction.build()
+                //                .persistenceCtxOwner(IncluirEnsaioController.this)
+                .addAction(
+                new AbstractAction() {
             private Ensaio e;
 
             @Override
             protected void action() {
 
-                Integer id = view.getEnsaioId();
-                if (id != null) {
-                    try {
+//
+//                if (dialog!= null && dialog) {
+                    Integer id = view.getEnsaioId();
+                    if (id != null) {
+                        try {
 
-                        EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
-                        e = dao.findById(id);
-                        if (e != null) {
-                            dao.remove(e);
+                            EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                            e = dao.findById(id);
+                            if (e != null) {
+                                dao.remove(e);
+//                                dialog = false;
+
+                            }
+                        } catch (Exception ex) {
+                            Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } catch (Exception ex) {
-                        Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+
                     }
 
                 }
-
-            }
+//            }
 
             @Override
             public void posAction() {
                 view.hide();
                 fireEvent(new RemoveEnsaioEvent(e));
             }
-        })));
+        }));
     }
 
     public void show() {

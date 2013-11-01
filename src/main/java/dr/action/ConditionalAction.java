@@ -42,14 +42,14 @@ public final class ConditionalAction extends AbstractAction {
     @Override
     protected void action() {
         if (action == null) {
-            throw new IllegalArgumentException("Indique a Ação que deve ser executada, utilize o método addAction.");
+//            throw new IllegalArgumentException("Indique a Ação que deve ser executada, utilize o método addAction.");
         }
 
-        if (expression == null) {
-            throw new IllegalArgumentException("Indique a expressão condicional da Ação, utilize o método addConditional.");
+        if (expression != null) {
+//            throw new IllegalArgumentException("Indique a expressão condicional da Ação, utilize o método addConditional.");
         }
 
-        if (expression.conditional()) {
+        if (expression != null && expression.conditional()) {
             action.actionPerformed();
         }
     }

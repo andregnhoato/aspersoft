@@ -118,4 +118,18 @@ public class EnsaioDAOImpl implements EnsaioDAO {
             return new ArrayList<Ensaio>(0);
         }
     }
+
+    @Override
+    public List<Ensaio> getEnsaiosByWhere(String where) {
+        if (where == null || where.isEmpty()) {
+            return null;
+        }
+        System.out.println("SELECT e FROM ensaio e "+ where );
+        System.out.println("SELECT e FROM ensaio e "+ where );
+        Query query = em.createQuery("SELECT e FROM ensaio e "+where);
+//        query.setParameter("where", where );//nm.concat(descricao).concat("%"));
+        
+        return (List<Ensaio>) query.getResultList();
+        
+    }
 }

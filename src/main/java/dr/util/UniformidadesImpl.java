@@ -316,10 +316,19 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
      * @param decimalPlace casas decimais do arredondamento
      * @return valor arredondado
      */
-    public static Float round(float d, int decimalPlace) {
-        BigDecimal bd = new BigDecimal(Float.toString(d));
-        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
-        return bd.floatValue();
+    public static Float round(Float d, int decimalPlace) {
+        try {
+            if (d != null && d != 0F) {
+                BigDecimal bd = new BigDecimal(Float.toString(d));
+                bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+                return bd.floatValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return 0F;
+
+
     }
 
     /**
@@ -424,7 +433,7 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
     @Override
     public List<Float> calculaDistanciaPerfilDistribuicao() {
         List<Float> distancias = new LinkedList<>();
-        if (this.ensaio != null) {   
+        if (this.ensaio != null) {
             float hipotenusa = (float) Math.sqrt(((float) Math.pow((ensaio.getEspacamentoPluviometro()), 2) + (float) Math.pow((ensaio.getEspacamentoPluviometro()), 2)));
             float somaHipotenusa = 0;
             for (int i = 0; i < (gridLargura / 2); i++) {
@@ -496,7 +505,6 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
         return vperfil;
 
     }
-
 
     @Override
     public Float getDesvioPadrao() {
