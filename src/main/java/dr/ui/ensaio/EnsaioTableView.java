@@ -233,9 +233,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             e.setBocal(this.bocal.get());
             e.setInicio(this.inicio.get());
             e.setVersion(Integer.parseInt(this.version.get()));
-            String g = this.direcaoVentoGraus.get();
-            
-            e.setDirecaoVentoGraus(Float.parseFloat(g.substring(0, g.indexOf(" "))));
+            e.setDirecaoVentoGraus(Float.parseFloat(this.direcaoVentoGraus.get()));
             e.setVelocidadeVento(Float.parseFloat(this.velocidadeVento.get()));
             e.setVazao(Float.parseFloat(this.vazao.get()));
             e.setEvaporacao(Float.parseFloat(this.evaporacao.get()));
