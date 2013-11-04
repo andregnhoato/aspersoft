@@ -69,6 +69,10 @@ public class IncluirEnsaioController extends PersistenceController {
                     Dialog.showInfo("Validacão", msg, view);
                     return false;
                 }
+                if(e.getEspacamentoPluviometro() <= 0){
+                    Dialog.showError("Validação", "Favor informar uma valor superior a zero para o campo Espaço entre pluviometros");
+                    return false;
+                }
 
                 return true;
             }

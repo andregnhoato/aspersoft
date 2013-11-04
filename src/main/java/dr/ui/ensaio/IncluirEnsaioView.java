@@ -2,6 +2,7 @@ package dr.ui.ensaio;
 
 import dr.model.Ensaio;
 import dr.ui.GridFormBuilder;
+import dr.util.WindUtil;
 import eu.schudt.javafx.controls.calendar.DatePicker;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -53,7 +54,7 @@ public class IncluirEnsaioView extends Stage {
     public IncluirEnsaioView() {
         setTitle("Incluir Ensaio");
         setWidth(390);
-        setHeight(480);
+        setHeight(500);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
 
@@ -194,10 +195,16 @@ public class IncluirEnsaioView extends Stage {
         tfDirecaoVentoGraus.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> ov, Boolean old, Boolean novo) {
-                if(novo)
-                    System.err.println("entrou");
-                else
-                    converteGraus(tfDirecaoVentoGraus.getText());
+                String entrada = "";
+                if (novo) {
+                    entrada = tfDirecaoVentoGraus.getText();
+                } else if (!entrada.equals(tfDirecaoVentoGraus.getText())) {
+                    float graus = Float.parseFloat(tfDirecaoVentoGraus.getText());
+                    if (graus > 360) {
+                        graus = graus % 360;
+                    }
+                    cbDirecaoVento.setValue(WindUtil.getWindByDegress(graus));
+                }
             }
         });
 
@@ -206,18 +213,16 @@ public class IncluirEnsaioView extends Stage {
         cbDirecaoVento = new ComboBox(getDirecoes());
         cbDirecaoVento.setMinWidth(180);
         cbDirecaoVento.setMaxWidth(180);
-        cbDirecaoVento.focusedProperty().addListener(new ChangeListener<Boolean>(){
-
+        cbDirecaoVento.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> ov, Boolean t, Boolean novo) {
                 String entrada = "";
-                if(novo)
-                    entrada = cbDirecaoVento.getValue().toString();
-                else
-                    if(!entrada.equals(cbDirecaoVento.getValue().toString()))
-                            converteGraus(cbDirecaoVento.getValue().toString());
+                if (novo) {
+                    entrada = (cbDirecaoVento.getValue() != null ? cbDirecaoVento.getValue().toString() : "");
+                } else if (!entrada.equals(cbDirecaoVento.getValue().toString())) {
+                    tfDirecaoVentoGraus.setText(WindUtil.getWindByText(WindUtil.WindDirection.valueOf(cbDirecaoVento.getValue().toString())) + "");
+                }
             }
-            
         });
 
         tfVazao = new TextField() {
@@ -341,7 +346,7 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Duração em horas:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
                 .addRow(new Label("Direção Vento:"), cbDirecaoVento)
-//                .addRow(new Label("Direção Vento em Graus:"), tfDirecaoVentoGraus)
+                .addRow(new Label("Direção Vento em Graus:"), tfDirecaoVentoGraus)
                 .addRow(new Label("Vazão:"), tfVazao)
                 .addRow(new Label("Evaporação:"), tfEvaporacao)
                 .addRow(new Label("Espaço entre Pluviometros:"), tfEspacamentoPluviometro)
@@ -370,6 +375,7 @@ public class IncluirEnsaioView extends Stage {
         tfVersion.setText("");
         tfGridAltura.setEditable(true);
         tfGridLargura.setEditable(true);
+        tfEspacamentoPluviometro.setEditable(true);
         bRemove.setVisible(false);
     }
 
@@ -380,11 +386,12 @@ public class IncluirEnsaioView extends Stage {
         tfBocal.setText(e.getBocal());
         tfQuebraJato.setText(e.getQuebraJato());
         tfEspacamentoPluviometro.setText(e.getEspacamentoPluviometro() + "");
+        tfEspacamentoPluviometro.setEditable(false);
         tfInicio.setText(e.getInicio());
         tfDuracao.setText(e.getDuracao());
         tfVelocidadeVento.setText(e.getVelocidadeVento() + "");
-        cbDirecaoVento.setValue(e.getDirecaoVento());
-//        tfDirecaoVentoGraus.setText(e.getDirecaoVentoGraus() + "");
+        cbDirecaoVento.setValue(WindUtil.getWindByDegress(e.getDirecaoVentoGraus()));
+        tfDirecaoVentoGraus.setText(e.getDirecaoVentoGraus() + "");
         tfVazao.setText(e.getVazao() + "");
         tfEvaporacao.setText(e.getEvaporacao() + "");
         tfGridAltura.setText(e.getGridAltura().toString());
@@ -434,18 +441,21 @@ public class IncluirEnsaioView extends Stage {
 
         if (!tfEspacamentoPluviometro.getText().trim().isEmpty()) {
             e.setEspacamentoPluviometro(Float.parseFloat(tfEspacamentoPluviometro.getText().trim()));
+//                    ( != 0 
+//                    ? Float.parseFloat(tfEspacamentoPluviometro.getText().trim()) 
+//                    : null));
         }
 
         if (!tfVelocidadeVento.getText().trim().isEmpty()) {
             e.setVelocidadeVento(Float.parseFloat(tfVelocidadeVento.getText().trim()));
         }
 
-        if (cbDirecaoVento.getValue() != null && !"".equals(cbDirecaoVento.getValue().toString())) {
-            e.setDirecaoVento(cbDirecaoVento.getValue().toString());
-        }
+//        if (cbDirecaoVento.getValue() != null && !"".equals(cbDirecaoVento.getValue().toString())) {
+//            e.setDirecaoVentoGraus(Float.parseFloat(tfDirecaoVentoGraus.getText()));
+//        }
 
         if (!tfDirecaoVentoGraus.getText().trim().isEmpty()) {
-//            e.setDirecaoVentoGraus(Float.parseFloat(tfVelocidadeVento.getText().trim()));
+            e.setDirecaoVentoGraus(Float.parseFloat(tfDirecaoVentoGraus.getText().trim()));
         }
 
         try {
@@ -501,8 +511,7 @@ public class IncluirEnsaioView extends Stage {
     }
 
     private ObservableList getDirecoes() {
-        ObservableList<String> direcoes =
-                FXCollections.observableArrayList(
+        ObservableList<String> direcoes = FXCollections.observableArrayList(
                 "N",
                 "NNE",
                 "NE",
@@ -524,7 +533,7 @@ public class IncluirEnsaioView extends Stage {
     }
 
     private String converteGraus(String direcao) {
-        
+
 //        if(direcao!= cbDirecaoVento)
 //        
         return null;

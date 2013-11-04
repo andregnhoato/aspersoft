@@ -7,6 +7,7 @@ import dr.dao.EnsaioDAO;
 import dr.dao.EnsaioDAOImpl;
 import dr.model.Coleta;
 import dr.model.Ensaio;
+import dr.util.WindUtil;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -217,7 +218,7 @@ public class ReadExcel extends PersistenceController {
                         //velocidade vento
                         e.setVelocidadeVento(Float.parseFloat(evaluator.evaluate(sheet.getRow(23).getCell(1)).formatAsString().replaceAll("\"", "")));
                         //direcao do vento MODA
-                        e.setDirecaoVento(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", ""));
+                        e.setDirecaoVentoGraus(WindUtil.getWindByText(WindUtil.WindDirection.valueOf(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", ""))));
                         //data e hora de inicio
                         e.setData(sheet.getRow(22).getCell(1).getDateCellValue());
 //                        time.setTime(sheet.getRow(17).getCell(1).getDateCellValue());

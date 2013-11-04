@@ -1,7 +1,7 @@
 package dr.ui.ensaio;
 
 import dr.model.Ensaio;
-import dr.util.DateUtil;
+import dr.util.WindUtil;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -74,6 +74,10 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         direcaoVentoCol.setMinWidth(80);
         direcaoVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("direcaoVento"));
         
+        TableColumn<EnsaioItem, String> direcaoVentoGrausCol = new TableColumn<>("Dir. Vento");
+        direcaoVentoGrausCol.setMinWidth(80);
+        direcaoVentoGrausCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("direcaoVentoGraus"));
+        
         TableColumn<EnsaioItem, String> vazaoCol = new TableColumn<>("Vazão");
         vazaoCol.setMinWidth(80);
         vazaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("vazao"));
@@ -123,6 +127,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         private final SimpleStringProperty duracao;
         private final SimpleStringProperty velocidadeVento;
         private final SimpleStringProperty direcaoVento;
+        private final SimpleStringProperty direcaoVentoGraus;
         private final SimpleStringProperty gridAltura;
         private final SimpleStringProperty gridLargura;
         private final SimpleStringProperty version;
@@ -140,7 +145,8 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             this.inicio = new SimpleStringProperty(e.getInicio());
             this.duracao = new SimpleStringProperty(e.getDuracao());
             this.velocidadeVento = new SimpleStringProperty(e.getVelocidadeVento()+"");
-            this.direcaoVento = new SimpleStringProperty(e.getDirecaoVento());
+            this.direcaoVento = new SimpleStringProperty(WindUtil.getWindByDegress(e.getDirecaoVentoGraus()));
+            this.direcaoVentoGraus = new SimpleStringProperty(e.getDirecaoVentoGraus()+"");
             this.gridAltura = new SimpleStringProperty(e.getGridAltura()+ "");
             this.gridLargura = new SimpleStringProperty(e.getGridLargura()+ "");
             this.data = new SimpleStringProperty(formatDate(e.getData()));
@@ -198,7 +204,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         }
         
         public String getDirecaoVento() {
-            return direcaoVento.get();
+            return direcaoVentoGraus.get();
         }
         
         public String getVazao() {
@@ -223,7 +229,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             e.setBocal(this.bocal.get());
             e.setInicio(this.inicio.get());
             e.setVersion(Integer.parseInt(this.version.get()));
-            e.setDirecaoVento(this.direcaoVento.get());
+            e.setDirecaoVentoGraus(Float.parseFloat(this.direcaoVentoGraus.get()));
             e.setVelocidadeVento(Float.parseFloat(this.velocidadeVento.get()));
             e.setVazao(Float.parseFloat(this.vazao.get()));
             e.setEvaporacao(Float.parseFloat(this.evaporacao.get()));

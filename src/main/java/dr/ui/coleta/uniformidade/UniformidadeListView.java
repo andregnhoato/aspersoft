@@ -4,6 +4,7 @@ import dr.model.Ensaio;
 import dr.util.DateUtil;
 import dr.util.IUniformidades;
 import dr.util.UniformidadesImpl;
+import dr.util.WindUtil;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -439,7 +440,7 @@ public final class UniformidadeListView extends Stage {
         pre = new SimpleStringProperty(e.getPressao());
         dt = new SimpleStringProperty(DateUtil.formatDate(e.getData()));
         vv = new SimpleStringProperty(e.getVelocidadeVento() + "");
-        dv = new SimpleStringProperty(e.getDirecaoVento());
+        dv = new SimpleStringProperty(WindUtil.getWindByDegress(e.getDirecaoVentoGraus()));
         esp = new SimpleStringProperty(e.getEspacamentoPluviometro() + "");
         ini = new SimpleStringProperty(e.getInicio());
         m = new SimpleStringProperty(mQuad + " m2");

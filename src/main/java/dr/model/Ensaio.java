@@ -59,11 +59,11 @@ public class Ensaio implements Bean, Serializable {
     @Column(name = "velocidade_vento")
     private float velocidadeVento;
     
-    @Column(name = "direcao_vento")
-    private String direcaoVento;
+//    @Column(name = "direcao_vento")
+//    private String direcaoVento;
     
-//    @Column(name = "direcao_vento_graus")
-//    private float direcaoVentoGraus;
+    @Column(name = "direcao_vento_graus")
+    private float direcaoVentoGraus;
     
     @NotNull
     @Column(name = "espacamento_pluviometro")
@@ -187,13 +187,13 @@ public class Ensaio implements Bean, Serializable {
         this.velocidadeVento = velocidadeVento;
     }
 
-    public String getDirecaoVento() {
-        return direcaoVento;
-    }
-
-    public void setDirecaoVento(String direcaoVento) {
-        this.direcaoVento = direcaoVento;
-    }
+//    public String getDirecaoVento() {
+//        return direcaoVento;
+//    }
+//
+//    public void setDirecaoVento(String direcaoVento) {
+//        this.direcaoVento = direcaoVento;
+//    }
 
     public float getEspacamentoPluviometro() {
         return espacamentoPluviometro;
@@ -219,12 +219,12 @@ public class Ensaio implements Bean, Serializable {
         this.vazao = vazao;
     }
 
-//    public float getDirecaoVentoGraus() {
-//        return direcaoVentoGraus;
-//    }
-//
-//    public void setDirecaoVentoGraus(float direcaoVentoGraus) {
-//        this.direcaoVentoGraus = direcaoVentoGraus;
-//    }
+    public float getDirecaoVentoGraus() {
+        return direcaoVentoGraus;
+    }
+
+    public void setDirecaoVentoGraus(float direcaoVentoGraus) {
+        this.direcaoVentoGraus = direcaoVentoGraus;
+    }
     
 }
