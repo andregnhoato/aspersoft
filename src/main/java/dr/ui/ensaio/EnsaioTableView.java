@@ -146,7 +146,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             this.duracao = new SimpleStringProperty(e.getDuracao());
             this.velocidadeVento = new SimpleStringProperty(e.getVelocidadeVento()+"");
             this.direcaoVento = new SimpleStringProperty(WindUtil.getWindByDegress(e.getDirecaoVentoGraus()));
-            this.direcaoVentoGraus = new SimpleStringProperty(e.getDirecaoVentoGraus()+" graus em relação ao N");
+            this.direcaoVentoGraus = new SimpleStringProperty(e.getDirecaoVentoGraus()+"");
             this.gridAltura = new SimpleStringProperty(e.getGridAltura()+ "");
             this.gridLargura = new SimpleStringProperty(e.getGridLargura()+ "");
             this.data = new SimpleStringProperty(formatDate(e.getData()));
