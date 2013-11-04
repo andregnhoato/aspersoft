@@ -121,6 +121,11 @@ public class UniformidadeTable extends VBox {
         return this.ensaio;
 
     }
+    
+    public ObservableList getSobreposicoes(){
+        
+        return this.sobreposicoes;
+    }
 
     /**
      * Método responável por calcular os coeficientes CUC, CUD e CUE;

@@ -19,6 +19,7 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -82,10 +83,12 @@ public final class UniformidadeListView extends Stage {
     private GridPane gridGrafico;
     private TitledPane tdGrafico;
     private LineChart<Number, Number> grafico;
+    private Button BtExportaSobreposicao;
 
     public UniformidadeListView() {
 
         this.uniformidade = new UniformidadesImpl(ensaio);
+         
 
         initModality(Modality.APPLICATION_MODAL);
 
@@ -111,7 +114,9 @@ public final class UniformidadeListView extends Stage {
         mmq = new Label("--");
         dp = new Label("--");
         cv = new Label("--");
-
+        BtExportaSobreposicao = new Button("Exportar para excel");
+        BtExportaSobreposicao.getStyleClass().add("buttonGreen");
+        BtExportaSobreposicao.setId("btExportar");
     }
 
     public Scene inicializaAll() {
@@ -235,6 +240,8 @@ public final class UniformidadeListView extends Stage {
         grid.add(table, 1, 1, 3, 1);
         aspersor.setAlignment(Pos.TOP_CENTER);
         grid.add(aspersor, 1, 2, 3, 1);
+        
+        grid.add(BtExportaSobreposicao, 1,3);
 
 //        grid.add(table, 0, 1, 2, 1);
         td.setText("Sobreposição");
@@ -461,6 +468,14 @@ public final class UniformidadeListView extends Stage {
 
     public ComboBox getComboEspacamento() {
         return cbEspacamento;
+    }
+    
+    public Button getBtExportar(){
+        return BtExportaSobreposicao;
+    }
+    
+    public ObservableList getSobreposicao(){
+        return this.table.getSobreposicoes();
     }
 
     private ObservableList getEspacamentos() {
