@@ -37,4 +37,8 @@ public class EnsaioTable extends VBox {
     public Ensaio getEnsaioSelected() {
         return table.getSelectedItem();
     }
+    
+    public Integer getTotalEnsaio(){
+        return table.getItems().size();
+    }
 }
