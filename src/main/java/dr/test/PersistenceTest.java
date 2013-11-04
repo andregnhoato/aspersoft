@@ -31,7 +31,8 @@ public class PersistenceTest extends PersistenceController {
     public static void main(String[] args) throws Exception {
 
         PersistenceTest pt = new PersistenceTest();
-//        pt.listarColetasByEnsaio(1);
+       
+//        pt.listarColetasByEnsaio(118);
 //        pt.qtdeColetasByEnsaio(1);
 //        pt.removeColetasByEnsaio(1);
 //        pt.qtdeColetasByEnsaio(1);
@@ -42,7 +43,7 @@ public class PersistenceTest extends PersistenceController {
 //        pt.atualizarEnsaio();
         
         
-        pt.removeColeta(30320);
+//        pt.removeColeta(30320);
 //        pt.removeColeta(30312);
 //        pt.removeColeta(30321);
 //        pt.removeColeta(30322);
@@ -50,10 +51,10 @@ public class PersistenceTest extends PersistenceController {
 //        pt.removeColeta(30324);
 //        pt.removeColeta(30325);
 //        pt.removeColeta(30326);
-//        pt.removeColeta(30327);
+//        pt.removeColeta(30308);
         
         
-        
+//         pt.listarColetasByEnsaio(108);
         pt.listarColetasByEnsaio(118);
 
 
@@ -113,17 +114,17 @@ public class PersistenceTest extends PersistenceController {
             System.out.println("tamanho array: "+coletas.size());
             
             int linha = 15;
-            int coluna = 8;
-//            for(int i=0; i<=7; i++ ){
-//                Coleta c = new Coleta();
-//                c.setColuna(coluna);
-//                c.setLinha(linha);
-//                c.setValor(0F);
-//                c.setEnsaio(coletas.get(0).getEnsaio());
-//                
-//                cdao.save(c);
-//                coluna++;
-//            }
+            int coluna = 14;
+            for(int i=0; i<=1; i++ ){
+                Coleta c = new Coleta();
+                c.setColuna(coluna);
+                c.setLinha(linha);
+                c.setValor(0F);
+                c.setEnsaio(coletas.get(0).getEnsaio());
+                
+                cdao.save(c);
+                coluna++;
+            }
             coletas = null;
             coletas = (List<Coleta>) cdao.findColetasByEnsaio(e);
             System.out.println("tamanho array: "+coletas.size());
