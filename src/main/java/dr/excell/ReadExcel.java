@@ -219,6 +219,8 @@ public class ReadExcel extends PersistenceController {
                         String moda = evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", "");
                         float grau = WindUtil.getWindByText(WindUtil.WindDirection.valueOf(moda));
                         grau += 55;
+                        if(grau>360)
+                            grau = grau%360;
                         e.setDirecaoVentoGraus(grau);
                         //data e hora de inicio
                         e.setData(sheet.getRow(22).getCell(1).getDateCellValue());
@@ -313,7 +315,7 @@ public class ReadExcel extends PersistenceController {
                 //direcao do vento MODA
                 String moda = evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", "");
                 float grau = WindUtil.getWindByText(WindUtil.WindDirection.valueOf(moda));
-                grau += 55;
+                
                 e.setDirecaoVentoGraus(grau);
                 //data e hora de inicio
                 e.setData(sheet.getRow(22).getCell(1).getDateCellValue());
@@ -471,6 +473,7 @@ public class ReadExcel extends PersistenceController {
 
     public static void main(String[] args) throws IOException {
         ReadExcel re = new ReadExcel();
+        re.readXLSXFileUpdateDataBaseFile();
         re.readXLSXFileUpdateDataBaseFileSimulado();
 //        re.readXLSXFileGenerateTxtFile();
 
