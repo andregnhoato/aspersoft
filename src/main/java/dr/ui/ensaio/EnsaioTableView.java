@@ -66,7 +66,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         dataCol.setMinWidth(100);
         dataCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("data"));
         
-        TableColumn<EnsaioItem, String> velocidadeVentoCol = new TableColumn<>("Vel. Vento");
+        TableColumn<EnsaioItem, String> velocidadeVentoCol = new TableColumn<>("Dir. Vento");
         velocidadeVentoCol.setMinWidth(80);
         velocidadeVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("velocidadeVento"));
         
@@ -74,8 +74,8 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         direcaoVentoCol.setMinWidth(80);
         direcaoVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("direcaoVento"));
         
-        TableColumn<EnsaioItem, String> direcaoVentoGrausCol = new TableColumn<>("Dir. Vento");
-        direcaoVentoGrausCol.setMinWidth(80);
+        TableColumn<EnsaioItem, String> direcaoVentoGrausCol = new TableColumn<>("Sentido do Vento");
+        direcaoVentoGrausCol.setMinWidth(150);
         direcaoVentoGrausCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("direcaoVentoGraus"));
         
         TableColumn<EnsaioItem, String> vazaoCol = new TableColumn<>("Vazão");
@@ -86,7 +86,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         ensaios = FXCollections.observableArrayList();
         setItems(ensaios);
         
-        getColumns().addAll(idCol, descricaoCol, dataCol, pressaoCol, bocalCol, quebraJatoCol , duracaoCol, velocidadeVentoCol, direcaoVentoCol, vazaoCol ,espacamentoCol/*, alturaCol, larguraCol*/);
+        getColumns().addAll(idCol, descricaoCol, dataCol, pressaoCol, bocalCol, quebraJatoCol , duracaoCol, velocidadeVentoCol, direcaoVentoCol, direcaoVentoGrausCol, vazaoCol ,espacamentoCol/*, alturaCol, larguraCol*/);
 
     }
 
@@ -146,7 +146,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             this.duracao = new SimpleStringProperty(e.getDuracao());
             this.velocidadeVento = new SimpleStringProperty(e.getVelocidadeVento()+"");
             this.direcaoVento = new SimpleStringProperty(WindUtil.getWindByDegress(e.getDirecaoVentoGraus()));
-            this.direcaoVentoGraus = new SimpleStringProperty(e.getDirecaoVentoGraus()+"");
+            this.direcaoVentoGraus = new SimpleStringProperty(e.getDirecaoVentoGraus()+" graus em relação ao N");
             this.gridAltura = new SimpleStringProperty(e.getGridAltura()+ "");
             this.gridLargura = new SimpleStringProperty(e.getGridLargura()+ "");
             this.data = new SimpleStringProperty(formatDate(e.getData()));
@@ -204,6 +204,10 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         }
         
         public String getDirecaoVento() {
+            return direcaoVento.get();
+        }
+        
+        public String getDirecaoVentoGraus() {
             return direcaoVentoGraus.get();
         }
         
@@ -229,7 +233,9 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             e.setBocal(this.bocal.get());
             e.setInicio(this.inicio.get());
             e.setVersion(Integer.parseInt(this.version.get()));
-            e.setDirecaoVentoGraus(Float.parseFloat(this.direcaoVentoGraus.get()));
+            String g = this.direcaoVentoGraus.get();
+            
+            e.setDirecaoVentoGraus(Float.parseFloat(g.substring(0, g.indexOf(" "))));
             e.setVelocidadeVento(Float.parseFloat(this.velocidadeVento.get()));
             e.setVazao(Float.parseFloat(this.vazao.get()));
             e.setEvaporacao(Float.parseFloat(this.evaporacao.get()));
