@@ -1,4 +1,4 @@
-package dr.ui.coleta.uniformidade;
+package dr.ui.analise;
 
 import dr.controller.PersistenceController;
 import dr.dao.ColetaDAO;
@@ -30,9 +30,9 @@ import javafx.util.Callback;
  * @author
  * @Andre
  */
-public class UniformidadeTable extends VBox {
+public class SobreposicaoTable extends VBox {
 
-    private UniformidadeTableView table;
+    private SobreposicaoTableView table;
     GridPane grid;
     private ObservableList<ObservableList> sobreposicoes;
     private Ensaio ensaio = null;
@@ -49,8 +49,8 @@ public class UniformidadeTable extends VBox {
     IUniformidades uniformidade;
     
 
-    public UniformidadeTable() {
-        table = new UniformidadeTableView();
+    public SobreposicaoTable() {
+        table = new SobreposicaoTableView();
         dao = new ColetaDAOImpl(pe.getPersistenceContext());
         CUC = 0F;
         this.getChildren().addAll(table);
@@ -63,7 +63,7 @@ public class UniformidadeTable extends VBox {
             try {
                 clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
             } catch (Exception ex) {
-                Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SobreposicaoTable.class.getName()).log(Level.SEVERE, null, ex);
             }
             int espacamentoX = Integer.parseInt(espacamento.substring(3, 5));
             int espacamentoY = Integer.parseInt(espacamento.substring(0, 2));
@@ -71,7 +71,7 @@ public class UniformidadeTable extends VBox {
 
             this.ensaio = ensaio;
             this.getChildren().remove(table);
-            table = new UniformidadeTableView();
+            table = new SobreposicaoTableView();
             table.getSelectionModel().setCellSelectionEnabled(true);
 
             //chamar método que calcula sobreposição

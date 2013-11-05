@@ -5,7 +5,7 @@ import dr.dao.ColetaDAO;
 import dr.dao.ColetaDAOImpl;
 import dr.model.Coleta;
 import dr.model.Ensaio;
-import dr.ui.coleta.uniformidade.UniformidadeTable;
+import dr.ui.analise.SobreposicaoTable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -151,7 +151,7 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
 
             }
         } catch (Exception ex) {
-            Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SobreposicaoTable.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sobreposicoes;
     }

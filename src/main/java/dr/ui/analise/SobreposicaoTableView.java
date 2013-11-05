@@ -1,4 +1,4 @@
-package dr.ui.coleta.uniformidade;
+package dr.ui.analise;
 
 import dr.model.Coleta;
 import java.util.List;
@@ -13,11 +13,11 @@ import javafx.scene.control.TableView;
  * @author
  * @Andre
  */
-public class UniformidadeTableView extends TableView {
+public class SobreposicaoTableView extends TableView {
 
     private ObservableList coletas;
 
-    public UniformidadeTableView() {
+    public SobreposicaoTableView() {
     }
 
     public void reload(final List<Coleta> coletas) {

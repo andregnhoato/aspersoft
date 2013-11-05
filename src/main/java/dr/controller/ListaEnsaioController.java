@@ -33,7 +33,7 @@ public class ListaEnsaioController extends PersistenceController {
     private IncluirEnsaioController addEnsaioController;
     private BuscarEnsaioController buscarController;
     private ListaColetaController coletaController;
-    private UniformidadeController uniformidadeController;
+    private AnaliseController uniformidadeController;
 
     public ListaEnsaioController(AbstractController parent) {
         super(parent);
@@ -42,7 +42,7 @@ public class ListaEnsaioController extends PersistenceController {
         this.addEnsaioController = new IncluirEnsaioController(this);
         this.buscarController = new BuscarEnsaioController(this);
         this.coletaController = new ListaColetaController(this);
-        this.uniformidadeController = new UniformidadeController(this);
+        this.uniformidadeController = new AnaliseController(this);
         
         
         registerAction(view.getNewButton(), new AbstractAction() {

@@ -3,11 +3,15 @@ package dr.controller;
 import dr.action.AbstractAction;
 import dr.model.Ensaio;
 import dr.ui.Dialog;
-import dr.ui.coleta.uniformidade.UniformidadeListView;
+import dr.ui.analise.AnaliseView;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.WritableImage;
+import javax.imageio.ImageIO;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -20,12 +24,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * 
  * @author @andre
  */
-public class UniformidadeController extends PersistenceController {
+public class AnaliseController extends PersistenceController {
     
-    private UniformidadeListView uniformidadeView;  
+    private AnaliseView uniformidadeView;  
 
-    public UniformidadeController(AbstractController parent) {
-        this.uniformidadeView = new UniformidadeListView();
+    public AnaliseController(AbstractController parent) {
+        this.uniformidadeView = new AnaliseView();
         
         registerAction(this.uniformidadeView.getComboEspacamento(), new AbstractAction() {
             @Override
@@ -48,6 +52,9 @@ public class UniformidadeController extends PersistenceController {
                     public void run() {
                         try {
                             writeXLSXFile(uniformidadeView.getSobreposicao());
+                            
+                            WritableImage snapShot = uniformidadeView.getScene().snapshot(null);
+                            ImageIO.write(SwingFXUtils.fromFXImage(snapShot, null), "png", new File("test.png"));
                         } catch (Exception e) {
                             System.err.println(e.getMessage());
                         } 

@@ -1,4 +1,4 @@
-package dr.ui.coleta.uniformidade;
+package dr.ui.analise;
 
 import dr.model.Ensaio;
 import dr.util.DateUtil;
@@ -43,9 +43,9 @@ import javafx.stage.Stage;
  * @author
  * @Andre
  */
-public final class UniformidadeListView extends Stage {
+public final class AnaliseView extends Stage {
 
-    private UniformidadeTable table;
+    private SobreposicaoTable table;
     private Ensaio ensaio;
     private ComboBox cbEspacamento;
     private Label metros;
@@ -85,7 +85,7 @@ public final class UniformidadeListView extends Stage {
     private LineChart<Number, Number> grafico;
     private Button BtExportaSobreposicao;
 
-    public UniformidadeListView() {
+    public AnaliseView() {
 
         this.uniformidade = new UniformidadesImpl(ensaio);
          
@@ -97,7 +97,7 @@ public final class UniformidadeListView extends Stage {
     }
 
     private void inicializaComponentes(Ensaio e) {
-        table = new UniformidadeTable();
+        table = new SobreposicaoTable();
         cbEspacamento = new ComboBox(getEspacamentos());
         cbEspacamento.setId("comboEspacamento");
         descricao = new Label("--");
@@ -429,7 +429,7 @@ public final class UniformidadeListView extends Stage {
 
     }
 
-    public UniformidadeTable getTable() {
+    public SobreposicaoTable getTable() {
         return table;
     }
 
