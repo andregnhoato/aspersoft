@@ -1,6 +1,7 @@
 package dr.ui.analise;
 
 import dr.model.Ensaio;
+import dr.report.AnaliseJavaBeanDataSource;
 import dr.util.DateUtil;
 import dr.util.IUniformidades;
 import dr.util.UniformidadesImpl;
@@ -84,6 +85,8 @@ public final class AnaliseView extends Stage {
     private TitledPane tdGrafico;
     private LineChart<Number, Number> grafico;
     private Button BtExportaSobreposicao;
+    List<Float> perfil;
+    List<Float> distancia;
 
     public AnaliseView() {
 
@@ -419,8 +422,8 @@ public final class AnaliseView extends Stage {
         this.grafico.getData().clear();
         XYChart.Series series = new XYChart.Series();
         series.setName("distribuição");
-        List<Float> perfil = uniformidade.calculaPerfilDistribuicao();
-        List<Float> distancia = uniformidade.calculaDistanciaPerfilDistribuicao();
+        perfil = uniformidade.calculaPerfilDistribuicao();
+        distancia = uniformidade.calculaDistanciaPerfilDistribuicao();
         for (int i = 0; i < perfil.size(); i++) {
             series.getData().add(new XYChart.Data(distancia.get(i), perfil.get(i)));
 
@@ -475,7 +478,24 @@ public final class AnaliseView extends Stage {
     }
     
     public ObservableList getSobreposicao(){
-        return this.table.getSobreposicoes();
+        
+        return table.getSobreposicoes();
+    }
+    
+    public AnaliseJavaBeanDataSource getReport(){
+        AnaliseJavaBeanDataSource report = new AnaliseJavaBeanDataSource();
+        report.setEnsaio(ensaio);
+        report.setCuc(table.getCUC());
+        report.setCud(table.getCUD());
+        report.setCue(table.getCUE());
+        report.setCv(table.getCV());
+        report.setDp(table.getDP());
+        report.setMedia(table.getMMQ());
+        report.setDistancia(distancia);
+        report.setPerfil(perfil);
+        report.setSobreposicao(table.getSobreposicoes());
+        
+        return report;
     }
 
     private ObservableList getEspacamentos() {
