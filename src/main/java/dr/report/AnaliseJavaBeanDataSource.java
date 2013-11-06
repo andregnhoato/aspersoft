@@ -18,6 +18,7 @@ public class AnaliseJavaBeanDataSource {
     private Float dp;
     private Float media;
     private Float cv;
+    private String sobredimensao;
 
     public Ensaio getEnsaio() {
         return ensaio;
@@ -98,4 +99,13 @@ public class AnaliseJavaBeanDataSource {
     public void setCv(Float cv) {
         this.cv = cv;
     }
+
+    public String getSobredimensao() {
+        return sobredimensao;
+    }
+
+    public void setSobredimensao(String sobredimensao) {
+        this.sobredimensao = sobredimensao;
+    }
+    
 }

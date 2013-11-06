@@ -85,6 +85,7 @@ public final class AnaliseView extends Stage {
     private TitledPane tdGrafico;
     private LineChart<Number, Number> grafico;
     private Button BtExportaSobreposicao;
+    private Button BtExportaExcel;
     List<Float> perfil;
     List<Float> distancia;
 
@@ -120,6 +121,9 @@ public final class AnaliseView extends Stage {
         BtExportaSobreposicao = new Button("Exportar para excel");
         BtExportaSobreposicao.getStyleClass().add("buttonGreen");
         BtExportaSobreposicao.setId("btExportar");
+        BtExportaExcel = new Button("Exportar Análise");
+        BtExportaExcel.getStyleClass().add("buttonGreen");
+        BtExportaExcel.setId("btExportar");
     }
 
     public Scene inicializaAll() {
@@ -283,6 +287,7 @@ public final class AnaliseView extends Stage {
         td.setContent(grid);
         td.autosize();
         geral.add(td, 0, 4);
+        geral.add(BtExportaExcel,0,5);
 
 
 
@@ -477,6 +482,10 @@ public final class AnaliseView extends Stage {
         return BtExportaSobreposicao;
     }
     
+    public Button getBtExportarExcel(){
+        return BtExportaExcel;
+    }
+    
     public ObservableList getSobreposicao(){
         
         return table.getSobreposicoes();
@@ -494,6 +503,7 @@ public final class AnaliseView extends Stage {
         report.setDistancia(distancia);
         report.setPerfil(perfil);
         report.setSobreposicao(table.getSobreposicoes());
+        report.setSobredimensao((cbEspacamento.getValue()!=null?cbEspacamento.getValue().toString():""));
         
         return report;
     }
