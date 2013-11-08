@@ -202,6 +202,7 @@ public class IncluirEnsaioView extends Stage {
                     float graus = Float.parseFloat(tfDirecaoVentoGraus.getText());
                     if (graus > 360) {
                         graus = graus % 360;
+                        tfDirecaoVentoGraus.setText(graus+"");
                     }
                     cbDirecaoVento.setValue(WindUtil.getWindByDegress(graus));
                 }
@@ -219,7 +220,7 @@ public class IncluirEnsaioView extends Stage {
                 String entrada = "";
                 if (novo) {
                     entrada = (cbDirecaoVento.getValue() != null ? cbDirecaoVento.getValue().toString() : "");
-                } else if (!entrada.equals(cbDirecaoVento.getValue().toString())) {
+                } else if (!entrada.equals((cbDirecaoVento.getValue() != null ? cbDirecaoVento.getValue().toString() : ""))) {
                     tfDirecaoVentoGraus.setText(WindUtil.getWindByText(WindUtil.WindDirection.valueOf(cbDirecaoVento.getValue().toString())) + "");
                 }
             }
