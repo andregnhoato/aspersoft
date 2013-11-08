@@ -142,6 +142,10 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
                             sp.add(soma);
                         }
 
+                        ajustaSobreposicaoParaTabela(sp);
+                    }else{
+                        reSobrepoeX = !reSobrepoeX;
+                        reSobrepoeY = !reSobrepoeY;
                         ajustaSobreposicaoParaTabela(sobreposicaoQuadrantes(clts));
                     }
                 } else {
