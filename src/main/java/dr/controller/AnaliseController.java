@@ -130,7 +130,7 @@ public class AnaliseController extends PersistenceController {
             rangeCell.setNameName("Precipitação(mm)");
             reference = sheetName + "!$B$" + (1) + ":$B$" + (1 + linha);
             rangeCell.setRefersToFormula(reference);
-            FileOutputStream f = new FileOutputStream(System.getProperty("user.dir") + "/Perfil_Distruibuicao" + report.getEnsaio().getDescricao().replace(" ", "_") + ".xlsx");
+            FileOutputStream f = new FileOutputStream(System.getProperty("user.dir") + "/EXP_Perfil_Distruibuicao_" + report.getEnsaio().getDescricao().replace(" ", "_") + ".xlsx");
             
             workbook.write(f);
             f.flush();
@@ -145,7 +145,7 @@ public class AnaliseController extends PersistenceController {
         try {
 
 
-            String excelFileName = System.getProperty("user.dir") + "/Analise" + report.getEnsaio().getDescricao().replace(" ", "_") + report.getSobredimensao() +".xlsx";//name of excel file
+            String excelFileName = System.getProperty("user.dir") + "/EXP_Analise_" + report.getEnsaio().getDescricao().replace(" ", "_") +"_"+ report.getSobredimensao() +".xlsx";//name of excel file
 
             String sheetName = "relatorio";//name of sheet
 
@@ -292,7 +292,7 @@ public class AnaliseController extends PersistenceController {
 
     public void writeXLSXFile(AnaliseJavaBeanDataSource report) {
         try {
-            String excelFileName = System.getProperty("user.dir") + "/" + report.getEnsaio().getDescricao().replace(" ", "_") + "_sobreposicao" + report.getSobredimensao() + ".xlsx";//name of excel file
+            String excelFileName = System.getProperty("user.dir") + "/S_" + report.getEnsaio().getDescricao().replace(" ", "_") + "_sobreposicao" + report.getSobredimensao() + ".xlsx";//name of excel file
 
             String sheetName = "Sobreposicao";//name of sheet
 
