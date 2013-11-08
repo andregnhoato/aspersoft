@@ -143,9 +143,6 @@ public class ColetaTable extends VBox {
     public void insertEmptyColetas(ArrayList<Coleta> clts, final Ensaio ensaio) {
         try {
             if (dao != null) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
                         try {
                             for (int linha = 0; linha < (ensaio.getGridAltura()/ensaio.getEspacamentoPluviometro()); linha++) {
                                 for (int coluna = 0; coluna < (ensaio.getGridLargura()/ensaio.getEspacamentoPluviometro()); coluna++) {
@@ -161,12 +158,9 @@ public class ColetaTable extends VBox {
                                     }
                                 }
                             }
-
                         } catch (Exception e) {
                             System.err.println(e.getMessage());
                         }
-                    }
-                });
             }
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
