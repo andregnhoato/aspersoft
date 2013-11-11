@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
@@ -44,11 +43,6 @@ public class Coleta implements Bean, Serializable {
     @JoinColumn(name = "id_ensaio", referencedColumnName = "id")
     private Ensaio ensaio;
     
-    /**
-     * Atributo utilizado para controle
-     * <code>lock</code> (otimista) da
-     * <code>JPA</code> para cada registro (objeto) Mercadoria.
-     */
     @Version
     private Integer version;
     

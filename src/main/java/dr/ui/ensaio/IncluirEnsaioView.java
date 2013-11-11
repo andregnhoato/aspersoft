@@ -532,16 +532,4 @@ public class IncluirEnsaioView extends Stage {
 
         return direcoes;
     }
-
-    private String converteGraus(String direcao) {
-
-//        if(direcao!= cbDirecaoVento)
-//        
-        return null;
-
-    }
-
-    private Float converteDirecao(String graus) {
-        return null;
-    }
 }

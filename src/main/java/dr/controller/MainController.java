@@ -18,12 +18,14 @@ public class MainController extends PersistenceController {
     private IncluirEnsaioController addEnsaioController;
     private ListaEnsaioController ensaioListController;
     private MainView mainView;
+    private ConfiguracaoController configController;
 
     public MainController(final Stage mainStage) {
         loadPersistenceContext();
         this.mainView = new MainView(mainStage);
         this.addEnsaioController = new IncluirEnsaioController(this);
         this.ensaioListController = new ListaEnsaioController(this);
+        this.configController = new ConfiguracaoController(this);
         
         final SobreView sobreView = new SobreView();
         
@@ -44,6 +46,15 @@ public class MainController extends PersistenceController {
             @Override
             public void action() {
                 sobreView.show();
+            }
+        });
+        
+        registerAction(mainView.getMenuConfiguracao(), new AbstractAction() {
+
+            @Override
+            protected void action() {
+                MainController.this.configController.show();
+          
             }
         });
 

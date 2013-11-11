@@ -23,6 +23,7 @@ public class MainView {
     private MenuItem menuAbout;
     private MenuItem menuEnsaio;
     private MenuItem menuEnsaioList;
+    private MenuItem menuConfiguracao;
 
     public MainView(Stage stage) {
         //inicializaComponentes();
@@ -61,6 +62,7 @@ public class MainView {
         MenuBar menuBar = new MenuBar();
         Menu menuHelp = new Menu("Ajuda");
         Menu menuStart = new Menu("Inicio");
+//        Menu menuConfig = new Menu("Preferências");
 
         menuEnsaio = new MenuItem("Ensaio");
         menuEnsaio.setId("ensaio");
@@ -69,14 +71,19 @@ public class MainView {
         menuEnsaioList = new MenuItem("Listagem Ensaio");
         menuEnsaioList.setId("ensaioList");
         menuEnsaioList.setAccelerator(KeyCombination.keyCombination("F3"));
+        
+        menuConfiguracao = new MenuItem("Prefêrencias");
+        menuConfiguracao.setId("config");
+        menuConfiguracao.setAccelerator(KeyCombination.keyCombination("F4"));
 
         menuAbout = new MenuItem("Sobre");
         menuAbout.setId("exibirSobre");
         menuAbout.setAccelerator(KeyCombination.keyCombination("F1"));
 
-        menuHelp.getItems().addAll(menuAbout);
+        menuHelp.getItems().addAll(menuAbout, menuConfiguracao);
         menuStart.getItems().addAll(menuEnsaio, menuEnsaioList);
-        menuBar.getMenus().addAll(menuStart, menuHelp);
+//        menuConfig.getItems().addAll(menuConfiguracao);
+        menuBar.getMenus().addAll(menuStart ,menuHelp);
         return menuBar;
     }
 
@@ -102,5 +109,13 @@ public class MainView {
 
     public void setMenuEnsaioList(MenuItem menuEnsaioList) {
         this.menuEnsaioList = menuEnsaioList;
+    }
+
+    public MenuItem getMenuConfiguracao() {
+        return menuConfiguracao;
+    }
+
+    public void setMenuConfiguracao(MenuItem menuConfiguracao) {
+        this.menuConfiguracao = menuConfiguracao;
     }
 }
