@@ -61,7 +61,7 @@ public class MainView {
     private MenuBar getMenuBar() {
         MenuBar menuBar = new MenuBar();
         Menu menuHelp = new Menu("Ajuda");
-        Menu menuStart = new Menu("Inicio");
+        Menu menuStart = new Menu("Início");
 //        Menu menuConfig = new Menu("Preferências");
 
         menuEnsaio = new MenuItem("Ensaio");
