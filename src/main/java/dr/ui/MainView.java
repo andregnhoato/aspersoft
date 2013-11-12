@@ -47,7 +47,7 @@ public class MainView {
         stage.setWidth(bounds.getWidth());
         stage.setHeight(bounds.getHeight());
 
-        stage.setTitle("Experimento");
+        stage.setTitle("Experimento 1.1.2");
         stage.setScene(mainScene);
         stage.setResizable(true);
         stage.centerOnScreen();
