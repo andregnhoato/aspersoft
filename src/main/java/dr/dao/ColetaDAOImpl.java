@@ -102,7 +102,7 @@ public class ColetaDAOImpl implements ColetaDAO {
     }
 
     @Override
-    public Collection<Coleta> findAll() throws Exception {
+    public List<Coleta> findAll() throws Exception {
         String query = "SELECT co FROM coleta co ORDER BY co.linha, co.coluna ASC";
         try {
             this.em.getTransaction().begin();

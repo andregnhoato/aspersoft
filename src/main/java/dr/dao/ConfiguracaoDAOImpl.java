@@ -4,7 +4,7 @@ import dr.controller.ConfiguracaoController;
 import dr.model.Configuracao;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -97,7 +97,7 @@ public class ConfiguracaoDAOImpl implements ConfiguracaoDAO {
     }
 
     @Override
-    public Collection<Configuracao> findAll() throws Exception {
+    public List<Configuracao> findAll() throws Exception {
         String query = "SELECT con FROM configuracao con";
         try {
 //            em.getTransaction().begin();

@@ -186,7 +186,7 @@ public class ListaEnsaioController extends PersistenceController {
                 }
                 try {
                     EnsaioDAO dao = new EnsaioDAOImpl(JPAUtil.getEntityManager());
-                    view.refreshTable((List<Ensaio>) dao.findAll());
+                    view.refreshTable(dao.findAll());
                 } catch (Exception ex) {
                     Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
                 }

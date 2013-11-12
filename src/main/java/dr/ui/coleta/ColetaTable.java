@@ -3,10 +3,14 @@ package dr.ui.coleta;
 import dr.controller.PersistenceController;
 import dr.dao.ColetaDAO;
 import dr.dao.ColetaDAOImpl;
+import dr.dao.ConfiguracaoDAO;
+import dr.dao.ConfiguracaoDAOImpl;
 import dr.model.Coleta;
+import dr.model.Configuracao;
 import dr.ui.ensaio.*;
 import dr.model.Ensaio;
 import dr.ui.table.cell.NumericEditableTableCell;
+import dr.util.UniformidadesImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +46,12 @@ public class ColetaTable extends VBox {
     private Ensaio e = null;
     PersistenceController pe = new PersistenceController();
     final ColetaDAO dao;
+    final ConfiguracaoDAO daoConfig;
 
     public ColetaTable() {
         table = new ColetaTableView();
         dao = new ColetaDAOImpl(pe.getPersistenceContext());
+        daoConfig = new ConfiguracaoDAOImpl(pe.getPersistenceContext());
         this.getChildren().addAll(table);
         this.setPadding(new Insets(10, 10, 10, 10));//css
 
@@ -169,14 +175,16 @@ public class ColetaTable extends VBox {
 
     private ObservableList getColetasfromDatabase() {
         coletas = FXCollections.observableArrayList();
+        
         try {
             List<Coleta> clts = dao.findColetasByEnsaio(e);
+            Configuracao c = daoConfig.findAll().get(0);
             if (clts.size() > 0) {
                 int contador = 0;
                 for (int linha = 0; linha < (e.getGridAltura()/e.getEspacamentoPluviometro()); linha++) {
                     ObservableList<Float> row = FXCollections.observableArrayList();
                     for (int coluna = 0; coluna < (e.getGridLargura()/e.getEspacamentoPluviometro()); coluna++) {
-                        row.add(clts.get(contador).getValor());
+                        row.add(UniformidadesImpl.round(clts.get(contador).getValor(), c.getCasasDecimaisColeta()));
                         contador++;
                     }
                     coletas.add(row);

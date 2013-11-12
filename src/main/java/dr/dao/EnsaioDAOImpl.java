@@ -3,7 +3,6 @@ package dr.dao;
 import dr.model.Ensaio;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -109,7 +108,7 @@ public class EnsaioDAOImpl implements EnsaioDAO {
     }
 
     @Override
-    public Collection<Ensaio> findAll() throws Exception {
+    public List<Ensaio> findAll() throws Exception {
         String query = "SELECT en FROM ensaio en ORDER BY en.descricao ASC";
         try {
 //            em.getTransaction().begin();
