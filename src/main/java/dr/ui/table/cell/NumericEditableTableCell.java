@@ -2,7 +2,7 @@ package dr.ui.table.cell;
 
 import dr.controller.AbstractController;
 import dr.dao.ColetaDAOImpl;
-import dr.event.ensaio.AtualizaColetaEvent;
+import dr.event.AtualizaColetaEvent;
 import dr.model.Coleta;
 import dr.util.JPAUtil;
 import java.text.NumberFormat;

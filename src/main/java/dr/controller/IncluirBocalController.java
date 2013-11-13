@@ -4,14 +4,15 @@ import dr.action.AbstractAction;
 import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
 import dr.action.TransactionalAction;
-import dr.dao.EnsaioDAO;
-import dr.dao.EnsaioDAOImpl;
-import dr.event.IncluirEnsaioEvent;
-import dr.event.RemoveEnsaioEvent;
-import dr.model.Ensaio;
+import dr.dao.BocalDAO;
+import dr.dao.BocalDAOImpl;
+import dr.event.IncluirBocalEvent;
+import dr.event.RemoveBocalEvent;
+import dr.model.Bocal;
 import dr.ui.Dialog;
-import dr.ui.ensaio.IncluirEnsaioView;
-import dr.validation.EnsaioValidator;
+import dr.ui.bocal.IncluirBocalView;
+import dr.validation.BocalValidator;
+
 import dr.validation.Validator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,27 +23,26 @@ import javafx.stage.WindowEvent;
 /**
  * Define a
  * <code>Controller</code> responsável por gerir a tela de inclusão/edição de
- * <code>Ensaio</code>.
+ * <code>Bocal</code>.
  *
  * @see controller.PersistenceController
  *
  * @author
  * @Andre
  */
-public class IncluirEnsaioController extends PersistenceController {
+public class IncluirBocalController extends PersistenceController {
 
-    private IncluirEnsaioView view;
-    private Validator<Ensaio> validador = new EnsaioValidator();
-    static Boolean dialog;
+    private IncluirBocalView view;
+    private Validator<Bocal> validador = new BocalValidator();
 
-    public IncluirEnsaioController(AbstractController parent) {
+    public IncluirBocalController(AbstractController parent) {
         super(parent);
 
-        this.view = new IncluirEnsaioView();
+        this.view = new IncluirBocalView();
         this.view.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent window) {
-                IncluirEnsaioController.this.cleanUp();
+                IncluirBocalController.this.cleanUp();
             }
         });
 
@@ -63,14 +63,10 @@ public class IncluirEnsaioController extends PersistenceController {
                 .addConditional(new BooleanExpression() {
             @Override
             public boolean conditional() {
-                Ensaio e = view.getEnsaio();
-                String msg = validador.validate(e);
+                Bocal b = view.getBocal();
+                String msg = validador.validate(b);
                 if (!"".equals(msg == null ? "" : msg)) {
                     Dialog.showInfo("Validacão", msg, view);
-                    return false;
-                }
-                if(e.getEspacamentoPluviometro() <= 0){
-                    Dialog.showError("Validação", "Favor informar uma valor superior a zero para o campo Espaço entre pluviometros");
                     return false;
                 }
 
@@ -79,18 +75,18 @@ public class IncluirEnsaioController extends PersistenceController {
         })
                 .addAction(
                 TransactionalAction.build()
-                .persistenceCtxOwner(IncluirEnsaioController.this)
+                .persistenceCtxOwner(IncluirBocalController.this)
                 .addAction(new AbstractAction() {
-            private Ensaio e;
+            private Bocal e;
 
             @Override
             protected void action() {
-                e = view.getEnsaio();
-                EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                e = view.getBocal();
+                BocalDAO dao = new BocalDAOImpl(getPersistenceContext());
                 try {
                     e = dao.save(e);
                 } catch (Exception ex) {
-                    Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(IncluirBocalController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -102,7 +98,7 @@ public class IncluirEnsaioController extends PersistenceController {
                         view.hide();
                     }
                 });
-                fireEvent(new IncluirEnsaioEvent(e));
+                fireEvent(new IncluirBocalEvent(e));
             }
         })));
 
@@ -112,7 +108,7 @@ public class IncluirEnsaioController extends PersistenceController {
             @Override
             public boolean conditional() {
 
-//                Dialog.buildConfirmation("Confirmação", "Deseja remover este Ensaio e todas as coletas relacionadas?", view).addYesButton(new EventHandler() {
+//                Dialog.buildConfirmation("Confirmação", "Deseja remover este Bocal e todas as coletas relacionadas?", view).addYesButton(new EventHandler() {
 //                    @Override
 //                    public void handle(Event t) {
 //                        dialog = true;
@@ -131,40 +127,40 @@ public class IncluirEnsaioController extends PersistenceController {
         })
                 //                .addAction(
                 //                TransactionalAction.build()
-                //                .persistenceCtxOwner(IncluirEnsaioController.this)
+                //                .persistenceCtxOwner(IncluirBocalController.this)
                 .addAction(
                 new AbstractAction() {
-            private Ensaio e;
+            private Bocal e;
 
             @Override
             protected void action() {
 
 //
 //                if (dialog!= null && dialog) {
-                    Integer id = view.getEnsaioId();
-                    if (id != null) {
-                        try {
+                Integer id = view.getBocalId();
+                if (id != null) {
+                    try {
 
-                            EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
-                            e = dao.findById(id);
-                            if (e != null) {
-                                dao.remove(e);
+                        BocalDAO dao = new BocalDAOImpl(getPersistenceContext());
+                        e = dao.findById(id);
+                        if (e != null) {
+                            dao.remove(e);
 //                                dialog = false;
 
-                            }
-                        } catch (Exception ex) {
-                            Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
+                    } catch (Exception ex) {
+                        Logger.getLogger(IncluirBocalController.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
+
+            }
 //            }
 
             @Override
             public void posAction() {
                 view.hide();
-                fireEvent(new RemoveEnsaioEvent(e));
+                fireEvent(new RemoveBocalEvent(e));
             }
         }));
     }
@@ -174,15 +170,15 @@ public class IncluirEnsaioController extends PersistenceController {
         view.show();
     }
 
-    public void show(Ensaio e) {
-        view.setEnsaio(e);
-        view.setTitle("Editar Ensaio");
+    public void show(Bocal e) {
+        view.setBocal(e);
+        view.setTitle("Editar Bocal");
         show();
     }
 
     @Override
     protected void cleanUp() {
-        view.setTitle("Incluir Ensaio");
+        view.setTitle("Incluir Bocal");
         view.resetForm();
 
         super.cleanUp();

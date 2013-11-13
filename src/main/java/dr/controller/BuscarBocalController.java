@@ -3,11 +3,11 @@ package dr.controller;
 import dr.action.AbstractAction;
 import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
-import dr.dao.EnsaioDAO;
-import dr.dao.EnsaioDAOImpl;
-import dr.event.BuscarEnsaioEvent;
-import dr.model.Ensaio;
-import dr.ui.ensaio.BuscarEnsaioView;
+import dr.dao.BocalDAO;
+import dr.dao.BocalDAOImpl;
+import dr.event.BuscarBocalEvent;
+import dr.model.Bocal;
+import dr.ui.bocal.BuscarBocalView;
 import dr.util.DateUtil;
 import java.util.List;
 import javafx.application.Platform;
@@ -15,24 +15,24 @@ import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 
 /**
- * Define a <code>Controller</code> responsável por gerir a tela de Busca de <code>Ensaio</code> pelo campo <code>nome</code>.
+ * Define a <code>Controller</code> responsável por gerir a tela de Busca de <code>Bocal</code> pelo campo <code>nome</code>.
  * 
  * @see controller.PersistenceController
  * 
  * @author @Andre
  */
-public class BuscarEnsaioController extends PersistenceController {
+public class BuscarBocalController extends PersistenceController {
     
-    private BuscarEnsaioView view;
+    private BuscarBocalView view;
     
-    public BuscarEnsaioController(ListaEnsaioController parent) {
+    public BuscarBocalController(ListaBocalController parent) {
         super(parent);
-        this.view = new BuscarEnsaioView();
+        this.view = new BuscarBocalView();
         
         this.view.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent window) {
-                BuscarEnsaioController.this.cleanUp();
+                BuscarBocalController.this.cleanUp();
             }
         });
         
@@ -57,22 +57,25 @@ public class BuscarEnsaioController extends PersistenceController {
                     }
                 })
                 .addAction(new AbstractAction() {
-                    private List<Ensaio> list;
+                    private List<Bocal> list;
 
                     @Override
                     protected void action() {
-                        EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("WHERE 1=1 ");
-                        if(view.getText().length()>0)
-                            sb.append(" and e.descricao like ").append("'%").append(view.getText()).append("%'");
-                        if(view.getDataInicio()!=null)
-                            sb.append(" and e.data > ").append(DateUtil.formatDate(view.getDataInicio())).append("'");
-                        if(view.getDataFim()!=null)
-                            sb.append(" and e.data < '").append(DateUtil.formatDate(view.getDataFim())).append("'");
                         
+                        //IMPLEMENTAR BUSCA DE BOCAL PELA DESCRICAO
                         
-                        list = dao.getEnsaiosByWhere(sb.toString());
+//                        BocalDAO dao = new BocalDAOImpl(getPersistenceContext());
+//                        StringBuilder sb = new StringBuilder();
+//                        sb.append("WHERE 1=1 ");
+//                        if(view.getText().length()>0)
+//                            sb.append(" and e.descricao like ").append("'%").append(view.getText()).append("%'");
+//                        if(view.getDataInicio()!=null)
+//                            sb.append(" and e.data > ").append(DateUtil.formatDate(view.getDataInicio())).append("'");
+//                        if(view.getDataFim()!=null)
+//                            sb.append(" and e.data < '").append(DateUtil.formatDate(view.getDataFim())).append("'");
+//                        
+//                        
+//                        list = dao.getBocalsByWhere(sb.toString());
                     }
 
                     @Override
@@ -83,7 +86,7 @@ public class BuscarEnsaioController extends PersistenceController {
                                 view.hide();
                             }
                         });
-                        fireEvent(new BuscarEnsaioEvent(list));
+                        fireEvent(new BuscarBocalEvent(list));
                         list = null;
                     }
                 }));

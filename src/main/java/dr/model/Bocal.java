@@ -11,27 +11,24 @@ import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
-
 /**
- * @author @Andre
- * Rntidade Bocal representa o bocal utilizado nos ensaios e tabela desempenho aspersor pingo
+ * @author @Andre Rntidade Bocal representa o bocal utilizado nos ensaios e
+ * tabela desempenho aspersor pingo
  */
-
-@Table(uniqueConstraints={@UniqueConstraint(columnNames={"descricao"})})
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"descricao"})})
 @Entity(name = "bocal")
 public class Bocal implements Bean, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    
-    @NotNull 
+    @NotNull
     @Column
     private String descricao;
-   
     @Version
     private Integer version;
-    
+
     public Bocal() {
     }
 
@@ -44,8 +41,12 @@ public class Bocal implements Bean, Serializable {
         this.id = id;
     }
 
-   public Integer getVersion() {
+    public Integer getVersion() {
         return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public String getDescricao() {
@@ -55,5 +56,4 @@ public class Bocal implements Bean, Serializable {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-
 }

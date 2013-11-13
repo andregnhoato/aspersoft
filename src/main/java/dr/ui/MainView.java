@@ -24,6 +24,7 @@ public class MainView {
     private MenuItem menuEnsaio;
     private MenuItem menuEnsaioList;
     private MenuItem menuConfiguracao;
+    private MenuItem menuBocais;
 
     public MainView(Stage stage) {
         //inicializaComponentes();
@@ -79,9 +80,12 @@ public class MainView {
         menuAbout = new MenuItem("Sobre");
         menuAbout.setId("exibirSobre");
         menuAbout.setAccelerator(KeyCombination.keyCombination("F1"));
+        
+        menuBocais = new MenuItem("Bocais");
+        menuBocais.setId("bocais");
 
         menuHelp.getItems().addAll(menuAbout, menuConfiguracao);
-        menuStart.getItems().addAll(menuEnsaio, menuEnsaioList);
+        menuStart.getItems().addAll(menuEnsaio, menuEnsaioList, menuBocais);
 //        menuConfig.getItems().addAll(menuConfiguracao);
         menuBar.getMenus().addAll(menuStart ,menuHelp);
         return menuBar;
@@ -118,4 +122,13 @@ public class MainView {
     public void setMenuConfiguracao(MenuItem menuConfiguracao) {
         this.menuConfiguracao = menuConfiguracao;
     }
+
+    public MenuItem getMenuBocais() {
+        return menuBocais;
+    }
+
+    public void setMenuBocais(MenuItem menuBocais) {
+        this.menuBocais = menuBocais;
+    }
+    
 }
