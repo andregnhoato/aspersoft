@@ -80,10 +80,10 @@ public class EnsaioDAOImpl implements EnsaioDAO {
         if (object == null) {
             throw new Exception("O objeto Ensaio está nulo.");
         }
-        Ensaio c = this.em.merge(object);
+        Ensaio e = this.em.merge(object);
         this.em.flush();
         
-        return c;
+        return e;
     }
 
     @Override
