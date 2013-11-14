@@ -24,7 +24,7 @@ public class BocalTableView extends TableView<BocalTableView.BocalItem> {
         idCol.setCellValueFactory(new PropertyValueFactory<BocalItem, String>("id"));
         
         TableColumn<BocalItem, String> descricaoCol = new TableColumn<>("Descrição");
-        descricaoCol.setMinWidth(100);
+        descricaoCol.setMinWidth(200);
         descricaoCol.setCellValueFactory(new PropertyValueFactory<BocalItem, String>("descricao"));
 
         bocais = FXCollections.observableArrayList();

@@ -1,6 +1,7 @@
 package dr.dao;
 
 import dr.model.Bocal;
+import dr.model.Ensaio;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 
 /**
  * Implementa o contrato de persistência da entidade
@@ -92,6 +94,23 @@ public class BocalDAOImpl implements BocalDAO {
         } catch (NoResultException e) {
             return new ArrayList<>(0);
         }
+    }
+    
+    /**
+     * Reliza a pesquisa bocais com filtro no nome (via operador
+     * <code>like</code>).
+     *
+     * @see dao.EnsaioDAO#getEnsaiosByDescricao(java.lang.String)
+     */
+    @Override
+    public List<Bocal> getBocalByDescricao(String descricao) {
+        if (descricao == null || descricao.isEmpty()) {
+            return null;
+        }
+        String nm = "%";
+        Query query = em.createQuery("SELECT b FROM bocal b WHERE b.descricao like :descricao");
+        query.setParameter("descricao", nm.concat(descricao).concat("%"));
+        return (List<Bocal>) query.getResultList();
     }
 
 }

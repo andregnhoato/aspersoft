@@ -1,12 +1,10 @@
-package dr.ui.bocal;
+package dr.ui.quebraJato;
 
-import dr.ui.bocal.*;
-import dr.model.Bocal;
+import dr.model.QuebraJato;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,16 +17,16 @@ import javafx.stage.Stage;
  * @author
  * @Andre
  */
-public class BocalListView extends Stage {
+public class QuebraJatoListView extends Stage {
 
     private Scene subScene;
-    private BocalTable table;    
-    private Button bNewBocal;
+    private QuebraJatoTable table;    
+    private Button bNewQuebraJato;
     private Button bRefreshList;
-    private Button bFindBocal;
+    private Button bFindQuebraJato;
     
-    public BocalListView() {
-        setTitle("Bocais");
+    public QuebraJatoListView() {
+        setTitle("Quebra Jato");
         
         setResizable(true);
 
@@ -49,14 +47,14 @@ public class BocalListView extends Stage {
     }
 
     private void inicializaComponentes() {
-        table = new BocalTable();
+        table = new QuebraJatoTable();
 
-        bNewBocal = new Button("Novo");
-        bNewBocal.getStyleClass().add("buttonLarge");
-        bNewBocal.setId("addBocal");
-        bFindBocal = new Button("Buscar");
-        bFindBocal.getStyleClass().add("buttonLarge");
-        bFindBocal.setId("findBocal");
+        bNewQuebraJato = new Button("Novo");
+        bNewQuebraJato.getStyleClass().add("buttonLarge");
+        bNewQuebraJato.setId("addQuebraJato");
+        bFindQuebraJato = new Button("Buscar");
+        bFindQuebraJato.getStyleClass().add("buttonLarge");
+        bFindQuebraJato.setId("findQuebraJato");
         bRefreshList = new Button("Atualizar");
         bRefreshList.getStyleClass().add("buttonLarge");
         bRefreshList.setId("refreshList");
@@ -67,13 +65,13 @@ public class BocalListView extends Stage {
 
     private HBox getButtonsBox() {
         HBox box = new HBox();
-        box.getChildren().addAll(bNewBocal, bFindBocal, bRefreshList);
+        box.getChildren().addAll(bNewQuebraJato, bFindQuebraJato, bRefreshList);
         box.getStyleClass().add("buttonBarMain");
         return box;
     }
 
     public Button getNewButton() {
-        return bNewBocal;
+        return bNewQuebraJato;
     }
 
     public Button getRefreshButton() {
@@ -81,22 +79,22 @@ public class BocalListView extends Stage {
     }
 
     public Button getFindButton() {
-        return bFindBocal;
+        return bFindQuebraJato;
     }
 
     
 
-    public BocalTable getTable() {
+    public QuebraJatoTable getTable() {
         return table;
     }
 
-    public void refreshTable(List<Bocal> bocais) {
+    public void refreshTable(List<QuebraJato> bocais) {
         table.reload(bocais);
     }
 
     private void disableButtonBar(boolean disable) {
-        bNewBocal.setDisable(disable);
-        bFindBocal.setDisable(disable);
+        bNewQuebraJato.setDisable(disable);
+        bFindQuebraJato.setDisable(disable);
         bRefreshList.setDisable(disable);
         
     }

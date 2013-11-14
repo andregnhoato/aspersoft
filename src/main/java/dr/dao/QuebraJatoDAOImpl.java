@@ -1,6 +1,7 @@
 package dr.dao;
 
 import dr.model.QuebraJato;
+import dr.model.QuebraJato;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 
 /**
  * Implementa o contrato de persistência da entidade
@@ -39,16 +41,16 @@ public class QuebraJatoDAOImpl implements QuebraJatoDAO {
             if (object.getId() != null) {
                 return this.update(object);
             } else {
-                if (!this.em.getTransaction().isActive()) {
-                    this.em.getTransaction().begin();
-                }
+//                if (!this.em.getTransaction().isActive()) {
+//                    this.em.getTransaction().begin();
+//                }
                 this.em.persist(object);
                 this.em.flush();
-                this.em.getTransaction().commit();
+//                this.em.getTransaction().commit();
                 return object;
             }
         } catch (PersistenceException e) {
-            this.em.getTransaction().rollback();
+//            this.em.getTransaction().rollback();
             throw new PersistenceException(e);
             
         }
@@ -92,6 +94,23 @@ public class QuebraJatoDAOImpl implements QuebraJatoDAO {
         } catch (NoResultException e) {
             return new ArrayList<>(0);
         }
+    }
+    
+    /**
+     * Reliza a pesquisa ensaios com filtro no nome (via operador
+     * <code>like</code>).
+     *
+     * @see dao.EnsaioDAO#getEnsaiosByDescricao(java.lang.String)
+     */
+    @Override
+    public List<QuebraJato> getQuebraJatoByDescricao(String descricao) {
+        if (descricao == null || descricao.isEmpty()) {
+            return null;
+        }
+        String nm = "%";
+        Query query = em.createQuery("SELECT qj FROM quebra_jato qj WHERE qj.descricao like :descricao");
+        query.setParameter("descricao", nm.concat(descricao).concat("%"));
+        return (List<QuebraJato>) query.getResultList();
     }
 
 }

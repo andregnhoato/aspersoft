@@ -4,14 +4,15 @@ import dr.action.AbstractAction;
 import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
 import dr.action.TransactionalAction;
-import dr.dao.EnsaioDAO;
-import dr.dao.EnsaioDAOImpl;
-import dr.event.IncluirEnsaioEvent;
-import dr.event.RemoveEnsaioEvent;
-import dr.model.Ensaio;
+import dr.dao.QuebraJatoDAO;
+import dr.dao.QuebraJatoDAOImpl;
+import dr.event.IncluirQuebraJatoEvent;
+import dr.event.RemoveQuebraJatoEvent;
+import dr.model.QuebraJato;
 import dr.ui.Dialog;
-import dr.ui.ensaio.IncluirEnsaioView;
-import dr.validation.EnsaioValidator;
+import dr.ui.quebraJato.IncluirQuebraJatoView;
+import dr.validation.QuebraJatoValidator;
+
 import dr.validation.Validator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,33 +23,26 @@ import javafx.stage.WindowEvent;
 /**
  * Define a
  * <code>Controller</code> responsável por gerir a tela de inclusão/edição de
- * <code>Ensaio</code>.
+ * <code>QuebraJato</code>.
  *
  * @see controller.PersistenceController
  *
  * @author
  * @Andre
  */
-public class IncluirEnsaioController extends PersistenceController {
+public class IncluirQuebraJatoController extends PersistenceController {
 
-    private IncluirEnsaioView view;
-    private Validator<Ensaio> validador = new EnsaioValidator();
-    static Boolean dialog;
-    private ListaBocalController bocalListController;
-    private ListaQuebraJatoController quebraListController;
+    private IncluirQuebraJatoView view;
+    private Validator<QuebraJato> validador = new QuebraJatoValidator();
 
-    public IncluirEnsaioController(AbstractController parent) {
+    public IncluirQuebraJatoController(AbstractController parent) {
         super(parent);
 
-        this.view = new IncluirEnsaioView();
-        this.bocalListController = new ListaBocalController(this);
-        this.quebraListController = new ListaQuebraJatoController(this);
-        
-        
+        this.view = new IncluirQuebraJatoView();
         this.view.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent window) {
-                IncluirEnsaioController.this.cleanUp();
+                IncluirQuebraJatoController.this.cleanUp();
             }
         });
 
@@ -63,45 +57,16 @@ public class IncluirEnsaioController extends PersistenceController {
                 });
             }
         });
-        
-        registerAction(this.view.getBocalButton(), new AbstractAction() {
-            @Override
-            protected void action() {
-                bocalListController.show();
-            }
-            
-            @Override
-            protected void posAction(){
-                view.setBocal(bocalListController.getBocal());
-                
-            }
-        });
-        
-        registerAction(this.view.getQuebraButton(), new AbstractAction() {
-            @Override
-            protected void action() {
-                quebraListController.show();
-            }
-            
-            @Override
-            protected void posAction(){
-                view.setQuebraJato(quebraListController.getQuebraJato());
-            }
-        });
 
         registerAction(this.view.getSaveButton(),
                 ConditionalAction.build()
                 .addConditional(new BooleanExpression() {
             @Override
             public boolean conditional() {
-                Ensaio e = view.getEnsaio();
-                String msg = validador.validate(e);
+                QuebraJato b = view.getQuebraJato();
+                String msg = validador.validate(b);
                 if (!"".equals(msg == null ? "" : msg)) {
                     Dialog.showInfo("Validacão", msg, view);
-                    return false;
-                }
-                if(e.getEspacamentoPluviometro() <= 0){
-                    Dialog.showError("Validação", "Favor informar uma valor superior a zero para o campo Espaço entre pluviometros");
                     return false;
                 }
 
@@ -110,18 +75,18 @@ public class IncluirEnsaioController extends PersistenceController {
         })
                 .addAction(
                 TransactionalAction.build()
-                .persistenceCtxOwner(IncluirEnsaioController.this)
+                .persistenceCtxOwner(IncluirQuebraJatoController.this)
                 .addAction(new AbstractAction() {
-            private Ensaio e;
+            private QuebraJato e;
 
             @Override
             protected void action() {
-                e = view.getEnsaio();
-                EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                e = view.getQuebraJato();
+                QuebraJatoDAO dao = new QuebraJatoDAOImpl(getPersistenceContext());
                 try {
                     e = dao.save(e);
                 } catch (Exception ex) {
-                    Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(IncluirQuebraJatoController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -133,7 +98,7 @@ public class IncluirEnsaioController extends PersistenceController {
                         view.hide();
                     }
                 });
-                fireEvent(new IncluirEnsaioEvent(e));
+                fireEvent(new IncluirQuebraJatoEvent(e));
             }
         })));
 
@@ -143,7 +108,7 @@ public class IncluirEnsaioController extends PersistenceController {
             @Override
             public boolean conditional() {
 
-//                Dialog.buildConfirmation("Confirmação", "Deseja remover este Ensaio e todas as coletas relacionadas?", view).addYesButton(new EventHandler() {
+//                Dialog.buildConfirmation("Confirmação", "Deseja remover este QuebraJato e todas as coletas relacionadas?", view).addYesButton(new EventHandler() {
 //                    @Override
 //                    public void handle(Event t) {
 //                        dialog = true;
@@ -162,40 +127,40 @@ public class IncluirEnsaioController extends PersistenceController {
         })
                 //                .addAction(
                 //                TransactionalAction.build()
-                //                .persistenceCtxOwner(IncluirEnsaioController.this)
+                //                .persistenceCtxOwner(IncluirQuebraJatoController.this)
                 .addAction(
                 new AbstractAction() {
-            private Ensaio e;
+            private QuebraJato e;
 
             @Override
             protected void action() {
 
 //
 //                if (dialog!= null && dialog) {
-                    Integer id = view.getEnsaioId();
-                    if (id != null) {
-                        try {
+                Integer id = view.getQuebraJatoId();
+                if (id != null) {
+                    try {
 
-                            EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
-                            e = dao.findById(id);
-                            if (e != null) {
-                                dao.remove(e);
+                        QuebraJatoDAO dao = new QuebraJatoDAOImpl(getPersistenceContext());
+                        e = dao.findById(id);
+                        if (e != null) {
+                            dao.remove(e);
 //                                dialog = false;
 
-                            }
-                        } catch (Exception ex) {
-                            Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
+                    } catch (Exception ex) {
+                        Logger.getLogger(IncluirQuebraJatoController.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
+
+            }
 //            }
 
             @Override
             public void posAction() {
                 view.hide();
-                fireEvent(new RemoveEnsaioEvent(e));
+                fireEvent(new RemoveQuebraJatoEvent(e));
             }
         }));
     }
@@ -205,15 +170,15 @@ public class IncluirEnsaioController extends PersistenceController {
         view.show();
     }
 
-    public void show(Ensaio e) {
-        view.setEnsaio(e);
-        view.setTitle("Editar Ensaio");
+    public void show(QuebraJato e) {
+        view.setQuebraJato(e);
+        view.setTitle("Editar QuebraJato");
         show();
     }
 
     @Override
     protected void cleanUp() {
-        view.setTitle("Incluir Ensaio");
+        view.setTitle("Incluir QuebraJato");
         view.resetForm();
 
         super.cleanUp();

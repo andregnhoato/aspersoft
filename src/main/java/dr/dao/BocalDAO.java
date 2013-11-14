@@ -1,6 +1,8 @@
 package dr.dao;
 
 import dr.model.Bocal;
+import dr.model.Ensaio;
+import java.util.List;
 
 /**
  * 
@@ -10,4 +12,5 @@ import dr.model.Bocal;
  */
 public interface BocalDAO extends AbstractDAO<Bocal>{
 
+    List<Bocal> getBocalByDescricao(String descricao);
 }

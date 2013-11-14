@@ -1,11 +1,6 @@
-package dr.ui.bocal;
+package dr.ui.quebraJato;
 
-import dr.ui.ensaio.*;
 import dr.ui.*;
-import eu.schudt.javafx.controls.calendar.DatePicker;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,20 +13,20 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Tela utilizada para realizar a pesquisa de <code>Bocal</code> 
+ * Tela utilizada para realizar a pesquisa de <code>QuebraJato</code> 
  * com filtro no campo <code>nome</code>. 
  * 
  * @author @Andre
  */
-public class BuscarBocalView extends Stage {
+public class BuscarQuebraJatoView extends Stage {
 
     private TextField tfNome;
     private Button bBuscar;
     private Button bCancelar;
 
-    public BuscarBocalView() {
-        setTitle("Buscar Bocal");
-        setWidth(250);
+    public BuscarQuebraJatoView() {
+        setTitle("Buscar Quebra Jato");
+        setWidth(290);
         setHeight(150);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
@@ -52,11 +47,11 @@ public class BuscarBocalView extends Stage {
 
     private HBox buildBotoes() {
         bBuscar = new Button("Buscar");
-        bBuscar.setId("buscarBocal");
+        bBuscar.setId("buscarQuebraJato");
         bBuscar.setDefaultButton(true);
         
         bCancelar = new Button("Cancelar");
-        bCancelar.setId("cancelarBuscaBocal");
+        bCancelar.setId("cancelarBuscaQuebraJato");
         bCancelar.setCancelButton(true);
         
         HBox box = new HBox();
@@ -73,9 +68,8 @@ public class BuscarBocalView extends Stage {
         tfNome.setMaxWidth(180);
                 
         GridFormBuilder grid = new GridFormBuilder();
-        grid.addRow(new Label("Bocal: "), tfNome);
-//                .addRow(new Label("Data Início:"), dpDataInicio)
-//                .addRow(new Label("Data Fim:"), dpDataFim);
+        grid.addRow(new Label("Quebra Jato: "), tfNome);
+
         
         return grid.build();
     }

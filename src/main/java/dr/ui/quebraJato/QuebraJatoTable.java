@@ -1,7 +1,6 @@
-package dr.ui.bocal;
+package dr.ui.quebraJato;
 
-import dr.ui.bocal.*;
-import dr.model.Bocal;
+import dr.model.QuebraJato;
 import java.util.List;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,19 +11,19 @@ import javafx.stage.Screen;
 
 /**
  * Reune os componentes para formar uma tabela de
- * <code>Bocal</code>.
+ * <code>QuebraJato</code>.
  *
- * @see ui.BocalTableView
+ * @see ui.QuebraJatoTableView
  *
  * @author
  * @Andre
  */
-public class BocalTable extends BorderPane {
+public class QuebraJatoTable extends BorderPane {
 
-    private BocalTableView table;
+    private QuebraJatoTableView table;
 
-    public BocalTable() {
-        table = new BocalTableView();
+    public QuebraJatoTable() {
+        table = new QuebraJatoTableView();
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
        
@@ -37,7 +36,7 @@ public class BocalTable extends BorderPane {
         this.setPadding(new Insets(10, 10, 10, 10));//css
     }
 
-    public void reload(List<Bocal> bocais) {
+    public void reload(List<QuebraJato> bocais) {
         table.reload(bocais);
     }
 
@@ -45,11 +44,11 @@ public class BocalTable extends BorderPane {
         table.setOnMouseClicked(event);
     }
 
-    public Bocal getBocalSelected() {
+    public QuebraJato getQuebraJatoSelected() {
         return table.getSelectedItem();
     }
 
-    public Integer getTotalBocal() {
+    public Integer getTotalQuebraJato() {
         return table.getItems().size();
     }
 }

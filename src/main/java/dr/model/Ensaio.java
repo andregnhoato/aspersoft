@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,12 +34,15 @@ public class Ensaio implements Bean, Serializable {
     @NotNull @Size(min=1, max=200)
     private String pressao;
     
-    @NotNull @Size(min=1, max=200)
-    private String bocal;
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_bocal", referencedColumnName = "id")
+    private Bocal bocal;
     
-    @NotNull @Size(min=1, max=200)
-    @Column(name = "quebra_jato")
-    private String quebraJato;
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_quebra_jato", referencedColumnName = "id")
+    private QuebraJato quebraJato;
     
     @NotNull @Size(min=1, max=200)
     private String inicio;
@@ -123,19 +129,19 @@ public class Ensaio implements Bean, Serializable {
         this.pressao = pressao;
     }
 
-    public String getBocal() {
+    public Bocal getBocal() {
         return bocal;
     }
 
-    public void setBocal(String bocal) {
+    public void setBocal(Bocal bocal) {
         this.bocal = bocal;
     }
 
-    public String getQuebraJato() {
+    public QuebraJato getQuebraJato() {
         return quebraJato;
     }
 
-    public void setQuebraJato(String quebraJato) {
+    public void setQuebraJato(QuebraJato quebraJato) {
         this.quebraJato = quebraJato;
     }
 

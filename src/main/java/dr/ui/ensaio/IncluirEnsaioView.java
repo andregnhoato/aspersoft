@@ -1,6 +1,8 @@
 package dr.ui.ensaio;
 
+import dr.model.Bocal;
 import dr.model.Ensaio;
+import dr.model.QuebraJato;
 import dr.ui.GridFormBuilder;
 import dr.util.WindUtil;
 import eu.schudt.javafx.controls.calendar.DatePicker;
@@ -50,11 +52,15 @@ public class IncluirEnsaioView extends Stage {
     private Button bSave;
     private Button bCancel;
     private Button bRemove;
+    private Button bBocal;
+    private Button bQuebraJato;
+    private Bocal bocal;
+    private QuebraJato quebraJato;
 
     public IncluirEnsaioView() {
         setTitle("Incluir Ensaio");
-        setWidth(390);
-        setHeight(500);
+        setWidth(410);
+        setHeight(520);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
 
@@ -202,7 +208,7 @@ public class IncluirEnsaioView extends Stage {
                     float graus = Float.parseFloat(tfDirecaoVentoGraus.getText());
                     if (graus > 360) {
                         graus = graus % 360;
-                        tfDirecaoVentoGraus.setText(graus+"");
+                        tfDirecaoVentoGraus.setText(graus + "");
                     }
                     cbDirecaoVento.setValue(WindUtil.getWindByDegress(graus));
                 }
@@ -336,12 +342,23 @@ public class IncluirEnsaioView extends Stage {
         dpData.getStylesheets().add("datePicker.css");
 
 
+        bBocal = new Button("...");
+        bBocal.setId("bocalZoom");
+        bBocal.getStyleClass().add("buttonGreen");
+
+        bQuebraJato = new Button("...");
+        bQuebraJato.setId("quebraZoom");
+        bQuebraJato.getStyleClass().add("buttonGreen");
+
+
+
+
         GridFormBuilder grid = new GridFormBuilder();
         grid.addRow(new Label("Id: "), tfId)
                 .addRow(new Label("Descrição: "), tfDescricao)
                 .addRow(new Label("Pressão: "), tfPressao)
-                .addRow(new Label("Bocal: "), tfBocal)
-                .addRow(new Label("Quebra Jato: "), tfQuebraJato)
+                .addRow(new Label("Bocal: "), tfBocal, bBocal)
+                .addRow(new Label("Quebra Jato: "), tfQuebraJato, bQuebraJato)
                 .addRow(new Label("Inicio: "), tfInicio)
                 .addRow(new Label("Data:"), dpData)
                 .addRow(new Label("Duração em horas:"), tfDuracao)
@@ -384,8 +401,8 @@ public class IncluirEnsaioView extends Stage {
         tfId.setText(e.getId().toString());
         tfDescricao.setText(e.getDescricao());
         tfPressao.setText(e.getPressao());
-        tfBocal.setText(e.getBocal());
-        tfQuebraJato.setText(e.getQuebraJato());
+        tfBocal.setText(e.getBocal().getDescricao());
+        tfQuebraJato.setText(e.getQuebraJato().getDescricao());
         tfEspacamentoPluviometro.setText(e.getEspacamentoPluviometro() + "");
         tfEspacamentoPluviometro.setEditable(false);
         tfInicio.setText(e.getInicio());
@@ -407,6 +424,7 @@ public class IncluirEnsaioView extends Stage {
 
     private Ensaio loadEnsaioFromPanel() {
         Ensaio e = new Ensaio();
+
         if (!tfDescricao.getText().trim().isEmpty()) {
             e.setDescricao(tfDescricao.getText().trim());
         }
@@ -416,11 +434,11 @@ public class IncluirEnsaioView extends Stage {
         }
 
         if (!tfBocal.getText().trim().isEmpty()) {
-            e.setBocal(tfBocal.getText().trim());
+            e.setBocal(bocal);
         }
 
         if (!tfQuebraJato.getText().trim().isEmpty()) {
-            e.setQuebraJato(tfQuebraJato.getText().trim());
+            e.setQuebraJato(quebraJato);
         }
 
         if (!tfInicio.getText().trim().isEmpty()) {
@@ -509,6 +527,37 @@ public class IncluirEnsaioView extends Stage {
 
     public Button getRemoveButton() {
         return bRemove;
+    }
+
+    public Button getQuebraButton() {
+        return bQuebraJato;
+    }
+
+    public Button getBocalButton() {
+        return bBocal;
+    }
+
+    public Bocal getBocal() {
+        return bocal;
+    }
+
+    public void setBocal(Bocal bocal) {
+        if (bocal != null) {
+            tfBocal.setText(bocal.getDescricao());
+            this.bocal = bocal;
+        }
+    }
+
+    public QuebraJato getQuebraJato() {
+
+        return quebraJato;
+    }
+
+    public void setQuebraJato(QuebraJato quebraJato) {
+        if (quebraJato != null) {
+            tfQuebraJato.setText(quebraJato.getDescricao());
+            this.quebraJato = quebraJato;
+        }
     }
 
     private ObservableList getDirecoes() {

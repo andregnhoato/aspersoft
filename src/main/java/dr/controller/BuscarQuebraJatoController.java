@@ -3,12 +3,11 @@ package dr.controller;
 import dr.action.AbstractAction;
 import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
-import dr.dao.BocalDAO;
-import dr.dao.BocalDAOImpl;
-import dr.event.BuscarBocalEvent;
-import dr.model.Bocal;
-import dr.ui.bocal.BuscarBocalView;
-import dr.util.DateUtil;
+import dr.dao.QuebraJatoDAO;
+import dr.dao.QuebraJatoDAOImpl;
+import dr.event.BuscarQuebraJatoEvent;
+import dr.model.QuebraJato;
+import dr.ui.quebraJato.BuscarQuebraJatoView;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -17,7 +16,7 @@ import javafx.stage.WindowEvent;
 /**
  * Define a
  * <code>Controller</code> responsável por gerir a tela de Busca de
- * <code>Bocal</code> pelo campo
+ * <code>QuebraJato</code> pelo campo
  * <code>nome</code>.
  *
  * @see controller.PersistenceController
@@ -25,18 +24,18 @@ import javafx.stage.WindowEvent;
  * @author
  * @Andre
  */
-public class BuscarBocalController extends PersistenceController {
+public class BuscarQuebraJatoController extends PersistenceController {
 
-    private BuscarBocalView view;
+    private BuscarQuebraJatoView view;
 
-    public BuscarBocalController(ListaBocalController parent) {
+    public BuscarQuebraJatoController(ListaQuebraJatoController parent) {
         super(parent);
-        this.view = new BuscarBocalView();
+        this.view = new BuscarQuebraJatoView();
 
         this.view.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent window) {
-                BuscarBocalController.this.cleanUp();
+                BuscarQuebraJatoController.this.cleanUp();
             }
         });
 
@@ -61,14 +60,14 @@ public class BuscarBocalController extends PersistenceController {
             }
         })
                 .addAction(new AbstractAction() {
-            private List<Bocal> list;
+            private List<QuebraJato> list;
 
             @Override
             protected void action() {
 
-                BocalDAO dao = new BocalDAOImpl(getPersistenceContext());
+                QuebraJatoDAO dao = new QuebraJatoDAOImpl(getPersistenceContext());
                 
-                list = dao.getBocalByDescricao(view.getText());
+                list = dao.getQuebraJatoByDescricao(view.getText());
             }
 
             @Override
@@ -79,7 +78,7 @@ public class BuscarBocalController extends PersistenceController {
                         view.hide();
                     }
                 });
-                fireEvent(new BuscarBocalEvent(list));
+                fireEvent(new BuscarQuebraJatoEvent(list));
                 list = null;
             }
         }));

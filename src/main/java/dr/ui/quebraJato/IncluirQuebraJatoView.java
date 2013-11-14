@@ -1,6 +1,6 @@
-package dr.ui.bocal;
+package dr.ui.quebraJato;
 
-import dr.model.Bocal;
+import dr.model.QuebraJato;
 import dr.ui.GridFormBuilder;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -14,12 +14,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * add/edit Bocal
+ * add/edit QuebraJato
  *
  * @author
  * @Andre
  */
-public class IncluirBocalView extends Stage {
+public class IncluirQuebraJatoView extends Stage {
 
     private TextField tfId;
     private TextField tfDescricao;
@@ -29,8 +29,8 @@ public class IncluirBocalView extends Stage {
     private Button bCancel;
     private Button bRemove;
 
-    public IncluirBocalView() {
-        setTitle("Incluir Bocal");
+    public IncluirQuebraJatoView() {
+        setTitle("Incluir Quebra Jato");
         setWidth(300);
         setHeight(150);
         setResizable(false);
@@ -53,15 +53,15 @@ public class IncluirBocalView extends Stage {
     private HBox buildButtons() {
 
         bSave = new Button("Salvar");
-        bSave.setId("saveBocal");
+        bSave.setId("saveQuebraJato");
         bSave.setDefaultButton(true);
 
         bCancel = new Button("Cancelar");
-        bCancel.setId("cancelBocal");
+        bCancel.setId("cancelQuebraJato");
         bCancel.setCancelButton(true);
 
         bRemove = new Button("Excluir");
-        bRemove.setId("removeBocal");
+        bRemove.setId("removeQuebraJato");
         bRemove.getStyleClass().add("buttonDanger");
 
         HBox box = new HBox();
@@ -102,33 +102,33 @@ public class IncluirBocalView extends Stage {
         bRemove.setVisible(false);
     }
 
-    private void populaTextFields(Bocal e) {
-        tfId.setText(e.getId().toString());
-        tfDescricao.setText(e.getDescricao());
+    private void populaTextFields(QuebraJato qj) {
+        tfId.setText(qj.getId().toString());
+        tfDescricao.setText(qj.getDescricao());
         
     }
 
-    private Bocal loadBocalFromPanel() {
-        Bocal b = new Bocal();
+    private QuebraJato loadQuebraJatoFromPanel() {
+        QuebraJato qj = new QuebraJato();
         if (!tfDescricao.getText().trim().isEmpty()) {
-            b.setDescricao(tfDescricao.getText().trim());
+            qj.setDescricao(tfDescricao.getText().trim());
         }
 
-        b.setId((tfId.getText() != null && !tfId.getText().isEmpty() ? Integer.parseInt(tfId.getText()) : null));
-        b.setVersion(tfVersion.getText() != null && !tfVersion.getText().isEmpty() ? Integer.parseInt(tfVersion.getText()) : null);
+        qj.setId((tfId.getText() != null && !tfId.getText().isEmpty() ? Integer.parseInt(tfId.getText()) : null));
+        qj.setVersion(tfVersion.getText() != null && !tfVersion.getText().isEmpty() ? Integer.parseInt(tfVersion.getText()) : null);
         
-        return b;
+        return qj;
     }
 
-    public void setBocal(Bocal e) {
+    public void setQuebraJato(QuebraJato qj) {
         resetForm();
-        if (e != null) {
-            populaTextFields(e);
+        if (qj != null) {
+            populaTextFields(qj);
             bRemove.setVisible(true);
         }
     }
 
-    public Integer getBocalId() {
+    public Integer getQuebraJatoId() {
         try {
             return Integer.parseInt(tfId.getText());
         } catch (Exception nex) {
@@ -136,8 +136,8 @@ public class IncluirBocalView extends Stage {
         }
     }
 
-    public Bocal getBocal() {
-        return loadBocalFromPanel();
+    public QuebraJato getQuebraJato() {
+        return loadQuebraJatoFromPanel();
     }
 
     public Button getSaveButton() {

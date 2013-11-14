@@ -1,15 +1,15 @@
 package dr.controller;
 
 import dr.action.AbstractAction;
-import dr.dao.BocalDAO;
-import dr.dao.BocalDAOImpl;
+import dr.dao.QuebraJatoDAO;
+import dr.dao.QuebraJatoDAOImpl;
 import dr.event.AbstractEventListener;
-import dr.event.AtualizaListaBocalEvent;
-import dr.event.BuscarBocalEvent;
-import dr.event.IncluirBocalEvent;
-import dr.event.RemoveBocalEvent;
-import dr.model.Bocal;
-import dr.ui.bocal.BocalListView;
+import dr.event.AtualizaListaQuebraJatoEvent;
+import dr.event.BuscarQuebraJatoEvent;
+import dr.event.IncluirQuebraJatoEvent;
+import dr.event.RemoveQuebraJatoEvent;
+import dr.model.QuebraJato;
+import dr.ui.quebraJato.QuebraJatoListView;
 import dr.util.JPAUtil;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,41 +22,41 @@ import javafx.scene.input.MouseEvent;
  * Define a
  * <code>Controller</code> principal do sistema, responsável por gerir a tela
  * com a lista de
- * <code>Bocal</code>.
+ * <code>QuebraJato</code>.
  *
  * @see controller.PersistenceController
  *
  * @author
  * @andre
  */
-public class ListaBocalController extends PersistenceController {
+public class ListaQuebraJatoController extends PersistenceController {
 
-    private BocalListView view;
-    private IncluirBocalController addBocalController;
-    private BuscarBocalController buscarController;
-    private Bocal bocal;
+    private QuebraJatoListView view;
+    private IncluirQuebraJatoController addQuebraJatoController;
+    private BuscarQuebraJatoController buscarController;
+    private QuebraJato quebraJato;
     
 
-    public ListaBocalController(AbstractController parent) {
+    public ListaQuebraJatoController(AbstractController parent) {
         super(parent);
         loadPersistenceContext();
-        this.view = new BocalListView();
-        this.addBocalController = new IncluirBocalController(this);
-        this.buscarController = new BuscarBocalController(this);
+        this.view = new QuebraJatoListView();
+        this.addQuebraJatoController = new IncluirQuebraJatoController(this);
+        this.buscarController = new BuscarQuebraJatoController(this);
         
 
 
         registerAction(view.getNewButton(), new AbstractAction() {
             @Override
             protected void action() {
-                ListaBocalController.this.addBocalController.show();
+                ListaQuebraJatoController.this.addQuebraJatoController.show();
             }
         });
 
         registerAction(view.getFindButton(), new AbstractAction() {
             @Override
             protected void action() {
-                ListaBocalController.this.buscarController.show();
+                ListaQuebraJatoController.this.buscarController.show();
             }
         });
 
@@ -72,40 +72,40 @@ public class ListaBocalController extends PersistenceController {
             @Override
             public void handle(MouseEvent t) {
                 if (t.getClickCount() == 2) {
-                    bocal = view.getTable().getBocalSelected();
+                    quebraJato = view.getTable().getQuebraJatoSelected();
                     view.hide();
-//                    if (e != null) {
-//                        ListaBocalController.this.addBocalController.show(e);
+//                    if (qj != null) {
+//                        ListaQuebraJatoController.this.addQuebraJatoController.show(qj);
 //                    }
                 }
             }
         });
 
-        registerEventListener(IncluirBocalEvent.class, new AbstractEventListener<IncluirBocalEvent>() {
+        registerEventListener(IncluirQuebraJatoEvent.class, new AbstractEventListener<IncluirQuebraJatoEvent>() {
             @Override
-            public void handleEvent(IncluirBocalEvent event) {
+            public void handleEvent(IncluirQuebraJatoEvent event) {
                 refreshTable();
             }
         });
 
-        registerEventListener(RemoveBocalEvent.class, new AbstractEventListener<RemoveBocalEvent>() {
+        registerEventListener(RemoveQuebraJatoEvent.class, new AbstractEventListener<RemoveQuebraJatoEvent>() {
             @Override
-            public void handleEvent(RemoveBocalEvent event) {
+            public void handleEvent(RemoveQuebraJatoEvent event) {
                 refreshTable();
             }
         });
 
-        registerEventListener(AtualizaListaBocalEvent.class, new AbstractEventListener<AtualizaListaBocalEvent>() {
+        registerEventListener(AtualizaListaQuebraJatoEvent.class, new AbstractEventListener<AtualizaListaQuebraJatoEvent>() {
             @Override
-            public void handleEvent(AtualizaListaBocalEvent event) {
+            public void handleEvent(AtualizaListaQuebraJatoEvent event) {
                 refreshTable();
             }
         });
 
-        registerEventListener(BuscarBocalEvent.class, new AbstractEventListener<BuscarBocalEvent>() {
+        registerEventListener(BuscarQuebraJatoEvent.class, new AbstractEventListener<BuscarQuebraJatoEvent>() {
             @Override
-            public void handleEvent(BuscarBocalEvent event) {
-                List<Bocal> list = event.getTarget();
+            public void handleEvent(BuscarQuebraJatoEvent event) {
+                List<QuebraJato> list = event.getTarget();
                 if (list != null) {
                     refreshTable(event.getTarget());
                 }
@@ -130,7 +130,7 @@ public class ListaBocalController extends PersistenceController {
         refreshTable(null);
     }
 
-    private void refreshTable(List<Bocal> list) {
+    private void refreshTable(List<QuebraJato> list) {
         if (list != null) {
             view.refreshTable(list);
             return;
@@ -143,21 +143,21 @@ public class ListaBocalController extends PersistenceController {
                     Logger.getLogger("nulo a parada da view");
                 }
                 try {
-                    BocalDAO dao = new BocalDAOImpl(JPAUtil.getEntityManager());
+                    QuebraJatoDAO dao = new QuebraJatoDAOImpl(JPAUtil.getEntityManager());
                     view.refreshTable(dao.findAll());
                 } catch (Exception ex) {
-                    Logger.getLogger(ListaBocalController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ListaQuebraJatoController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
     }
 
-    public Bocal getBocal() {
-        return bocal;
+    public QuebraJato getQuebraJato() {
+        return quebraJato;
     }
 
-    public void setBocal(Bocal bocal) {
-        this.bocal = bocal;
+    public void setQuebraJato(QuebraJato quebraJato) {
+        this.quebraJato = quebraJato;
     }
     
 }

@@ -25,6 +25,7 @@ public class MainView {
     private MenuItem menuEnsaioList;
     private MenuItem menuConfiguracao;
     private MenuItem menuBocais;
+    private MenuItem menuQuebraJato;
 
     public MainView(Stage stage) {
         //inicializaComponentes();
@@ -63,7 +64,6 @@ public class MainView {
         MenuBar menuBar = new MenuBar();
         Menu menuHelp = new Menu("Ajuda");
         Menu menuStart = new Menu("Início");
-//        Menu menuConfig = new Menu("Preferências");
 
         menuEnsaio = new MenuItem("Ensaio");
         menuEnsaio.setId("ensaio");
@@ -83,10 +83,12 @@ public class MainView {
         
         menuBocais = new MenuItem("Bocais");
         menuBocais.setId("bocais");
+        
+        menuQuebraJato = new MenuItem("Quebra Jato");
+        menuQuebraJato.setId("quebraJato");
 
         menuHelp.getItems().addAll(menuAbout, menuConfiguracao);
-        menuStart.getItems().addAll(menuEnsaio, menuEnsaioList, menuBocais);
-//        menuConfig.getItems().addAll(menuConfiguracao);
+        menuStart.getItems().addAll(menuEnsaio, menuEnsaioList, menuBocais, menuQuebraJato);
         menuBar.getMenus().addAll(menuStart ,menuHelp);
         return menuBar;
     }
@@ -129,6 +131,14 @@ public class MainView {
 
     public void setMenuBocais(MenuItem menuBocais) {
         this.menuBocais = menuBocais;
+    }
+
+    public MenuItem getMenuQuebraJato() {
+        return menuQuebraJato;
+    }
+
+    public void setMenuQuebraJato(MenuItem menuQuebraJato) {
+        this.menuQuebraJato = menuQuebraJato;
     }
     
 }

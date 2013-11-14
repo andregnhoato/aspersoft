@@ -208,9 +208,9 @@ public class ReadExcel extends PersistenceController {
                         XSSFCell cell;
                        e.setDescricao("Ensaio linha " + linha + " repeticao " + repeticao);
                         //bocal pequeno
-                        e.setBocal(sheet.getRow(19).getCell(1).getStringCellValue().trim());
-                        //bocal grande
-                        e.setQuebraJato(sheet.getRow(21).getCell(1).getStringCellValue().trim().replace(",", "."));
+//                        e.setBocal(sheet.getRow(19).getCell(1).getStringCellValue().trim());
+//                        //bocal grande
+//                        e.setQuebraJato(sheet.getRow(21).getCell(1).getStringCellValue().trim().replace(",", "."));
                         //pressao
                         e.setPressao(sheet.getRow(20).getCell(1).getStringCellValue().trim().replace(",", "."));
                         //velocidade vento
@@ -305,9 +305,9 @@ public class ReadExcel extends PersistenceController {
                 XSSFCell cell;
                 e.setDescricao("Ensaio Simulado " + sheet.getSheetName());
                 //bocal pequeno
-                e.setBocal(sheet.getRow(19).getCell(1).getStringCellValue().trim());
-                //bocal grande
-                e.setQuebraJato(sheet.getRow(21).getCell(1).getStringCellValue().trim().replace(",", "."));
+//                e.setBocal(sheet.getRow(19).getCell(1).getStringCellValue().trim());
+//                //bocal grande
+//                e.setQuebraJato(sheet.getRow(21).getCell(1).getStringCellValue().trim().replace(",", "."));
                 //pressao
                 e.setPressao(sheet.getRow(20).getCell(1).getStringCellValue().trim().replace(",", "."));
                 //velocidade vento

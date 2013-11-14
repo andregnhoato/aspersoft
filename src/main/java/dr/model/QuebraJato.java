@@ -56,4 +56,8 @@ public class QuebraJato implements Bean, Serializable {
         this.descricao = descricao;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+    
 }
