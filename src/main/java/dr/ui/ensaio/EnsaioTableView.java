@@ -1,6 +1,8 @@
 package dr.ui.ensaio;
 
+import dr.model.Bocal;
 import dr.model.Ensaio;
+import dr.model.QuebraJato;
 import dr.util.WindUtil;
 import java.util.Date;
 import java.text.DateFormat;
@@ -134,13 +136,15 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         private final SimpleStringProperty vazao;
         private final SimpleStringProperty evaporacao;
         private final SimpleStringProperty data;
+        private final Bocal bocalObject;
+        private final QuebraJato quebraJatoObject;
 
         private EnsaioItem(Ensaio e) {
             this.id = new SimpleStringProperty(e.getId() + "");
             this.descricao = new SimpleStringProperty(e.getDescricao());
             this.pressao = new SimpleStringProperty(e.getPressao());
-            this.bocal = new SimpleStringProperty(e.getBocal().getDescricao());
-            this.quebraJato = new SimpleStringProperty(e.getQuebraJato().getDescricao());
+            this.bocal = new SimpleStringProperty((e.getBocal()!= null ?e.getBocal().getDescricao():""));
+            this.quebraJato = new SimpleStringProperty((e.getQuebraJato()!=null?e.getQuebraJato().getDescricao():""));
             this.espacamentoPluviometro = new SimpleStringProperty(e.getEspacamentoPluviometro()+"");
             this.inicio = new SimpleStringProperty(e.getInicio());
             this.duracao = new SimpleStringProperty(e.getDuracao());
@@ -153,6 +157,8 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             this.version = new SimpleStringProperty(e.getVersion() + "");
             this.vazao = new SimpleStringProperty(e.getVazao() + "");
             this.evaporacao = new SimpleStringProperty(e.getEvaporacao() + "");
+            this.bocalObject = e.getBocal();
+            this.quebraJatoObject= e.getQuebraJato();
         }
 
         public String getId() {
@@ -218,7 +224,14 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         public String getEvaporacao() {
             return evaporacao.get();
         }
-        
+
+        public Bocal getBocalObject() {
+            return bocalObject;
+        }
+
+        public QuebraJato getQuebraJatoObject() {
+            return quebraJatoObject;
+        }
         
         public Ensaio toEnsaio(){
             Ensaio e = new Ensaio();
@@ -228,9 +241,9 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
             e.setDuracao(this.duracao.get());
             e.setGridAltura(Integer.parseInt(this.gridAltura.get()));
             e.setGridLargura(Integer.parseInt(this.gridLargura.get()));
-//            e.setQuebraJato(this.quebraJato.get());
+            e.setQuebraJato(this.quebraJatoObject);
             e.setEspacamentoPluviometro(Float.parseFloat(this.espacamentoPluviometro.get()));
-//            e.setBocal(this.bocal.get());
+            e.setBocal(this.bocalObject);
             e.setInicio(this.inicio.get());
             e.setVersion(Integer.parseInt(this.version.get()));
             e.setDirecaoVentoGraus(Float.parseFloat(this.direcaoVentoGraus.get()));

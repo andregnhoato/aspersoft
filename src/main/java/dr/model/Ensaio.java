@@ -2,6 +2,7 @@ package dr.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,12 +35,10 @@ public class Ensaio implements Bean, Serializable {
     @NotNull @Size(min=1, max=200)
     private String pressao;
     
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_bocal", referencedColumnName = "id")
     private Bocal bocal;
     
-    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_quebra_jato", referencedColumnName = "id")
     private QuebraJato quebraJato;
@@ -64,9 +63,6 @@ public class Ensaio implements Bean, Serializable {
     
     @Column(name = "velocidade_vento")
     private float velocidadeVento;
-    
-//    @Column(name = "direcao_vento")
-//    private String direcaoVento;
     
     @Column(name = "direcao_vento_graus")
     private float direcaoVentoGraus;
@@ -193,13 +189,6 @@ public class Ensaio implements Bean, Serializable {
         this.velocidadeVento = velocidadeVento;
     }
 
-//    public String getDirecaoVento() {
-//        return direcaoVento;
-//    }
-//
-//    public void setDirecaoVento(String direcaoVento) {
-//        this.direcaoVento = direcaoVento;
-//    }
 
     public float getEspacamentoPluviometro() {
         return espacamentoPluviometro;

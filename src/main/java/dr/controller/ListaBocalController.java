@@ -10,6 +10,7 @@ import dr.event.IncluirBocalEvent;
 import dr.event.RemoveBocalEvent;
 import dr.model.Bocal;
 import dr.ui.bocal.BocalListView;
+import dr.ui.ensaio.IncluirEnsaioView;
 import dr.util.JPAUtil;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,6 +36,7 @@ public class ListaBocalController extends PersistenceController {
     private IncluirBocalController addBocalController;
     private BuscarBocalController buscarController;
     private Bocal bocal;
+    private IncluirEnsaioView Iview;
     
 
     public ListaBocalController(AbstractController parent) {
@@ -72,8 +74,10 @@ public class ListaBocalController extends PersistenceController {
             @Override
             public void handle(MouseEvent t) {
                 if (t.getClickCount() == 2) {
-                    bocal = view.getTable().getBocalSelected();
+//                    bocal = 
+                    Iview.setBocal(view.getTable().getBocalSelected());
                     view.hide();
+                    
 //                    if (e != null) {
 //                        ListaBocalController.this.addBocalController.show(e);
 //                    }
@@ -116,6 +120,12 @@ public class ListaBocalController extends PersistenceController {
     }
 
     public void show() {
+        loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
+        view.show();
+    }
+    
+    public void show(IncluirEnsaioView v) {
+        this.Iview = v;
         loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
         view.show();
     }

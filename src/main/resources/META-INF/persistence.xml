@@ -4,6 +4,10 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>dr.model.Ensaio</class>
     <class>dr.model.Coleta</class>
+    <class>dr.model.Bocal</class>
+    <class>dr.model.QuebraJato</class>
+    <class>dr.model.Configuracao</class>
+    <class>dr.model.Combinacao</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:file:database"/>

@@ -67,26 +67,18 @@ public class IncluirEnsaioController extends PersistenceController {
         registerAction(this.view.getBocalButton(), new AbstractAction() {
             @Override
             protected void action() {
-                bocalListController.show();
+                bocalListController.show(view);
             }
-            
-            @Override
-            protected void posAction(){
-                view.setBocal(bocalListController.getBocal());
-                
-            }
+  
         });
+        
         
         registerAction(this.view.getQuebraButton(), new AbstractAction() {
             @Override
             protected void action() {
-                quebraListController.show();
+                quebraListController.show(view);
             }
-            
-            @Override
-            protected void posAction(){
-                view.setQuebraJato(quebraListController.getQuebraJato());
-            }
+           
         });
 
         registerAction(this.view.getSaveButton(),
@@ -101,7 +93,17 @@ public class IncluirEnsaioController extends PersistenceController {
                     return false;
                 }
                 if(e.getEspacamentoPluviometro() <= 0){
-                    Dialog.showError("Validação", "Favor informar uma valor superior a zero para o campo Espaço entre pluviometros");
+                    Dialog.showError("Validação", "Necessário informar uma valor superior a zero para o campo Espaço entre pluviometros");
+                    return false;
+                }
+                
+                if(e.getBocal() == null){
+                    Dialog.showError("Validação", "Campo Bocal obrigatório, informar um valor.");
+                    return false;
+                }
+                
+                if(e.getQuebraJato() == null){
+                    Dialog.showError("Validação", "Campo Quebra Jato obrigatório, informar um valor.");
                     return false;
                 }
 
@@ -216,6 +218,6 @@ public class IncluirEnsaioController extends PersistenceController {
         view.setTitle("Incluir Ensaio");
         view.resetForm();
 
-        super.cleanUp();
+//        super.cleanUp();
     }
 }

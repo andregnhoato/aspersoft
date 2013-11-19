@@ -64,10 +64,12 @@ public class QuebraJatoTableView extends TableView<QuebraJatoTableView.QuebraJat
 
         private final SimpleStringProperty id;
         private final SimpleStringProperty descricao;
+        private final SimpleStringProperty version;
         
         private QuebraJatoItem(QuebraJato b) {
             this.id = new SimpleStringProperty(b.getId() + "");
             this.descricao = new SimpleStringProperty(b.getDescricao());
+            this.version = new SimpleStringProperty(b.getVersion()+"");
             
         }
 
@@ -83,6 +85,7 @@ public class QuebraJatoTableView extends TableView<QuebraJatoTableView.QuebraJat
             QuebraJato qj = new QuebraJato();
             qj.setId(Integer.parseInt(this.id.get()));
             qj.setDescricao(this.descricao.get());
+            qj.setVersion(Integer.parseInt(this.version.get()));
             
             return qj;
         }

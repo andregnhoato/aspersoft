@@ -9,6 +9,7 @@ import dr.event.BuscarQuebraJatoEvent;
 import dr.event.IncluirQuebraJatoEvent;
 import dr.event.RemoveQuebraJatoEvent;
 import dr.model.QuebraJato;
+import dr.ui.ensaio.IncluirEnsaioView;
 import dr.ui.quebraJato.QuebraJatoListView;
 import dr.util.JPAUtil;
 import java.util.List;
@@ -35,6 +36,7 @@ public class ListaQuebraJatoController extends PersistenceController {
     private IncluirQuebraJatoController addQuebraJatoController;
     private BuscarQuebraJatoController buscarController;
     private QuebraJato quebraJato;
+    private IncluirEnsaioView Iview;
     
 
     public ListaQuebraJatoController(AbstractController parent) {
@@ -73,9 +75,10 @@ public class ListaQuebraJatoController extends PersistenceController {
             public void handle(MouseEvent t) {
                 if (t.getClickCount() == 2) {
                     quebraJato = view.getTable().getQuebraJatoSelected();
+                    Iview.setQuebraJato(quebraJato);
                     view.hide();
-//                    if (qj != null) {
-//                        ListaQuebraJatoController.this.addQuebraJatoController.show(qj);
+//                    if (quebraJato != null) {
+//                        ListaQuebraJatoController.this.addQuebraJatoController.show(quebraJato);
 //                    }
                 }
             }
@@ -116,6 +119,12 @@ public class ListaQuebraJatoController extends PersistenceController {
     }
 
     public void show() {
+        loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
+        view.show();
+    }
+    
+    public void show(IncluirEnsaioView v) {
+        this.Iview = v;
         loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
         view.show();
     }

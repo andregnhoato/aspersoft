@@ -63,10 +63,12 @@ public class BocalTableView extends TableView<BocalTableView.BocalItem> {
 
         private final SimpleStringProperty id;
         private final SimpleStringProperty descricao;
+        private final SimpleStringProperty version;
         
         private BocalItem(Bocal b) {
             this.id = new SimpleStringProperty(b.getId() + "");
             this.descricao = new SimpleStringProperty(b.getDescricao());
+            this.version = new SimpleStringProperty(b.getVersion()+"");
             
         }
 
@@ -78,10 +80,15 @@ public class BocalTableView extends TableView<BocalTableView.BocalItem> {
             return descricao.get();
         }
         
+        public String getVersion(){
+            return version.get();
+        }
+        
         public Bocal toBocal(){
             Bocal b = new Bocal();
             b.setId(Integer.parseInt(this.id.get()));
             b.setDescricao(this.descricao.get());
+            b.setVersion(Integer.parseInt(this.version.get()));
             
             return b;
         }

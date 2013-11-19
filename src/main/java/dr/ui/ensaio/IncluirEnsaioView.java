@@ -493,6 +493,8 @@ public class IncluirEnsaioView extends Stage {
         e.setId((tfId.getText() != null && !tfId.getText().isEmpty() ? Integer.parseInt(tfId.getText()) : null));
         e.setVersion(tfVersion.getText() != null && !tfVersion.getText().isEmpty() ? Integer.parseInt(tfVersion.getText()) : null);
         e.setData(dpData.getSelectedDate());
+        e.setBocal(this.bocal);
+        e.setQuebraJato(this.quebraJato);
 
         return e;
     }
@@ -501,6 +503,8 @@ public class IncluirEnsaioView extends Stage {
         resetForm();
         if (e != null) {
             populaTextFields(e);
+            this.bocal = e.getBocal();
+            this.quebraJato = e.getQuebraJato();
             bRemove.setVisible(true);
         }
     }
