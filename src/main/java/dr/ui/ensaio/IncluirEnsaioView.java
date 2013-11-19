@@ -54,7 +54,7 @@ public class IncluirEnsaioView extends Stage {
     public IncluirEnsaioView() {
         setTitle("Incluir Ensaio");
         setWidth(390);
-        setHeight(500);
+        setHeight(515);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
 
