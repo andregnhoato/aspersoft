@@ -1,6 +1,5 @@
 package dr.ui.combinacao;
 
-import dr.ui.ensaio.*;
 import dr.model.Combinacao;
 import java.util.List;
 import javafx.scene.Group;
