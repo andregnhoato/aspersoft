@@ -24,29 +24,43 @@ public class Combinacao implements Bean, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    
+    @NotNull
+    @Column
+    private String descricao;
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_bocal", referencedColumnName = "id")
     private Bocal bocal;
+   
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_quebra_jato", referencedColumnName = "id")
     private QuebraJato quebraJato;
+    
     @NotNull
     @Column
     private Float pressao;
+    
     @NotNull
     @Column
     private Float vazao;
+    
     @NotNull
     @Column
     private Float diametroIrrigado;
+    
     @NotNull
     @Column
     private Float altura;
+    
     @NotNull
     @Column
     private Float largura;
+    
+    @NotNull
     @Column
     private Float peq;
+    
     @Version
     private Integer version;
 
@@ -128,6 +142,18 @@ public class Combinacao implements Bean, Serializable {
 
     public void setQuebraJato(QuebraJato quebraJato) {
         this.quebraJato = quebraJato;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setVersion(Integer integer) {
+        this.version = integer;
     }
     
 }

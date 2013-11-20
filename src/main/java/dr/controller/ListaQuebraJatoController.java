@@ -9,6 +9,7 @@ import dr.event.BuscarQuebraJatoEvent;
 import dr.event.IncluirQuebraJatoEvent;
 import dr.event.RemoveQuebraJatoEvent;
 import dr.model.QuebraJato;
+import dr.ui.combinacao.IncluirCombinacaoView;
 import dr.ui.ensaio.IncluirEnsaioView;
 import dr.ui.quebraJato.QuebraJatoListView;
 import dr.util.JPAUtil;
@@ -37,6 +38,7 @@ public class ListaQuebraJatoController extends PersistenceController {
     private BuscarQuebraJatoController buscarController;
     private QuebraJato quebraJato;
     private IncluirEnsaioView Iview;
+    private IncluirCombinacaoView Cview;
     
 
     public ListaQuebraJatoController(AbstractController parent) {
@@ -75,11 +77,12 @@ public class ListaQuebraJatoController extends PersistenceController {
             public void handle(MouseEvent t) {
                 if (t.getClickCount() == 2) {
                     quebraJato = view.getTable().getQuebraJatoSelected();
-                    Iview.setQuebraJato(quebraJato);
-                    view.hide();
-//                    if (quebraJato != null) {
-//                        ListaQuebraJatoController.this.addQuebraJatoController.show(quebraJato);
-//                    }
+                    if(Iview!=null)
+                        Iview.setQuebraJato(quebraJato);
+                    if(Cview!=null)
+                        Cview.setQuebraJato(quebraJato);
+                                
+                    view.hide();               
                 }
             }
         });
@@ -128,6 +131,12 @@ public class ListaQuebraJatoController extends PersistenceController {
         loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
         view.show();
     }
+    public void show(IncluirCombinacaoView v) {
+        this.Cview = v;
+        loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
+        view.show();
+    }
+    
 
     @Override
     public void cleanUp() {

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 
 /**
  * Implementa o contrato de persistência da entidade
@@ -30,25 +31,43 @@ public class CombinacaoDAOImpl implements CombinacaoDAO {
         this.em = em;
     }
 
+    
+    /**
+     * Reliza a pesquisa ensaios com filtro no nome (via operador
+     * <code>like</code>).
+     *
+     * @see dao.EnsaioDAO#getEnsaiosByDescricao(java.lang.String)
+     */
+    @Override
+    public List<Combinacao> getCombinacaoByDescricao(String descricao) {
+        if (descricao == null || descricao.isEmpty()) {
+            return null;
+        }
+        String nm = "%";
+        Query query = em.createQuery("SELECT c FROM combinacao c WHERE c.descricao like :descricao");
+        query.setParameter("descricao", nm.concat(descricao).concat("%"));
+        return (List<Combinacao>) query.getResultList();
+    }
+    
     @Override
     public Combinacao save(Combinacao object) throws Exception {
         if (object == null) {
-            throw new Exception("O objeto Combinacao está nulo.");
+            throw new Exception("O objeto Combinação está nulo.");
         }
         try {
             if (object.getId() != null) {
                 return this.update(object);
             } else {
-                if (!this.em.getTransaction().isActive()) {
-                    this.em.getTransaction().begin();
-                }
+//                if (!this.em.getTransaction().isActive()) {
+//                    this.em.getTransaction().begin();
+//                }
                 this.em.persist(object);
                 this.em.flush();
-                this.em.getTransaction().commit();
+//                this.em.getTransaction().commit();
                 return object;
             }
         } catch (PersistenceException e) {
-            this.em.getTransaction().rollback();
+//            this.em.getTransaction().rollback();
             throw new PersistenceException(e);
             
         }
@@ -87,7 +106,6 @@ public class CombinacaoDAOImpl implements CombinacaoDAO {
     public List<Combinacao> findAll() throws Exception {
         String query = "SELECT co FROM combinacao co ORDER BY co.bocal.descricao, co.quebraJato.descricao ASC";
         try {
-            this.em.getTransaction().begin();
             return this.em.createQuery(query, Combinacao.class).getResultList();
         } catch (NoResultException e) {
             return new ArrayList<>(0);

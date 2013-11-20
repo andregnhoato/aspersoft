@@ -1,6 +1,7 @@
 package dr.dao;
 
 import dr.model.Combinacao;
+import java.util.List;
 
 /**
  * 
@@ -9,5 +10,7 @@ import dr.model.Combinacao;
  * @author @Andre
  */
 public interface CombinacaoDAO extends AbstractDAO<Combinacao>{
+    
+    public List<Combinacao> getCombinacaoByDescricao(String descricao);
 
 }

@@ -21,6 +21,7 @@ public class MainController extends PersistenceController {
     private ConfiguracaoController configController;
     private ListaBocalController bocalListController;
     private ListaQuebraJatoController quebraJatoListController;
+    private ListaCombinacaoController combinacaoController;
 
     public MainController(final Stage mainStage) {
         loadPersistenceContext();
@@ -30,6 +31,7 @@ public class MainController extends PersistenceController {
         this.configController = new ConfiguracaoController(this);
         this.bocalListController = new ListaBocalController(this);
         this.quebraJatoListController = new ListaQuebraJatoController(this);
+        this.combinacaoController = new ListaCombinacaoController(this);
         
         final SobreView sobreView = new SobreView();
         
@@ -76,6 +78,15 @@ public class MainController extends PersistenceController {
             @Override
             protected void action() {
                 MainController.this.quebraJatoListController.show();
+          
+            }
+        });
+        
+        registerAction(mainView.getMenuCombinacao(), new AbstractAction() {
+
+            @Override
+            protected void action() {
+                MainController.this.combinacaoController.show();
           
             }
         });
