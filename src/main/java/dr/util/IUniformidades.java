@@ -55,7 +55,7 @@ public interface IUniformidades {
     public List<Float> calculaDistanciaPerfilDistribuicao();
     
     public Float getDesvioPadrao();
-    public Float getCoeficienteVariacao();
+    public Integer getCoeficienteVariacao();
     public Float getMediaMenorQuartil();
 
     

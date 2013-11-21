@@ -41,7 +41,7 @@ public class SobreposicaoTable extends VBox {
     private Float CUC;    
     private Float CUD;  
     private Float CUE;
-    private Float CV;  
+    private Integer CV;  
     private Float MMQ;   
     private Float DP;
     float gridAltura;
@@ -193,7 +193,7 @@ public class SobreposicaoTable extends VBox {
         return (DP!=null?DP:0);
     }
 
-    public Float getCV() {
+    public Integer getCV() {
         return (CV!=null?CV:0);
     }
     
