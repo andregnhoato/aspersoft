@@ -528,7 +528,11 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
     }
 
     @Override
-    public Float getCoeficienteVariacao() {
-        return round((coeficienteVariacao != null ? coeficienteVariacao : 0), 0);
+    public Integer getCoeficienteVariacao() {
+        if(coeficienteVariacao != null){
+            coeficienteVariacao = round(coeficienteVariacao, 0);
+            return new Integer(coeficienteVariacao.intValue()) ;
+        }else
+            return 0;
     }
 }
