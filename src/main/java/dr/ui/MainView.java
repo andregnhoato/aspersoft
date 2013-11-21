@@ -80,7 +80,7 @@ public class MainView {
         menuAbout.setId("exibirSobre");
         menuAbout.setAccelerator(KeyCombination.keyCombination("F1"));
 
-        menuHelp.getItems().addAll(/*menuAbout ,*/ menuConfiguracao);
+        menuHelp.getItems().addAll(menuAbout , menuConfiguracao);
         menuStart.getItems().addAll(menuEnsaio, menuEnsaioList);
 //        menuConfig.getItems().addAll(menuConfiguracao);
         menuBar.getMenus().addAll(menuStart ,menuHelp);
