@@ -1,9 +1,16 @@
 package dr.ui.combinacao;
 
+import dr.controller.PersistenceController;
+import dr.dao.BocalDAO;
+import dr.dao.BocalDAOImpl;
+import dr.dao.QuebraJatoDAO;
+import dr.dao.QuebraJatoDAOImpl;
 import dr.model.Bocal;
 import dr.model.Combinacao;
 import dr.model.QuebraJato;
 import dr.ui.GridFormBuilder;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -42,8 +49,13 @@ public class IncluirCombinacaoView extends Stage {
     private Button bQuebraJato;
     private Bocal bocal;
     private QuebraJato quebraJato;
+    PersistenceController pe = new PersistenceController();
+    final QuebraJatoDAO qjdao;
+    final BocalDAO bdao;
 
     public IncluirCombinacaoView() {
+        qjdao = new QuebraJatoDAOImpl(pe.getPersistenceContext());
+        bdao = new BocalDAOImpl(pe.getPersistenceContext());
         setTitle("Incluir Combinação de bocais");
         setWidth(410);
         setHeight(520);
@@ -105,11 +117,35 @@ public class IncluirCombinacaoView extends Stage {
         tfBocal.setPromptText("*Campo obrigatório");
         tfBocal.setMinWidth(180);
         tfBocal.setMaxWidth(180);
+        tfBocal.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean old, Boolean novo) {
+                String entrada = "";
+                if (novo) {
+                    entrada = tfBocal.getText();
+                } else if (!entrada.equals(tfBocal.getText())) {
+                    bocal = bdao.getBocalByDescricao(tfBocal.getText()).get(0);
+                    tfBocal.setText(bocal.getDescricao());
+                }
+            }
+        });
 
         tfQuebraJato = new TextField();
         tfQuebraJato.setPromptText("*Campo obrigatório");
         tfQuebraJato.setMinWidth(180);
         tfQuebraJato.setMaxWidth(180);
+        tfQuebraJato.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean old, Boolean novo) {
+                String entrada = "";
+                if (novo) {
+                    entrada = tfQuebraJato.getText();
+                } else if (!entrada.equals(tfQuebraJato.getText())) {
+                    quebraJato = qjdao.getQuebraJatoByDescricao(tfQuebraJato.getText()).get(0);
+                    tfQuebraJato.setText(quebraJato.getDescricao());
+                }
+            }
+        });
         
         tfPressao = new TextField();
         tfPressao.setPromptText("*mca");

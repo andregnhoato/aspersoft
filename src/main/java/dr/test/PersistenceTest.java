@@ -65,8 +65,8 @@ public class PersistenceTest extends PersistenceController {
 
 
 //         pt.listarColetasByEnsaio(108);
-//        pt.listarColetasByEnsaio(118);
-        pt.insertNewFunc();
+        pt.listarColetasByEnsaio(118);
+//        pt.insertNewFunc();
 
 
 
@@ -218,8 +218,8 @@ public class PersistenceTest extends PersistenceController {
             System.out.println("tamanho array: " + coletas.size());
 
             int linha = 15;
-            int coluna = 14;
-            for (int i = 0; i <= 1; i++) {
+            int coluna = 10;
+            for (int i = 0; i <= 5; i++) {
                 Coleta c = new Coleta();
                 c.setColuna(coluna);
                 c.setLinha(linha);

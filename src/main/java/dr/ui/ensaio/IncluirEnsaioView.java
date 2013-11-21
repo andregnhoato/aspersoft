@@ -1,5 +1,10 @@
 package dr.ui.ensaio;
 
+import dr.controller.PersistenceController;
+import dr.dao.BocalDAO;
+import dr.dao.BocalDAOImpl;
+import dr.dao.QuebraJatoDAO;
+import dr.dao.QuebraJatoDAOImpl;
 import dr.model.Bocal;
 import dr.model.Ensaio;
 import dr.model.QuebraJato;
@@ -56,8 +61,13 @@ public class IncluirEnsaioView extends Stage {
     private Button bQuebraJato;
     private Bocal bocal;
     private QuebraJato quebraJato;
+    PersistenceController pe = new PersistenceController();
+    final QuebraJatoDAO qjdao;
+    final BocalDAO bdao;
 
     public IncluirEnsaioView() {
+        qjdao = new QuebraJatoDAOImpl(pe.getPersistenceContext());
+        bdao = new BocalDAOImpl(pe.getPersistenceContext());
         setTitle("Incluir Ensaio");
         setWidth(410);
         setHeight(520);
@@ -122,11 +132,35 @@ public class IncluirEnsaioView extends Stage {
         tfBocal.setPromptText("*Campo obrigatório");
         tfBocal.setMinWidth(180);
         tfBocal.setMaxWidth(180);
+        tfBocal.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean old, Boolean novo) {
+                String entrada = "";
+                if (novo) {
+                    entrada = tfBocal.getText();
+                } else if (!entrada.equals(tfBocal.getText())) {
+                    bocal = bdao.getBocalByDescricao(tfBocal.getText()).get(0);
+                    tfBocal.setText(bocal.getDescricao());
+                }
+            }
+        });
 
         tfQuebraJato = new TextField();
         tfQuebraJato.setPromptText("*Campo obrigatório");
         tfQuebraJato.setMinWidth(180);
         tfQuebraJato.setMaxWidth(180);
+        tfQuebraJato.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean old, Boolean novo) {
+                String entrada = "";
+                if (novo) {
+                    entrada = tfQuebraJato.getText();
+                } else if (!entrada.equals(tfQuebraJato.getText())) {
+                    quebraJato = qjdao.getQuebraJatoByDescricao(tfQuebraJato.getText()).get(0);
+                    tfQuebraJato.setText(quebraJato.getDescricao());
+                }
+            }
+        });
 
         tfEspacamentoPluviometro = new TextField() {
             @Override
