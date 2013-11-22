@@ -24,6 +24,7 @@ public class QuebraJatoListView extends Stage {
     private Button bNewQuebraJato;
     private Button bRefreshList;
     private Button bFindQuebraJato;
+    private Button bEditQuebraJato;
     
     public QuebraJatoListView() {
         setTitle("Quebra Jato");
@@ -59,19 +60,27 @@ public class QuebraJatoListView extends Stage {
         bRefreshList.getStyleClass().add("buttonLarge");
         bRefreshList.setId("refreshList");
         
+        bEditQuebraJato = new Button("Editar");
+        bEditQuebraJato.getStyleClass().add("buttonLarge");
+        bEditQuebraJato.setId("editList");
+        
 
 
     }
 
     private HBox getButtonsBox() {
         HBox box = new HBox();
-        box.getChildren().addAll(bNewQuebraJato, bFindQuebraJato, bRefreshList);
+        box.getChildren().addAll(bNewQuebraJato, bEditQuebraJato, bFindQuebraJato, bRefreshList);
         box.getStyleClass().add("buttonBarMain");
         return box;
     }
 
     public Button getNewButton() {
         return bNewQuebraJato;
+    }
+    
+    public Button getEditButton(){
+        return bEditQuebraJato;
     }
 
     public Button getRefreshButton() {
@@ -96,6 +105,7 @@ public class QuebraJatoListView extends Stage {
         bNewQuebraJato.setDisable(disable);
         bFindQuebraJato.setDisable(disable);
         bRefreshList.setDisable(disable);
+        bEditQuebraJato.setDisable(disable);
         
     }
 }

@@ -105,6 +105,7 @@ public class IncluirBocalView extends Stage {
     private void populaTextFields(Bocal e) {
         tfId.setText(e.getId().toString());
         tfDescricao.setText(e.getDescricao());
+        tfVersion.setText(e.getVersion()+"");
         
     }
 

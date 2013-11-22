@@ -170,8 +170,8 @@ public class IncluirQuebraJatoController extends PersistenceController {
         view.show();
     }
 
-    public void show(QuebraJato e) {
-        view.setQuebraJato(e);
+    public void show(QuebraJato qj) {
+        view.setQuebraJato(qj);
         view.setTitle("Editar QuebraJato");
         show();
     }

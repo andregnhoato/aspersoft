@@ -139,8 +139,13 @@ public class IncluirEnsaioView extends Stage {
                 if (novo) {
                     entrada = tfBocal.getText();
                 } else if (!entrada.equals(tfBocal.getText())) {
-                    bocal = bdao.getBocalByDescricao(tfBocal.getText()).get(0);
-                    tfBocal.setText(bocal.getDescricao());
+                    try {
+                        bocal = bdao.getBocalByDescricao(tfBocal.getText()).get(0);
+                        tfBocal.setText(bocal.getDescricao());
+                    } catch (IndexOutOfBoundsException e) {
+                        bocal = null;
+                        tfBocal.setText("");
+                    }
                 }
             }
         });
@@ -156,8 +161,13 @@ public class IncluirEnsaioView extends Stage {
                 if (novo) {
                     entrada = tfQuebraJato.getText();
                 } else if (!entrada.equals(tfQuebraJato.getText())) {
-                    quebraJato = qjdao.getQuebraJatoByDescricao(tfQuebraJato.getText()).get(0);
-                    tfQuebraJato.setText(quebraJato.getDescricao());
+                    try {
+                        quebraJato = qjdao.getQuebraJatoByDescricao(tfQuebraJato.getText()).get(0);
+                        tfQuebraJato.setText(quebraJato.getDescricao());
+                    } catch (IndexOutOfBoundsException e) {
+                        quebraJato = null;
+                        tfQuebraJato.setText("");
+                    }
                 }
             }
         });

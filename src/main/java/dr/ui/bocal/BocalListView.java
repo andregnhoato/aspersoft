@@ -26,6 +26,7 @@ public class BocalListView extends Stage {
     private Button bNewBocal;
     private Button bRefreshList;
     private Button bFindBocal;
+    private Button bEditBocal;
     
     public BocalListView() {
         setTitle("Bocais");
@@ -61,13 +62,18 @@ public class BocalListView extends Stage {
         bRefreshList.getStyleClass().add("buttonLarge");
         bRefreshList.setId("refreshList");
         
+        bEditBocal = new Button("Editar");
+        bEditBocal.getStyleClass().add("buttonLarge");
+        bEditBocal.setId("editList");
+        
+        
 
 
     }
 
     private HBox getButtonsBox() {
         HBox box = new HBox();
-        box.getChildren().addAll(bNewBocal, bFindBocal, bRefreshList);
+        box.getChildren().addAll(bNewBocal, bEditBocal, bFindBocal, bRefreshList);
         box.getStyleClass().add("buttonBarMain");
         return box;
     }
@@ -84,8 +90,10 @@ public class BocalListView extends Stage {
         return bFindBocal;
     }
 
+    public Button getEditBocal() {
+        return bEditBocal;
+    }
     
-
     public BocalTable getTable() {
         return table;
     }
@@ -98,6 +106,7 @@ public class BocalListView extends Stage {
         bNewBocal.setDisable(disable);
         bFindBocal.setDisable(disable);
         bRefreshList.setDisable(disable);
+        bEditBocal.setDisable(disable);
         
     }
 }

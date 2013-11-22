@@ -104,7 +104,7 @@ public class CombinacaoDAOImpl implements CombinacaoDAO {
 
     @Override
     public List<Combinacao> findAll() throws Exception {
-        String query = "SELECT co FROM combinacao co ORDER BY co.bocal.descricao, co.quebraJato.descricao ASC";
+        String query = "SELECT co FROM combinacao co ORDER BY co.bocal.descricao, co.quebraJato.descricao, co.pressao, co.vazao ASC";
         try {
             return this.em.createQuery(query, Combinacao.class).getResultList();
         } catch (NoResultException e) {

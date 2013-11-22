@@ -9,6 +9,7 @@ import dr.event.BuscarQuebraJatoEvent;
 import dr.event.IncluirQuebraJatoEvent;
 import dr.event.RemoveQuebraJatoEvent;
 import dr.model.QuebraJato;
+import dr.ui.Dialog;
 import dr.ui.combinacao.IncluirCombinacaoView;
 import dr.ui.ensaio.IncluirEnsaioView;
 import dr.ui.quebraJato.QuebraJatoListView;
@@ -68,6 +69,19 @@ public class ListaQuebraJatoController extends PersistenceController {
             @Override
             protected void action() {
                 refreshTable();
+            }
+        });
+        
+        registerAction(view.getEditButton(), new AbstractAction() {
+
+            @Override
+            protected void action() {
+                quebraJato = view.getTable().getQuebraJatoSelected();
+                if(quebraJato!=null)
+                    ListaQuebraJatoController.this.addQuebraJatoController.show(quebraJato);
+                else
+                    Dialog.showError("Validação", "Selecione um quebra jato na listagem para realizar a edição.");
+                
             }
         });
 

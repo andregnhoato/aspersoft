@@ -9,6 +9,7 @@ import dr.event.BuscarBocalEvent;
 import dr.event.IncluirBocalEvent;
 import dr.event.RemoveBocalEvent;
 import dr.model.Bocal;
+import dr.ui.Dialog;
 import dr.ui.bocal.BocalListView;
 import dr.ui.combinacao.IncluirCombinacaoView;
 import dr.ui.ensaio.IncluirEnsaioView;
@@ -68,6 +69,18 @@ public class ListaBocalController extends PersistenceController {
             @Override
             protected void action() {
                 refreshTable();
+            }
+        });
+        
+        registerAction(view.getEditBocal(), new AbstractAction() {
+
+            @Override
+            protected void action() {
+                bocal =  view.getTable().getBocalSelected();
+                if(bocal!=null)
+                    ListaBocalController.this.addBocalController.show(bocal);
+                else
+                    Dialog.showError("Validação", "Selecione um bocal na listagem para realizar a edição.");
             }
         });
 
@@ -142,7 +155,7 @@ public class ListaBocalController extends PersistenceController {
 
     @Override
     public void cleanUp() {
-        super.cleanUp();
+//        super.cleanUp();
         JPAUtil.closeEntityManagerFactory();
     }
 

@@ -41,7 +41,6 @@ public class IncluirCombinacaoView extends Stage {
     private TextField tfVersion;
     private TextField tfPeq;
     private TextField tfVazao;
-    
     private Button bSave;
     private Button bCancel;
     private Button bRemove;
@@ -56,9 +55,9 @@ public class IncluirCombinacaoView extends Stage {
     public IncluirCombinacaoView() {
         qjdao = new QuebraJatoDAOImpl(pe.getPersistenceContext());
         bdao = new BocalDAOImpl(pe.getPersistenceContext());
-        setTitle("Incluir Combinação de bocais");
+        setTitle("Incluir combinação de bocais");
         setWidth(410);
-        setHeight(520);
+        setHeight(400);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
 
@@ -111,7 +110,7 @@ public class IncluirCombinacaoView extends Stage {
         tfDescricao.setMinWidth(180);
         tfDescricao.setMaxWidth(180);
 
-        
+
 
         tfBocal = new TextField();
         tfBocal.setPromptText("*Campo obrigatório");
@@ -124,8 +123,14 @@ public class IncluirCombinacaoView extends Stage {
                 if (novo) {
                     entrada = tfBocal.getText();
                 } else if (!entrada.equals(tfBocal.getText())) {
-                    bocal = bdao.getBocalByDescricao(tfBocal.getText()).get(0);
-                    tfBocal.setText(bocal.getDescricao());
+                    try {
+                        bocal = bdao.getBocalByDescricao(tfBocal.getText()).get(0);
+                        tfBocal.setText(bocal.getDescricao());
+                    } catch (IndexOutOfBoundsException e) {
+                        bocal = null;
+                        tfBocal.setText("");
+                    }
+
                 }
             }
         });
@@ -141,17 +146,22 @@ public class IncluirCombinacaoView extends Stage {
                 if (novo) {
                     entrada = tfQuebraJato.getText();
                 } else if (!entrada.equals(tfQuebraJato.getText())) {
-                    quebraJato = qjdao.getQuebraJatoByDescricao(tfQuebraJato.getText()).get(0);
-                    tfQuebraJato.setText(quebraJato.getDescricao());
+                    try {
+                        quebraJato = qjdao.getQuebraJatoByDescricao(tfQuebraJato.getText()).get(0);
+                        tfQuebraJato.setText(quebraJato.getDescricao());
+                    } catch (IndexOutOfBoundsException e) {
+                        quebraJato = null;
+                        tfQuebraJato.setText("");
+                    }
                 }
             }
         });
-        
+
         tfPressao = new TextField();
         tfPressao.setPromptText("*mca");
         tfPressao.setMinWidth(180);
         tfPressao.setMaxWidth(180);
-        
+
         tfVazao = new TextField() {
             @Override
             public void replaceText(int start, int end, String text) {
@@ -315,14 +325,14 @@ public class IncluirCombinacaoView extends Stage {
         tfVersion.setText("");
 //        tfGridAltura.setEditable(true);
 //        tfGridLargura.setEditable(true);
-        
+
         bRemove.setVisible(false);
     }
 
     private void populaTextFields(Combinacao c) {
         tfId.setText(c.getId().toString());
         tfDescricao.setText(c.getDescricao());
-        tfPressao.setText(c.getPressao()+"");
+        tfPressao.setText(c.getPressao() + "");
         tfBocal.setText(c.getBocal().getDescricao());
         tfQuebraJato.setText(c.getQuebraJato().getDescricao());
         tfVazao.setText(c.getVazao() + "");
@@ -331,9 +341,9 @@ public class IncluirCombinacaoView extends Stage {
 //        tfGridAltura.setEditable(false);
         tfGridLargura.setText(c.getLargura().toString());
 //        tfGridLargura.setEditable(false);
-        tfPeq.setText(c.getPeq()+"");
+        tfPeq.setText(c.getPeq() + "");
         tfVersion.setText(c.getVersion() == null ? "0" : c.getVersion().toString());
-        
+
     }
 
     private Combinacao loadCombinacaoFromPanel() {
@@ -375,7 +385,7 @@ public class IncluirCombinacaoView extends Stage {
         } catch (NumberFormatException nex) {
             throw new RuntimeException("Erro durante a conversão do campo alturaxlargura (Integer).\nConteudo inválido!");
         }
-        
+
         if (!tfPeq.getText().trim().isEmpty()) {
             c.setPeq(Float.valueOf(tfPeq.getText().trim()));
         }
@@ -452,5 +462,4 @@ public class IncluirCombinacaoView extends Stage {
             this.quebraJato = quebraJato;
         }
     }
-
 }

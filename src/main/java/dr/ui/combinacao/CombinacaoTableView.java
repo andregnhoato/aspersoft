@@ -29,39 +29,38 @@ public class CombinacaoTableView extends TableView<CombinacaoTableView.Combinaca
         descricaoCol.setMinWidth(100);
         descricaoCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("descricao"));
 
-        TableColumn<CombinacaoItem, String> pressaoCol = new TableColumn<>("Pressão");
+        TableColumn<CombinacaoItem, String> pressaoCol = new TableColumn<>("Pressão \n(mca)");
         pressaoCol.setMinWidth(80);
         pressaoCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("pressao"));
 
-        TableColumn<CombinacaoItem, String> combinacaoCol = new TableColumn<>("Combinação de bocais");
-        combinacaoCol.setMinWidth(130);
+        TableColumn<CombinacaoItem, String> combinacaoCol = new TableColumn<>("Combinação \nde bocais");
+        combinacaoCol.setMinWidth(120);
         combinacaoCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("combinacao"));
         
-        TableColumn<CombinacaoItem, String> diametroIrrigado = new TableColumn<>("Diâmetro Irrigado");
-        diametroIrrigado.setMinWidth(130);
+        TableColumn<CombinacaoItem, String> diametroIrrigado = new TableColumn<>("Diâmetro \nIrrigado (m)");
+        diametroIrrigado.setMinWidth(100);
         diametroIrrigado.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("diametroIrrigado"));
         
-        TableColumn<CombinacaoItem, String> peqCol = new TableColumn<>("Peq");
+        TableColumn<CombinacaoItem, String> peqCol = new TableColumn<>("  Peq \n(mm/h)");
         peqCol.setMinWidth(80);
         peqCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("peq"));
         
-        TableColumn<CombinacaoItem, String> alturaCol = new TableColumn<>("Altura");
-        alturaCol.setMinWidth(80);
-        alturaCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("gridAltura"));
+        TableColumn<CombinacaoItem, String> alturaCol = new TableColumn<>(" A x L  \n(mXm)");
+        alturaCol.setMinWidth(100);
+        alturaCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("axl"));
 
         TableColumn<CombinacaoItem, String> larguraCol = new TableColumn<>("Largura");
         larguraCol.setMinWidth(80);
         larguraCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("gridLargura"));
         
-        TableColumn<CombinacaoItem, String> vazaoCol = new TableColumn<>("Vazão");
-        vazaoCol.setMinWidth(80);
+        TableColumn<CombinacaoItem, String> vazaoCol = new TableColumn<>("Vazão total \nm³/h");
+        vazaoCol.setMinWidth(100);
         vazaoCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("vazao"));
         
-
         combinacoes = FXCollections.observableArrayList();
         setItems(combinacoes);
         
-        getColumns().addAll(idCol, descricaoCol, combinacaoCol, pressaoCol, vazaoCol, diametroIrrigado , alturaCol, larguraCol, peqCol);
+        getColumns().addAll(idCol, descricaoCol, combinacaoCol, pressaoCol, vazaoCol, diametroIrrigado , alturaCol /*, larguraCol*/, peqCol);
 
     }
 
@@ -100,19 +99,23 @@ public class CombinacaoTableView extends TableView<CombinacaoTableView.Combinaca
         private final SimpleStringProperty peq;
         private final SimpleStringProperty gridAltura;
         private final SimpleStringProperty gridLargura;
+        private final SimpleStringProperty axl;
         private final SimpleStringProperty version;
         private final SimpleStringProperty vazao;
         private final Bocal bocalObject;
         private final QuebraJato quebraJatoObject;
 
         private CombinacaoItem(Combinacao c) {
+            Integer a =new Integer(c.getAltura().intValue());
+            Integer l = new Integer(c.getLargura().intValue());
             this.id = new SimpleStringProperty(c.getId() + "");
             this.descricao = new SimpleStringProperty(c.getDescricao());
             this.pressao = new SimpleStringProperty(c.getPressao()+"");
             this.combinacao = new SimpleStringProperty((c.getBocal()!= null ?c.getBocal().getDescricao():"") + " X " + (c.getQuebraJato() != null ? c.getQuebraJato().getDescricao() :  ""));
             this.diametroIrrigado = new SimpleStringProperty(c.getDiametroIrrigado()+"");
             this.peq = new SimpleStringProperty(c.getPeq()+"");
-            this.gridAltura = new SimpleStringProperty(c.getAltura()+ "");
+            this.axl = new SimpleStringProperty(a+ " X "+ l);
+            this.gridAltura = new SimpleStringProperty(c.getAltura()+"");
             this.gridLargura = new SimpleStringProperty(c.getLargura()+ "");
             this.version = new SimpleStringProperty(c.getVersion() + "");
             this.vazao = new SimpleStringProperty(c.getVazao() + "");
@@ -154,6 +157,10 @@ public class CombinacaoTableView extends TableView<CombinacaoTableView.Combinaca
 
         public String getVazao() {
             return vazao.get();
+        }
+        
+        public String getAxl(){
+            return axl.get();
         }
        
         public Bocal getBocalObject() {

@@ -105,6 +105,7 @@ public class IncluirQuebraJatoView extends Stage {
     private void populaTextFields(QuebraJato qj) {
         tfId.setText(qj.getId().toString());
         tfDescricao.setText(qj.getDescricao());
+        tfVersion.setText(qj.getVersion()+"");
         
     }
 

@@ -95,7 +95,7 @@ public class MainController extends PersistenceController {
     
     @Override
     public void cleanUp() {
-        super.cleanUp();
+//        super.cleanUp();
         JPAUtil.closeEntityManagerFactory();
     }
 }
