@@ -1,5 +1,6 @@
 package dr.ui.analise;
 
+import dr.chart.AreaChartLineSmooth;
 import dr.model.Ensaio;
 import dr.report.AnaliseJavaBeanDataSource;
 import dr.util.DateUtil;
@@ -83,7 +84,7 @@ public final class AnaliseView extends Stage {
     IUniformidades uniformidade;
     private GridPane gridGrafico;
     private TitledPane tdGrafico;
-    private LineChart<Number, Number> grafico;
+    private AreaChartLineSmooth grafico;
     private Button BtExportaSobreposicao;
     private Button BtExportaExcel;
     List<Float> perfil;
@@ -175,7 +176,7 @@ public final class AnaliseView extends Stage {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         //creating the chart
-        grafico = new LineChart<Number, Number>(xAxis, yAxis);
+        grafico = new AreaChartLineSmooth(xAxis, yAxis);
 
         grafico.setTitle("Perfil de distribuição");
         //defining a series
@@ -304,7 +305,7 @@ public final class AnaliseView extends Stage {
 
     }
 
-    private Label createCursorGraphCoordsMonitorLabel(LineChart<Number, Number> lineChart) {
+    private Label createCursorGraphCoordsMonitorLabel(AreaChartLineSmooth lineChart) {
         final Axis<Number> xAxis = lineChart.getXAxis();
         final Axis<Number> yAxis = lineChart.getYAxis();
 
