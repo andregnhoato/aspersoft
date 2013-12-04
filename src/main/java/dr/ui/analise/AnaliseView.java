@@ -18,7 +18,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.Axis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -423,11 +422,9 @@ public final class AnaliseView extends Stage {
         mmq.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 
 
-
-
         this.grafico.getData().clear();
         XYChart.Series series = new XYChart.Series();
-        series.setName("distribuição");
+        series.setName(ensaio.getDescricao());
         perfil = uniformidade.calculaPerfilDistribuicao();
         distancia = uniformidade.calculaDistanciaPerfilDistribuicao();
         for (int i = 0; i < perfil.size(); i++) {

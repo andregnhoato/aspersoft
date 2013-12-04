@@ -35,7 +35,7 @@ import javafx.scene.input.MouseEvent;
  */
 public class ListaEnsaioController extends PersistenceController {
 
-    private EnsaioListView view;
+    protected EnsaioListView view;
     private IncluirEnsaioController addEnsaioController;
     private BuscarEnsaioController buscarController;
     private ListaColetaController coletaController;

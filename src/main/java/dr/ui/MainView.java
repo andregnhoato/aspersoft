@@ -27,6 +27,7 @@ public class MainView {
     private MenuItem menuBocais;
     private MenuItem menuQuebraJato;
     private MenuItem menuCombinacao;
+    private MenuItem menuPerfil;
     
 
     public MainView(Stage stage) {
@@ -51,7 +52,7 @@ public class MainView {
         stage.setWidth(bounds.getWidth());
         stage.setHeight(bounds.getHeight());
 
-        stage.setTitle("Aspersoft 1.1.3");
+        stage.setTitle("Aspersoft 1.1.4");
         stage.setScene(mainScene);
         stage.setResizable(true);
         stage.centerOnScreen();
@@ -91,10 +92,13 @@ public class MainView {
         
         menuCombinacao = new MenuItem("Combinação de bocais");
         menuCombinacao.setId("combinacao");
+        
+        menuPerfil = new MenuItem("Perfis");
+        menuPerfil.setId("perfis");
                
 
         menuHelp.getItems().addAll(menuAbout, menuConfiguracao);
-        menuStart.getItems().addAll(menuEnsaio, menuEnsaioList, menuBocais, menuQuebraJato, menuCombinacao);
+        menuStart.getItems().addAll(menuEnsaio, menuEnsaioList, menuBocais, menuQuebraJato, menuCombinacao, menuPerfil);
         menuBar.getMenus().addAll(menuStart ,menuHelp);
         return menuBar;
     }
@@ -153,6 +157,10 @@ public class MainView {
 
     public void setMenuCombinacao(MenuItem menuCombinacao) {
         this.menuCombinacao = menuCombinacao;
+    }
+
+    public MenuItem getMenuPerfil() {
+        return menuPerfil;
     }
     
 }
