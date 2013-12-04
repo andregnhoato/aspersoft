@@ -86,15 +86,19 @@ public class MainView {
         
         menuBocais = new MenuItem("Bocais");
         menuBocais.setId("bocais");
+        menuBocais.setAccelerator(KeyCombination.keyCombination("F5"));
         
         menuQuebraJato = new MenuItem("Quebra Jato");
         menuQuebraJato.setId("quebraJato");
+        menuQuebraJato.setAccelerator(KeyCombination.keyCombination("F6"));
         
         menuCombinacao = new MenuItem("Combinação de bocais");
         menuCombinacao.setId("combinacao");
+        menuCombinacao.setAccelerator(KeyCombination.keyCombination("F7"));
         
         menuPerfil = new MenuItem("Perfis");
         menuPerfil.setId("perfis");
+        menuPerfil.setAccelerator(KeyCombination.keyCombination("F8"));
                
 
         menuHelp.getItems().addAll(menuAbout, menuConfiguracao);
