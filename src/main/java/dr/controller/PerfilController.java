@@ -7,6 +7,7 @@ import dr.event.AbstractEventListener;
 import dr.event.AtualizaListaEnsaioEvent;
 import dr.event.BuscarEnsaioEvent;
 import dr.model.Ensaio;
+import dr.ui.Dialog;
 import dr.ui.perfil.PerfilView;
 import dr.util.JPAUtil;
 import java.util.List;
@@ -40,6 +41,13 @@ public class PerfilController extends ListaEnsaioController {
             @Override
             protected void action() {
                 pView.limparGrafico();
+            }
+        });
+        
+        registerAction(pView.getBtExportarExcel(), new AbstractAction() {
+            @Override
+            protected void action() {
+                Dialog.showError("Erro", "Não implementado");
             }
         });
 
