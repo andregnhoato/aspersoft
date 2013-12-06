@@ -56,7 +56,6 @@ public class AnaliseController extends PersistenceController {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-
                         writeXLSXFile(uniformidadeView.getReport());
 
                     }

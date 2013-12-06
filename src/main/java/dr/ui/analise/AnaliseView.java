@@ -186,6 +186,7 @@ public final class AnaliseView extends Stage {
         grafico.getYAxis().setAutoRanging(true);
         grafico.getXAxis().setAutoRanging(true);
         grafico.getData().add(series);
+        grafico.setPrefSize(700, 400);
 
         Label cursorCoords = createCursorGraphCoordsMonitorLabel(grafico);
         cursorCoords.setAlignment(Pos.CENTER);
@@ -248,7 +249,7 @@ public final class AnaliseView extends Stage {
         aspersor.setAlignment(Pos.TOP_CENTER);
         grid.add(aspersor, 1, 2, 3, 1);
         
-        grid.add(BtExportaSobreposicao, 1,3);
+//        grid.add(BtExportaSobreposicao, 1,3);
 
 //        grid.add(table, 0, 1, 2, 1);
         td.setText("Sobreposição");
@@ -261,7 +262,7 @@ public final class AnaliseView extends Stage {
         td = new TitledPane();
         grid.setVgap(5);
         grid.setHgap(5);
-        grid.add(new Label("Coeficiente de uniformidade de Christiansen(CUC):"), 0, 0);
+        grid.add(new Label("Coeficiente de uniformidade de Christiansen (CUC):"), 0, 0);
         grid.add(cuc, 1, 0);
         grid.add(new Label("Coeficiente de uniformidade de distribuição (CUD):"), 0, 1);
         grid.add(cud, 1, 1);

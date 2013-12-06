@@ -68,14 +68,15 @@ public final class PerfilView extends Stage {
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
 
-        setX(bounds.getMinX());
+//        setX(bounds.getMinX());
         setY(bounds.getMinY());
-        setWidth(bounds.getWidth());
+        setWidth(820);
         setHeight(bounds.getHeight());
 
         GridPane geral = new GridPane();
         setTitle("Comparação de perfis");
         setResizable(true);
+        
 
         inicializaComponentes();
         /* public void add(Node child, int columnIndex, int rowIndex, int colspan, int rowspan)
@@ -83,6 +84,7 @@ public final class PerfilView extends Stage {
         TitledPane td = new TitledPane();
         td.setText("Ensaios");
         table = new EnsaioTable();
+        table.setPrefSize(800, 300);
         GridPane grid = new GridPane();
         grid.add(table, 0, 0);
         td.setContent(grid);
@@ -102,7 +104,7 @@ public final class PerfilView extends Stage {
         grafico.getYAxis().setAutoRanging(true);
         grafico.getXAxis().setAutoRanging(true);
         grafico.setPrefSize(800, 500);
-
+        
         Label cursorCoords = createCursorGraphCoordsMonitorLabel(grafico);
         cursorCoords.setAlignment(Pos.CENTER);
         grid = new GridPane();
@@ -120,6 +122,8 @@ public final class PerfilView extends Stage {
 
         ScrollPane sp = new ScrollPane();
         sp.setContent(geral);
+        
+        initModality(Modality.APPLICATION_MODAL);
 
         Scene scene = new Scene(sp);
         scene.getStylesheets().add("style.css");
