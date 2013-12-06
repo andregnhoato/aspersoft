@@ -69,13 +69,14 @@ public final class PerfilView extends Stage {
         Rectangle2D bounds = screen.getVisualBounds();
 
 //        setX(bounds.getMinX());
-        setY(bounds.getMinY());
+//        setY(bounds.getMinY());
         setWidth(820);
         setHeight(bounds.getHeight());
 
         GridPane geral = new GridPane();
         setTitle("Comparação de perfis");
-        setResizable(true);
+//        setResizable(true);
+
         
 
         inicializaComponentes();
