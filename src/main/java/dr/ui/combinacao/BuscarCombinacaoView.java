@@ -32,8 +32,8 @@ public class BuscarCombinacaoView extends Stage {
 
     public BuscarCombinacaoView() {
         setTitle("Buscar Combinações de bocais");
-        setWidth(250);
-        setHeight(150);
+        setWidth(300);
+        setHeight(120);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
 

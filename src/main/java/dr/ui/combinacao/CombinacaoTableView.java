@@ -53,7 +53,7 @@ public class CombinacaoTableView extends TableView<CombinacaoTableView.Combinaca
         larguraCol.setMinWidth(80);
         larguraCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("gridLargura"));
         
-        TableColumn<CombinacaoItem, String> vazaoCol = new TableColumn<>("Vazão total \nm³/h");
+        TableColumn<CombinacaoItem, String> vazaoCol = new TableColumn<>("Vazão total \nc");
         vazaoCol.setMinWidth(100);
         vazaoCol.setCellValueFactory(new PropertyValueFactory<CombinacaoItem, String>("vazao"));
         
