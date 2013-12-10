@@ -71,7 +71,7 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
         dataCol.setMinWidth(100);
         dataCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("data"));
 
-        TableColumn<EnsaioItem, String> velocidadeVentoCol = new TableColumn<>("Dir. Vento");
+        TableColumn<EnsaioItem, String> velocidadeVentoCol = new TableColumn<>("Vel. Vento");
         velocidadeVentoCol.setMinWidth(80);
         velocidadeVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("velocidadeVento"));
 
