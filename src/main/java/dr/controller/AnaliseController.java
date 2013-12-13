@@ -90,15 +90,11 @@ public class AnaliseController extends PersistenceController {
         try {
             XSSFWorkbook workbook;
             workbook = new XSSFWorkbook(OPCPackage.open(new FileInputStream(System.getProperty("user.dir") + "/template/perfildedistribuicao.xlsx"))); // or sample.xls
-
-//            CreationHelper cHelper = workbook.getCreationHelper();
             XSSFSheet sheet = workbook.getSheetAt(0);
             String sheetName = sheet.getSheetName();
             XSSFRow row;
             XSSFCell cell;
 
-//            sh.getRow(0).getCell(0).setCellValue("");
-//            sh.getRow(0).getCell(1).setCellValue("");
             //Set headers for the data
             sheet.createRow(0).createCell(0).setCellValue("Distância(m)");
             sheet.getRow(0).createCell(1).setCellValue("Precipitação(mm)");
@@ -112,9 +108,7 @@ public class AnaliseController extends PersistenceController {
                 cell.setCellValue((float) report.getDistancia().get(r));
                 cell = row.createCell(1);
                 cell.setCellValue((float) report.getPerfil().get(r));
-//                //iterating c number of columns
-//                for (int c = 0; c < report.getDistancia().size(); c++) {
-//                }
+
                 linha++;
             }
 
@@ -197,7 +191,7 @@ public class AnaliseController extends PersistenceController {
             cell.setCellValue(report.getEnsaio().getGridAltura() * report.getEnsaio().getGridLargura() + " m2");
             row = sheet.createRow(4);
             cell = row.createCell(0);
-            cell.setCellValue("sobreposicao");
+            cell.setCellValue("Sobreposicao "+report.getSobredimensao());
 
             int linha = 5;
             //iterating r number of rows
@@ -257,7 +251,6 @@ public class AnaliseController extends PersistenceController {
             cell.setCellValue("Distância(\"m\")");
             cell = row.createCell(1);
             cell.setCellValue("Precipitação(\"mm\")");
-//            int rowNum = linha+1;
             linha++;
 
             for (int r = 0; r < report.getDistancia().size(); r++) {
@@ -267,21 +260,12 @@ public class AnaliseController extends PersistenceController {
                 cell.setCellValue((float) report.getDistancia().get(r));
                 cell = row.createCell(1);
                 cell.setCellValue((float) report.getPerfil().get(r));
-//                //iterating c number of columns
-//                for (int c = 0; c < report.getDistancia().size(); c++) {
-//                }
                 linha++;
             }
-
-
-
-
-            FileOutputStream fileOut = new FileOutputStream(excelFileName);
-
-            //write this workbook to an Outputstream.
-            wb.write(fileOut);
-            fileOut.flush();
-            fileOut.close();
+            try (FileOutputStream fileOut = new FileOutputStream(excelFileName)) {
+                wb.write(fileOut);
+                fileOut.flush();
+            }
             Dialog.showInfo("Exportação", "Valores da analise exportado com sucesso no seguinte caminho: " + excelFileName);
         } catch (IOException ex) {
             Logger.getLogger(AnaliseController.class.getName()).log(Level.SEVERE, null, ex);

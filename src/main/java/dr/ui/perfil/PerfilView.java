@@ -117,8 +117,8 @@ public final class PerfilView extends Stage {
         geral.add(td, 0, 1);
 
         grid = new GridPane();
-        grid.add(BtExportaExcel, 0, 0);
-        grid.add(BtLimpar, 1, 0);
+        //grid.add(BtExportaExcel, 0, 0);
+        grid.add(BtLimpar, 0, 0);
         geral.add(grid, 0, 2);
 
         ScrollPane sp = new ScrollPane();
@@ -244,6 +244,10 @@ public final class PerfilView extends Stage {
 
     public void setEnsaio(Ensaio e) {
         this.ensaio = e;
+    }
+    
+    public Ensaio getEnsaio(){
+        return this.ensaio;
     }
 
     public EnsaioTable getTable() {

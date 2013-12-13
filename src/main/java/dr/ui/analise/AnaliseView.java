@@ -81,8 +81,6 @@ public final class AnaliseView extends Stage {
     private Label aspersor;
     private Label laterais;
     IUniformidades uniformidade;
-    private GridPane gridGrafico;
-    private TitledPane tdGrafico;
     private AreaChartLineSmooth grafico;
     private Button BtExportaSobreposicao;
     private Button BtExportaExcel;
@@ -198,7 +196,6 @@ public final class AnaliseView extends Stage {
         td.setContent(grid);
         geral.add(td, 0, 1);
 
-
         /* terceiro painel superposição*/
         td = new TitledPane();
         grid = new GridPane();
@@ -248,10 +245,7 @@ public final class AnaliseView extends Stage {
         grid.add(table, 1, 1, 3, 1);
         aspersor.setAlignment(Pos.TOP_CENTER);
         grid.add(aspersor, 1, 2, 3, 1);
-        
-//        grid.add(BtExportaSobreposicao, 1,3);
 
-//        grid.add(table, 0, 1, 2, 1);
         td.setText("Sobreposição");
         td.setContent(grid);
         td.autosize();
@@ -289,12 +283,7 @@ public final class AnaliseView extends Stage {
         td.autosize();
         geral.add(td, 0, 4);
         geral.add(BtExportaExcel,0,5);
-
-
-
-
-//        Group panel = new Group();
-//        panel.getChildren().add(grid);
+ 
         sp = new ScrollPane();
         sp.setContent(geral);
 

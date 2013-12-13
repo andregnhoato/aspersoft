@@ -20,14 +20,11 @@ import javafx.stage.Stage;
  */
 public class CombinacaoListView extends Stage {
 
-    private Scene subScene;
     private CombinacaoTable table;
-    private Label countCombinacao;
     private Button bNewCombinacao;
     private Button bRefreshList;
     private Button bFindCombinacao;
     private Button bImprimir;
-//    private Button bUniformidade;
 
     public CombinacaoListView() {
         setTitle("Tabela Desempenho Aspersor Pingo");
@@ -38,15 +35,9 @@ public class CombinacaoListView extends Stage {
 
         inicializaComponentes();
 
-//        GridPane panel = new GridPane();
         Group panel = new Group();
         HBox boxButtons = getButtonsBox();
-        HBox boxLabel = getLabelBox();
-//        panel.add(boxLabel, 0,0);
-//        panel.add(table, 0, 1);
-//        panel.add(boxButtons, 0,2);
         panel.getChildren().addAll(boxButtons, table);
-
         Scene scene = new Scene(panel);
         scene.getStylesheets().add("style.css");
         this.setScene(scene);
@@ -79,17 +70,6 @@ public class CombinacaoListView extends Stage {
         return box;
     }
 
-    private HBox getLabelBox() {
-        
-        countCombinacao = new Label();
-        countCombinacao.setText(table.getTotalCombinacao()+"");
-        HBox box = new HBox();
-        box.getChildren().add(new Label("Total :"));
-        box.getChildren().add(countCombinacao);
-        box.getStyleClass().add("buttonBarMain");
-        return box;
-    }
-
     public Button getNewButton() {
         return bNewCombinacao;
     }
@@ -114,10 +94,4 @@ public class CombinacaoListView extends Stage {
         table.reload(combinacoes);
     }
 
-    private void disableButtonBar(boolean disable) {
-        bNewCombinacao.setDisable(disable);
-        bFindCombinacao.setDisable(disable);
-        bRefreshList.setDisable(disable);
-        bImprimir.setDisable(disable);
-    }
 }

@@ -7,15 +7,27 @@ import dr.event.AbstractEventListener;
 import dr.event.AtualizaListaEnsaioEvent;
 import dr.event.BuscarEnsaioEvent;
 import dr.model.Ensaio;
+import dr.report.AnaliseJavaBeanDataSource;
 import dr.ui.Dialog;
 import dr.ui.perfil.PerfilView;
 import dr.util.JPAUtil;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFName;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * Define a
@@ -31,23 +43,27 @@ import javafx.scene.input.MouseEvent;
 public class PerfilController extends ListaEnsaioController {
 
     private PerfilView pView;
+    private List<Ensaio> ensaios;
 
     public PerfilController(AbstractController parent) {
         super(parent);
         this.pView = new PerfilView();
         this.pView.refreshTable(null);
+        ensaios = new ArrayList<>();
 
         registerAction(pView.getBtLimpar(), new AbstractAction() {
             @Override
             protected void action() {
                 pView.limparGrafico();
+                ensaios.clear();
             }
         });
         
         registerAction(pView.getBtExportarExcel(), new AbstractAction() {
             @Override
             protected void action() {
-                Dialog.showError("Erro", "Não implementado");
+//                Dialog.showError("Erro", "Não implementado");
+                writeXLSXFilePerfil();
             }
         });
 
@@ -60,6 +76,7 @@ public class PerfilController extends ListaEnsaioController {
                     if (e != null) {
                         pView.setEnsaio(e);
                         pView.reRenderTable();
+                        ensaios.add(pView.getEnsaio());
                     }
                 }
 
@@ -84,6 +101,54 @@ public class PerfilController extends ListaEnsaioController {
         });
 
         refreshTable();
+    }
+    
+        private void writeXLSXFilePerfil() {
+        try {
+            XSSFWorkbook workbook;
+            workbook = new XSSFWorkbook(OPCPackage.open(new FileInputStream(System.getProperty("user.dir") + "/template/perfildedistribuicao.xlsx"))); // or sample.xls
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            String sheetName = sheet.getSheetName();
+            XSSFRow row;
+            XSSFCell cell;
+
+            //Set headers for the data
+            sheet.createRow(0).createCell(0).setCellValue("Distância(m)");
+            sheet.getRow(0).createCell(1).setCellValue("Precipitação(mm)");
+
+            
+            int linha = 1;
+            for (int r = 0; r < ensaios.size(); r++) {
+                row = sheet.createRow(r + 1);
+
+//                cell = row.createCell(0);
+//                cell.setCellValue((float) report.getDistancia().get(r));
+//                cell = row.createCell(1);
+//                cell.setCellValue((float) report.getPerfil().get(r));
+
+                linha++;
+            }
+
+            //Search for named range
+            XSSFName rangeCell = workbook.createName();
+            rangeCell.setNameName("Distância(m)");
+            //Set new range for named range
+            String reference = sheetName + "!$A$" + (1) + ":$A$" + (1 + linha);
+            //Assigns range value to named range
+            rangeCell.setRefersToFormula(reference);
+            rangeCell = workbook.createName();
+            rangeCell.setNameName("Precipitação(mm)");
+            reference = sheetName + "!$B$" + (1) + ":$B$" + (1 + linha);
+            rangeCell.setRefersToFormula(reference);
+//            FileOutputStream f = new FileOutputStream(System.getProperty("user.dir") + "/EXP_Perfil_Distruibuicao_" + report.getEnsaio().getDescricao().replace(" ", "_") + ".xlsx");
+            
+//            workbook.write(f);
+//            f.flush();
+//            f.close();
+        } catch (IOException | InvalidFormatException ex) {
+            Logger.getLogger(AnaliseController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
