@@ -4,12 +4,16 @@ import dr.action.AbstractAction;
 import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
 import dr.action.TransactionalAction;
+import dr.dao.ColetaDAO;
+import dr.dao.ColetaDAOImpl;
 import dr.dao.EnsaioDAO;
 import dr.dao.EnsaioDAOImpl;
 import dr.event.IncluirEnsaioEvent;
 import dr.event.RemoveEnsaioEvent;
+import dr.model.Coleta;
 import dr.model.Ensaio;
 import dr.ui.Dialog;
+import dr.ui.coleta.ColetaTable;
 import dr.ui.ensaio.IncluirEnsaioView;
 import dr.validation.EnsaioValidator;
 import dr.validation.Validator;
@@ -43,8 +47,8 @@ public class IncluirEnsaioController extends PersistenceController {
         this.view = new IncluirEnsaioView();
         this.bocalListController = new ListaBocalController(this);
         this.quebraListController = new ListaQuebraJatoController(this);
-        
-        
+
+
         this.view.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent window) {
@@ -63,22 +67,20 @@ public class IncluirEnsaioController extends PersistenceController {
                 });
             }
         });
-        
+
         registerAction(this.view.getBocalButton(), new AbstractAction() {
             @Override
             protected void action() {
                 bocalListController.show(view);
             }
-  
         });
-        
-        
+
+
         registerAction(this.view.getQuebraButton(), new AbstractAction() {
             @Override
             protected void action() {
                 quebraListController.show(view);
             }
-           
         });
 
         registerAction(this.view.getSaveButton(),
@@ -92,17 +94,17 @@ public class IncluirEnsaioController extends PersistenceController {
                     Dialog.showInfo("Validacão", msg, view);
                     return false;
                 }
-                if(e.getEspacamentoPluviometro() <= 0){
+                if (e.getEspacamentoPluviometro() <= 0) {
                     Dialog.showError("Validação", "Necessário informar uma valor superior a zero para o campo Espaço entre pluviometros");
                     return false;
                 }
-                
-                if(e.getBocal() == null){
+
+                if (e.getBocal() == null) {
                     Dialog.showError("Validação", "Campo Bocal obrigatório, informar um valor.");
                     return false;
                 }
-                
-                if(e.getQuebraJato() == null){
+
+                if (e.getQuebraJato() == null) {
                     Dialog.showError("Validação", "Campo Quebra Jato obrigatório, informar um valor.");
                     return false;
                 }
@@ -133,6 +135,30 @@ public class IncluirEnsaioController extends PersistenceController {
                     @Override
                     public void run() {
                         view.hide();
+                        try {
+                            ColetaDAO dao = new ColetaDAOImpl(getPersistenceContext());
+                            try {
+                                for (int linha = 0; linha < (e.getGridAltura() / e.getEspacamentoPluviometro()); linha++) {
+                                    for (int coluna = 0; coluna < (e.getGridLargura() / e.getEspacamentoPluviometro()); coluna++) {
+                                        Coleta c = new Coleta();
+                                        c.setColuna(coluna);
+                                        c.setLinha(linha);
+                                        c.setEnsaio(e);
+                                        c.setValor(0F);
+                                        try {
+                                            dao.save(c);
+                                        } catch (Exception ex) {
+                                            Logger.getLogger(ColetaTable.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                System.err.println(e.getMessage());
+                            }
+
+                        } catch (Exception ex) {
+                            System.err.println(ex.getMessage());
+                        }
                     }
                 });
                 fireEvent(new IncluirEnsaioEvent(e));
@@ -174,24 +200,24 @@ public class IncluirEnsaioController extends PersistenceController {
 
 //
 //                if (dialog!= null && dialog) {
-                    Integer id = view.getEnsaioId();
-                    if (id != null) {
-                        try {
+                Integer id = view.getEnsaioId();
+                if (id != null) {
+                    try {
 
-                            EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
-                            e = dao.findById(id);
-                            if (e != null) {
-                                dao.remove(e);
+                        EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
+                        e = dao.findById(id);
+                        if (e != null) {
+                            dao.remove(e);
 //                                dialog = false;
 
-                            }
-                        } catch (Exception ex) {
-                            Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-
+                    } catch (Exception ex) {
+                        Logger.getLogger(IncluirEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
+
+            }
 //            }
 
             @Override

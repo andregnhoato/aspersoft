@@ -7,12 +7,9 @@ import dr.event.AbstractEventListener;
 import dr.event.AtualizaListaEnsaioEvent;
 import dr.event.BuscarEnsaioEvent;
 import dr.model.Ensaio;
-import dr.report.AnaliseJavaBeanDataSource;
-import dr.ui.Dialog;
 import dr.ui.perfil.PerfilView;
 import dr.util.JPAUtil;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,11 +118,6 @@ public class PerfilController extends ListaEnsaioController {
             for (int r = 0; r < ensaios.size(); r++) {
                 row = sheet.createRow(r + 1);
 
-//                cell = row.createCell(0);
-//                cell.setCellValue((float) report.getDistancia().get(r));
-//                cell = row.createCell(1);
-//                cell.setCellValue((float) report.getPerfil().get(r));
-
                 linha++;
             }
 
@@ -140,11 +132,7 @@ public class PerfilController extends ListaEnsaioController {
             rangeCell.setNameName("Precipitação(mm)");
             reference = sheetName + "!$B$" + (1) + ":$B$" + (1 + linha);
             rangeCell.setRefersToFormula(reference);
-//            FileOutputStream f = new FileOutputStream(System.getProperty("user.dir") + "/EXP_Perfil_Distruibuicao_" + report.getEnsaio().getDescricao().replace(" ", "_") + ".xlsx");
-            
-//            workbook.write(f);
-//            f.flush();
-//            f.close();
+
         } catch (IOException | InvalidFormatException ex) {
             Logger.getLogger(AnaliseController.class.getName()).log(Level.SEVERE, null, ex);
         }

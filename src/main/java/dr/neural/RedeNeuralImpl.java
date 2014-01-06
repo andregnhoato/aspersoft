@@ -16,6 +16,7 @@ public class RedeNeuralImpl {
 
     public static void carregaLib() {
         System.setProperty("jna.debug_load", "true");
+        //setting path
         System.setProperty("jna.library.path", System.getProperty("user.dir"));
 
         IRedeNeural INSTANCE = (IRedeNeural) Native.loadLibrary("libRede", IRedeNeural.class);
