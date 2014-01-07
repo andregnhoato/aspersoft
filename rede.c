@@ -1,6 +1,6 @@
 /*********************************************************
 
-    nn.c
+    rede.c por Paulo Lopes:
     1x4_8x35_16x16.NET.treinada
     Erro SSE:7.958807    Backpropagation FeedForward
     Servidor: Mesa
@@ -15,6 +15,9 @@
 *********************************************************/
 
 #include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 #define Act_Logistic(sum, bias)  ( (sum+bias<10000.0) ? ( 1.0/(1.0 + exp(-sum-bias) ) ) : 0.0 )
 #ifndef NULL
@@ -28,6 +31,7 @@ typedef struct UT {
    struct UT   **sources; /* predecessor units */
           float *weights; /* weights from predecessor units */
         } UnitType, *pUnit;
+
 
   /* Forward Declaration for all unit types */
   static UnitType Units[541];
@@ -18158,7 +18162,7 @@ Units + 275, Units + 276, Units + 277, Units + 278, Units + 279, Units + 280, Un
 
 
 
-int rede(float *in, float *out)
+int rede(float *in, float *out, int init)
 {
   int member, source;
   float sum;
@@ -18207,7 +18211,7 @@ int rede(float *in, float *out)
   return(OK);
 }
 
-/*int main(int argc, char *argv[]){
+int main(int argc, char *argv[]){
 
     ////#Linha: 99	Ensaio: 56
     //float entrada[4]= {0.454545, 1.000000, 0.200000, 0.733333};
@@ -18238,8 +18242,24 @@ int rede(float *in, float *out)
     //float entrada[4]= {0.818182, 0.000000, 0.781818, 0.200000};
 
     ////#Linha: 108	Ensaio: 85
-    float entrada[4]= {0.818182, 0.000000, 0.606061, 0.733333};
-
+    //float entrada[4]= {0.818182, 0.000000, 0.606061, 0.733333};
+  
+    float entrada[5];
+    double var;
+    int j;
+    // open file
+    FILE *f = fopen("saida.txt", "r+");
+    //validating
+    if (f == NULL)
+    {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+    //read content
+    for(j =0; j < 4; j++){
+      fscanf(f, "%lf", &var);
+      entrada[j] = var;
+    }
 
     float saida[256];
     int i;
@@ -18248,14 +18268,14 @@ int rede(float *in, float *out)
 
     int coluna=0;
     for (i=0;i<256;i++){
-        printf("%f",saida[i]*15.5);
+        fprintf(f, "%f", saida[i]*15.5);
          if (coluna==15){
-            printf("\n");
+            fprintf(f, "\n");
             coluna=0;
         }else{
-            printf(";");
+            fprintf(f,";");
             coluna++;
         }
     }
     return(0);
-}*/
+}
