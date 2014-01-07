@@ -4,15 +4,15 @@
  */
 package dr.neural;
 
-import com.sun.jna.Library;
+import dr.model.Ensaio;
 import java.util.List;
 
 /**
  *
  * @author andregnhoato
  */
-public interface IRedeNeural extends Library {
+public interface IRedeNeural {
     
-    List<Float> rede(List<Float> entrada);
+    List<Float> rede(Ensaio e);
     
 }
