@@ -28,6 +28,7 @@ public class EnsaioListView extends Stage {
     private Button bFindEnsaio;
     private Button bColeta;
     private Button bUniformidade;
+    private Button bSimulado;
 
     public EnsaioListView() {
         setTitle("Ensaios");
@@ -71,13 +72,16 @@ public class EnsaioListView extends Stage {
         bUniformidade = new Button("Análise");
         bUniformidade.getStyleClass().add("buttonLarge");
         bUniformidade.setId("showUniformidade");
+        bSimulado = new Button("Simulado");
+        bSimulado.getStyleClass().add("buttonLarge");
+        bSimulado.setId("simulado");
 
 
     }
 
     private HBox getButtonsBox() {
         HBox box = new HBox();
-        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList, bColeta, bUniformidade);
+        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList, bColeta, bUniformidade, bSimulado);
         box.getStyleClass().add("buttonBarMain");
         return box;
     }
@@ -112,6 +116,10 @@ public class EnsaioListView extends Stage {
     public Button getUniformidadeButton() {
         return bUniformidade;
     }
+    
+    public Button getSimuladoButton(){
+        return bSimulado;
+    }
 
     public EnsaioTable getTable() {
         return table;
@@ -127,5 +135,6 @@ public class EnsaioListView extends Stage {
         bRefreshList.setDisable(disable);
         bColeta.setDisable(disable);
         bUniformidade.setDisable(disable);
+        
     }
 }

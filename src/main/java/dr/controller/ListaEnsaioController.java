@@ -12,6 +12,8 @@ import dr.event.AtualizaListaEnsaioEvent;
 import dr.event.BuscarEnsaioEvent;
 import dr.model.Coleta;
 import dr.model.Ensaio;
+import dr.neural.IRedeNeural;
+import dr.neural.RedeNeuralImpl;
 import dr.ui.Dialog;
 import dr.ui.ensaio.EnsaioListView;
 import dr.util.JPAUtil;
@@ -82,7 +84,7 @@ public class ListaEnsaioController extends PersistenceController {
                     ListaEnsaioController.this.coletaController.reRenderTable();
                     ListaEnsaioController.this.coletaController.show();
                 } else {
-                    Dialog.showInfo("Validacão", "Selecione um Ensaio", view);
+                    Dialog.showInfo("Validacão", "Selecione um ensaio", view);
                 }
             }
         });
@@ -100,13 +102,27 @@ public class ListaEnsaioController extends PersistenceController {
                             ListaEnsaioController.this.uniformidadeController.setEnsaio(e);
                             ListaEnsaioController.this.uniformidadeController.reRenderTable();
                             ListaEnsaioController.this.uniformidadeController.show();
-                        }else
+                        } else {
                             Dialog.showInfo("Validacão", "O ensaio selecionado não possui os valores das coletas, necessário para a tela de Análise.", view);
+                        }
                     } catch (Exception ex) {
                         Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
-                    Dialog.showInfo("Validacão", "Selecione um Ensaio", view);
+                    Dialog.showInfo("Validacão", "Selecione um ensaio.", view);
+                }
+            }
+        });
+
+        registerAction(view.getSimuladoButton(), new AbstractAction() {
+            @Override
+            protected void action() {
+                if (view.getTable().getEnsaioSelected() != null) {
+
+                    IRedeNeural neural = new RedeNeuralImpl();
+                    List<Float> coletas = neural.rede(view.getTable().getEnsaioSelected());
+                } else {
+                    Dialog.showInfo("Validacão", "Selecione um ensaio.", view);
                 }
             }
         });

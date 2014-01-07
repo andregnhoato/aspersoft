@@ -18269,13 +18269,13 @@ int main(int argc, char *argv[]){
     int coluna=0;
     for (i=0;i<256;i++){
         fprintf(f, "%f", saida[i]*15.5);
-         if (coluna==15){
-            fprintf(f, "\n");
-            coluna=0;
-        }else{
+        //  if (coluna==15){
+        //     fprintf(f, "\n");
+        //     coluna=0;
+        // }else{
             fprintf(f,";");
-            coluna++;
-        }
+        //     coluna++;
+        // }
     }
     return(0);
 }

@@ -138,17 +138,19 @@ public class IncluirEnsaioController extends PersistenceController {
                         try {
                             ColetaDAO dao = new ColetaDAOImpl(getPersistenceContext());
                             try {
-                                for (int linha = 0; linha < (e.getGridAltura() / e.getEspacamentoPluviometro()); linha++) {
-                                    for (int coluna = 0; coluna < (e.getGridLargura() / e.getEspacamentoPluviometro()); coluna++) {
-                                        Coleta c = new Coleta();
-                                        c.setColuna(coluna);
-                                        c.setLinha(linha);
-                                        c.setEnsaio(e);
-                                        c.setValor(0F);
-                                        try {
-                                            dao.save(c);
-                                        } catch (Exception ex) {
-                                            Logger.getLogger(ColetaTable.class.getName()).log(Level.SEVERE, null, ex);
+                                if (dao.findColetasByEnsaio(e).isEmpty()) {
+                                    for (int linha = 0; linha < (e.getGridAltura() / e.getEspacamentoPluviometro()); linha++) {
+                                        for (int coluna = 0; coluna < (e.getGridLargura() / e.getEspacamentoPluviometro()); coluna++) {
+                                            Coleta c = new Coleta();
+                                            c.setColuna(coluna);
+                                            c.setLinha(linha);
+                                            c.setEnsaio(e);
+                                            c.setValor(0F);
+                                            try {
+                                                dao.save(c);
+                                            } catch (Exception ex) {
+                                                Logger.getLogger(ColetaTable.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
                                         }
                                     }
                                 }
@@ -159,6 +161,7 @@ public class IncluirEnsaioController extends PersistenceController {
                         } catch (Exception ex) {
                             System.err.println(ex.getMessage());
                         }
+
                     }
                 });
                 fireEvent(new IncluirEnsaioEvent(e));
