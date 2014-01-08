@@ -18263,19 +18263,26 @@ int main(int argc, char *argv[]){
 
     float saida[256];
     int i;
+    if(sizeof(entrada) == 4){
+      rede(entrada, saida, 0);
 
-    rede(entrada, saida, 0);
+      int coluna=0;
+      for (i=0;i<256;i++){
+          fprintf(f, "%f", saida[i]*15.5);
+              fprintf(f,";");
+        printf("Write on txt file! %c \n", i);
+            
+      }
+      printf("Finish sucessfull neural process!\n");
+        
 
-    int coluna=0;
-    for (i=0;i<256;i++){
-        fprintf(f, "%f", saida[i]*15.5);
-        //  if (coluna==15){
-        //     fprintf(f, "\n");
-        //     coluna=0;
-        // }else{
-            fprintf(f,";");
-        //     coluna++;
-        // }
+    }else{
+      printf("Error! Less parameter for neural process.\n");
+        exit(1);
     }
+
+    
+
+    
     return(0);
 }
