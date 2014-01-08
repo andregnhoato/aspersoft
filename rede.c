@@ -18248,7 +18248,7 @@ int main(int argc, char *argv[]){
     double var;
     int j;
     // open file
-    FILE *f = fopen("saida.txt", "r+");
+    FILE *f = fopen("neural.txt", "r+");
     //validating
     if (f == NULL)
     {
