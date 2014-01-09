@@ -15,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,18 +27,54 @@ import java.util.logging.Logger;
  */
 public class RedeNeuralImpl implements IRedeNeural {
 
-    public List<Float> rede(Ensaio e) {
-        createTxt(e);
-        ProcessBuilder pb = new ProcessBuilder("./a.out");
+    public List<Coleta> rede(Ensaio e) {
         try {
-            Process p = pb.start();
+            createTxt(e);
+            ProcessBuilder pb;
+            System.out.println(System.getProperty("os.name"));
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                pb = new ProcessBuilder("neural.exe");
+                Dialog.showInfo("Detected Windows", "no problem yet");
+            } else {
+                pb = new ProcessBuilder("./neural.out");
+            }
 
-            List<String> lines = readSmallTextFile("saida.txt");
-            System.out.println(lines.get(1).toString());
+            Ensaio ensaioSimulado = new Ensaio();
+            ensaioSimulado = cloneEnsaio(e);
+            Process p = pb.start();
+            List<String> lines = readSmallTextFile("neural.txt");
+            String[] in = lines.get(0).split(";");
+            System.out.println(in.toString());
             
+            Coleta coleta;
+            List<Coleta> coletas = new LinkedList<>();
+            
+            //criando as coletas e alimentando com os valores lidos no txt
+            for (int i = 0; i < 256; i++) {
+                coleta = new Coleta();
+                coleta.setValor(Float.parseFloat(in[i].replaceAll(";", "")));
+                coleta.setEnsaio(ensaioSimulado);
+                coletas.add(coleta);
+            }
+
+            int contador = 0;
+            for (int linha = 0; linha < 16; linha++) {
+                for (int coluna = 0; coluna < 16; coluna++) {
+                    coletas.get(contador).setLinha(linha);
+                    coletas.get(contador).setColuna(coluna);
+                    contador++;
+                }
+            }
+
+            return coletas;
+
         } catch (IOException ex) {
             Logger.getLogger(RedeNeuralImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Dialog.showError(ex.getCause().toString(), ex.getMessage());
+        } catch (IndexOutOfBoundsException ie) {
+            Dialog.showError("Erro ao ler arquivo", "Não foi possível ler o arquivo de coletas!");
         }
+
         return null;
     }
 
@@ -48,7 +86,7 @@ public class RedeNeuralImpl implements IRedeNeural {
     public void createTxt(Ensaio e) {
         PrintWriter writer;
         try {
-            writer = new PrintWriter("saida.txt", StandardCharsets.UTF_8.toString());
+            writer = new PrintWriter("neural.txt", StandardCharsets.UTF_8.toString());
             StringBuilder sb = new StringBuilder();
             sb.append(normalizaBocal(e));
             sb.append(" ");
@@ -102,5 +140,13 @@ public class RedeNeuralImpl implements IRedeNeural {
 
     public Float normalizaColeta(Coleta c) {
         return (float) (c.getValor() / 15.5);
+    }
+
+    private Ensaio cloneEnsaio(Ensaio e) {
+        e.setId(null);
+        e.setVersion(null);
+        e.setDescricao(e.getDescricao()+" simulado");
+        return e;
+        
     }
 }

@@ -18248,7 +18248,7 @@ int main(int argc, char *argv[]){
     double var;
     int j;
     // open file
-    FILE *f = fopen("neural.txt", "r+");
+    FILE *f = fopen("neural.txt", "w+");
     //validating
     if (f == NULL)
     {
@@ -18273,11 +18273,12 @@ int main(int argc, char *argv[]){
 
       int coluna=0;
       for (i=0;i<256;i++){
-          fprintf(f, "%f", saida[i]*15.5);
-              fprintf(f,";");
-        printf("Write on txt file! %d \n", i);
+
+          fprintf(f, "%f;", saida[i]*15.5);
+          printf("Write on txt file! %d \n", i);
             
       }
+      fclose(f);
       printf("Finish sucessfull neural process!\n");
 
     return(0);

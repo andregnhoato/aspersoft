@@ -142,6 +142,7 @@ public class PerfilController extends ListaEnsaioController {
     @Override
     public void show() {
         loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
+        refreshTable(null);
         pView.show();
     }
 
@@ -168,7 +169,7 @@ public class PerfilController extends ListaEnsaioController {
                     Logger.getLogger("nulo a parada da view");
                 }
                 try {
-                    EnsaioDAO dao = new EnsaioDAOImpl(JPAUtil.getEntityManager());
+                    EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
                     pView.refreshTable(dao.findAll());
                 } catch (Exception ex) {
                     Logger.getLogger(PerfilController.class.getName()).log(Level.SEVERE, null, ex);

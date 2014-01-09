@@ -1,5 +1,6 @@
 package dr.neural;
 
+import dr.model.Coleta;
 import dr.model.Ensaio;
 import java.util.List;
 
@@ -9,5 +10,5 @@ import java.util.List;
  */
 public interface IRedeNeural {
     
-    List<Float> rede(Ensaio e);
+    List<Coleta> rede(Ensaio e);
 }
