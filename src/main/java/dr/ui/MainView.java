@@ -52,7 +52,7 @@ public class MainView {
         stage.setWidth(bounds.getWidth());
         stage.setHeight(bounds.getHeight());
 
-        stage.setTitle("Aspersoft 1.1.4");
+        stage.setTitle("Aspersoft 1.1.5");
         stage.setScene(mainScene);
         stage.setResizable(true);
         stage.centerOnScreen();
