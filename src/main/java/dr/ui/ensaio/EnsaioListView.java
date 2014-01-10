@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -22,17 +23,18 @@ public class EnsaioListView extends Stage {
 
     private Scene subScene;
     private EnsaioTable table;
-    private Label countEnsaio;
+    private Label processando;
     private Button bNewEnsaio;
     private Button bRefreshList;
     private Button bFindEnsaio;
     private Button bColeta;
     private Button bUniformidade;
     private Button bSimulado;
+    private ProgressBar pi;
 
     public EnsaioListView() {
         setTitle("Ensaios");
-        
+
         setResizable(true);
 
         initModality(Modality.APPLICATION_MODAL);
@@ -42,15 +44,14 @@ public class EnsaioListView extends Stage {
 //        GridPane panel = new GridPane();
         Group panel = new Group();
         HBox boxButtons = getButtonsBox();
-        HBox boxLabel = getLabelBox();
-//        panel.add(boxLabel, 0,0);
-//        panel.add(table, 0, 1);
-//        panel.add(boxButtons, 0,2);
+       
         panel.getChildren().addAll(boxButtons, table);
 
         Scene scene = new Scene(panel);
         scene.getStylesheets().add("style.css");
         this.setScene(scene);
+
+
 
     }
 
@@ -72,30 +73,25 @@ public class EnsaioListView extends Stage {
         bUniformidade = new Button("Análise");
         bUniformidade.getStyleClass().add("buttonLarge");
         bUniformidade.setId("showUniformidade");
-        bSimulado = new Button("Simulado");
+        bSimulado = new Button("Simulação");
         bSimulado.getStyleClass().add("buttonLarge");
         bSimulado.setId("simulado");
+        processando = new Label("Processando simulação");
+        processando.setVisible(false);
+        pi = new ProgressBar();
+        pi.setVisible(false);
 
 
     }
 
     private HBox getButtonsBox() {
         HBox box = new HBox();
-        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList, bColeta, bUniformidade, bSimulado);
+        box.getChildren().addAll(bNewEnsaio, bFindEnsaio, bRefreshList, bColeta, bUniformidade, bSimulado, processando, pi);
         box.getStyleClass().add("buttonBarMain");
         return box;
     }
 
-    private HBox getLabelBox() {
-        
-        countEnsaio = new Label();
-        countEnsaio.setText(table.getTotalEnsaio()+"");
-        HBox box = new HBox();
-        box.getChildren().add(new Label("Total :"));
-        box.getChildren().add(countEnsaio);
-        box.getStyleClass().add("buttonBarMain");
-        return box;
-    }
+    
 
     public Button getNewButton() {
         return bNewEnsaio;
@@ -116,8 +112,8 @@ public class EnsaioListView extends Stage {
     public Button getUniformidadeButton() {
         return bUniformidade;
     }
-    
-    public Button getSimuladoButton(){
+
+    public Button getSimuladoButton() {
         return bSimulado;
     }
 
@@ -128,13 +124,19 @@ public class EnsaioListView extends Stage {
     public void refreshTable(List<Ensaio> ensaios) {
         table.reload(ensaios);
     }
-
-    private void disableButtonBar(boolean disable) {
+    
+    public void showProgress(boolean b){
+        processando.setVisible(b);
+        pi.setVisible(b);
+    }
+    
+    public void disableButtonBar(boolean disable) {
         bNewEnsaio.setDisable(disable);
         bFindEnsaio.setDisable(disable);
         bRefreshList.setDisable(disable);
         bColeta.setDisable(disable);
         bUniformidade.setDisable(disable);
-        
+        bSimulado.setDisable(disable);
+
     }
 }

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
@@ -36,13 +37,13 @@ import javafx.scene.input.MouseEvent;
  * @andre
  */
 public class ListaEnsaioController extends PersistenceController {
-    
+
     protected EnsaioListView view;
     private IncluirEnsaioController addEnsaioController;
     private BuscarEnsaioController buscarController;
     private ListaColetaController coletaController;
     private AnaliseController uniformidadeController;
-    
+
     public ListaEnsaioController(AbstractController parent) {
         super(parent);
         loadPersistenceContext();
@@ -51,29 +52,29 @@ public class ListaEnsaioController extends PersistenceController {
         this.buscarController = new BuscarEnsaioController(this);
         this.coletaController = new ListaColetaController(this);
         this.uniformidadeController = new AnaliseController(this);
-        
-        
+
+
         registerAction(view.getNewButton(), new AbstractAction() {
             @Override
             protected void action() {
                 ListaEnsaioController.this.addEnsaioController.show();
             }
         });
-        
+
         registerAction(view.getFindButton(), new AbstractAction() {
             @Override
             protected void action() {
                 ListaEnsaioController.this.buscarController.show();
             }
         });
-        
+
         registerAction(view.getRefreshButton(), new AbstractAction() {
             @Override
             protected void action() {
                 refreshTable();
             }
         });
-        
+
         registerAction(view.getColetaButton(), new AbstractAction() {
             @Override
             protected void action() {
@@ -88,7 +89,7 @@ public class ListaEnsaioController extends PersistenceController {
                 }
             }
         });
-        
+
         registerAction(view.getUniformidadeButton(), new AbstractAction() {
             @Override
             protected void action() {
@@ -97,7 +98,7 @@ public class ListaEnsaioController extends PersistenceController {
                     try {
                         ColetaDAO dao = new ColetaDAOImpl(JPAUtil.getEntityManager());
                         List<Coleta> coletas = dao.findColetasByEnsaio(e);
-                        
+
                         if (coletas.size() > 0) {
                             ListaEnsaioController.this.uniformidadeController.setEnsaio(e);
                             ListaEnsaioController.this.uniformidadeController.reRenderTable();
@@ -113,41 +114,34 @@ public class ListaEnsaioController extends PersistenceController {
                 }
             }
         });
-        
+
         registerAction(view.getSimuladoButton(), new AbstractAction() {
+            
+            @Override
+            protected void preAction(){
+                view.disableButtonBar(true);              
+            }
+            
             @Override
             protected void action() {
                 if (view.getTable().getEnsaioSelected() != null) {
-                   
-                    IRedeNeural neural = new RedeNeuralImpl();
-                    List<Coleta> coletas = neural.rede(view.getTable().getEnsaioSelected());
-                    if (coletas.size() == 256) {
-                        try {
-                            ColetaDAO cdao = new ColetaDAOImpl((getPersistenceContext()));
-                            EnsaioDAO edao = new EnsaioDAOImpl((getPersistenceContext()));
-                            Ensaio e = edao.save(coletas.get(0).getEnsaio());
-                            Coleta c;
-                            for (int i = 0; i < coletas.size(); i++) {
-                                c = coletas.get(i);
-                                c.setEnsaio(e);
-                                cdao.save(c);
-                            }
-                            Dialog.showInfo("Notificação", "Ensaio e coleta simulada inserida com sucesso!");
-                        } catch (Exception ex) {
-                            Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }else{
-                        Dialog.showError("Notificação", "Retorno das coletas menor que o valor esperado.", view);
-                    }
+                    view.showProgress(true);
+                    view.getProgressIndicator().progressProperty().unbind();
+                    view.getProgressIndicator().setProgress(0);
+                    Task t = createTask();
+                    view.getProgressIndicator().progressProperty().bind(t.progressProperty());
                     
-                    
-                    
+                    new Thread(t).start();
+
                 } else {
                     Dialog.showInfo("Validacão", "Selecione um ensaio.", view);
                 }
             }
+
         });
-        
+
+
+
         view.getTable().setMouseEvent(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -159,28 +153,28 @@ public class ListaEnsaioController extends PersistenceController {
                 }
             }
         });
-        
+
         registerEventListener(IncluirEnsaioEvent.class, new AbstractEventListener<IncluirEnsaioEvent>() {
             @Override
             public void handleEvent(IncluirEnsaioEvent event) {
                 refreshTable();
             }
         });
-        
+
         registerEventListener(RemoveEnsaioEvent.class, new AbstractEventListener<RemoveEnsaioEvent>() {
             @Override
             public void handleEvent(RemoveEnsaioEvent event) {
                 refreshTable();
             }
         });
-        
+
         registerEventListener(AtualizaListaEnsaioEvent.class, new AbstractEventListener<AtualizaListaEnsaioEvent>() {
             @Override
             public void handleEvent(AtualizaListaEnsaioEvent event) {
                 refreshTable();
             }
         });
-        
+
         registerEventListener(BuscarEnsaioEvent.class, new AbstractEventListener<BuscarEnsaioEvent>() {
             @Override
             public void handleEvent(BuscarEnsaioEvent event) {
@@ -190,31 +184,67 @@ public class ListaEnsaioController extends PersistenceController {
                 }
             }
         });
-        
+
         refreshTable();
     }
-    
+
+    public Task createTask() {
+        return new Task() {
+            // call() should be overridden
+            @Override
+            protected Object call() throws Exception {
+                try {
+                    IRedeNeural neural = new RedeNeuralImpl();
+                    List<Coleta> coletas = neural.rede(view.getTable().getEnsaioSelected());
+                    if (coletas.size() == 256) {
+
+                        ColetaDAO cdao = new ColetaDAOImpl((getPersistenceContext()));
+                        EnsaioDAO edao = new EnsaioDAOImpl((getPersistenceContext()));
+                        Ensaio e = edao.save(coletas.get(0).getEnsaio());
+                        Coleta c;
+                        for (int i = 0; i < coletas.size(); i++) {
+                            c = coletas.get(i);
+                            c.setEnsaio(e);
+                            cdao.save(c);
+                            updateProgress(i, coletas.size());
+                        }
+//                        Dialog.showInfo("Notificação", "Ensaio e coleta simulada inserida com sucesso!");
+                        refreshTable();
+                        view.showProgress(false);
+                        view.disableButtonBar(false);
+                    } else {
+//                        Dialog.showError("Notificação", "Retorno das coletas menor que o valor esperado.", view);
+                        Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, "Erro!!! Retorno das coletas menor que o valor esperado.");
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return true;
+            }
+        };
+    }
+
     public void show() {
         loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
         view.show();
     }
-    
+
     @Override
     public void cleanUp() {
         super.cleanUp();
         JPAUtil.closeEntityManagerFactory();
     }
-    
+
     private void refreshTable() {
         refreshTable(null);
     }
-    
+
     private void refreshTable(List<Ensaio> list) {
         if (list != null) {
             view.refreshTable(list);
             return;
         }
-        
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -224,8 +254,15 @@ public class ListaEnsaioController extends PersistenceController {
                 try {
                     EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
                     view.refreshTable(dao.findAll());
+
+
+
+
+
+
                 } catch (Exception ex) {
-                    Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ListaEnsaioController.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });

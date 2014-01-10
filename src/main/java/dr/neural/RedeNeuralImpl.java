@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,6 +26,7 @@ import java.util.logging.Logger;
  */
 public class RedeNeuralImpl implements IRedeNeural {
 
+    @Override
     public List<Coleta> rede(Ensaio e) {
         try {
             createTxt(e);
@@ -38,13 +38,19 @@ public class RedeNeuralImpl implements IRedeNeural {
             } else {
                 pb = new ProcessBuilder("./neural.out");
             }
-
-            Ensaio ensaioSimulado = new Ensaio();
-            ensaioSimulado = cloneEnsaio(e);
             Process p = pb.start();
+//            InputStream is = p.getInputStream();
+            
+            for (int i = 0; i < 1000; i++) {
+                System.err.println("aguardadndo processo externo");
+            }
+            
+
+            Ensaio ensaioSimulado = cloneEnsaio(e);
+            
             List<String> lines = readSmallTextFile("neural.txt");
             String[] in = lines.get(0).split(";");
-            System.out.println(in.toString());
+            
             
             Coleta coleta;
             List<Coleta> coletas = new LinkedList<>();
@@ -72,7 +78,8 @@ public class RedeNeuralImpl implements IRedeNeural {
             Logger.getLogger(RedeNeuralImpl.class.getName()).log(Level.SEVERE, null, ex);
             Dialog.showError(ex.getCause().toString(), ex.getMessage());
         } catch (IndexOutOfBoundsException ie) {
-            Dialog.showError("Erro ao ler arquivo", "Não foi possível ler o arquivo de coletas!");
+            Logger.getLogger(RedeNeuralImpl.class.getName()).log(Level.SEVERE, null, "Erro ao ler arquivo!! Não foi possível ler o arquivo de coletas!\"");
+//            Dialog.showError("Erro ao ler arquivo", "Não foi possível ler o arquivo de coletas!");
         }
 
         return null;
@@ -105,8 +112,8 @@ public class RedeNeuralImpl implements IRedeNeural {
 
     public Float normalizaBocal(Ensaio e) {
         try {
-            float bocal = Float.parseFloat(e.getBocal().getDescricao());
-            float quebraJato = Float.parseFloat(e.getQuebraJato().getDescricao());
+            float bocal = Float.parseFloat(e.getBocal().getDescricao().replaceAll("\\D+", ""));
+            float quebraJato = Float.parseFloat(e.getQuebraJato().getDescricao().replaceAll("\\D+", ""));
 
             return (float) (((bocal + quebraJato) - 5.0) / 2.2);
 
@@ -120,7 +127,7 @@ public class RedeNeuralImpl implements IRedeNeural {
 
     public Float normalizaPressao(Ensaio e) {
         try {
-            float pressao = Float.parseFloat(e.getPressao());
+            float pressao = Float.parseFloat(e.getPressao().replaceAll("kgf/cm2", ""));
 
             return (float) ((pressao - 2.0) / 1.5);
 
