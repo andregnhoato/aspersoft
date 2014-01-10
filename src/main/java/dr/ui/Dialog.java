@@ -7,7 +7,6 @@ import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,11 +26,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import javafx.stage.WindowEvent;
 
 /**
  * @author Anton Smirnov (dev@antonsmirnov.name)
- * <p>Modificado por YaW Tecnologia</p>
+
  *
  * <p>github: https://github.com/4ntoine/JavaFXDialog</p>
  */
