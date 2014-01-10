@@ -130,6 +130,10 @@ public class EnsaioListView extends Stage {
         pi.setVisible(b);
     }
     
+    public ProgressBar getProgressBar(){
+        return pi;
+    }
+
     public void disableButtonBar(boolean disable) {
         bNewEnsaio.setDisable(disable);
         bFindEnsaio.setDisable(disable);

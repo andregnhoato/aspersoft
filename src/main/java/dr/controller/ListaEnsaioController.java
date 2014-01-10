@@ -126,10 +126,10 @@ public class ListaEnsaioController extends PersistenceController {
             protected void action() {
                 if (view.getTable().getEnsaioSelected() != null) {
                     view.showProgress(true);
-                    view.getProgressIndicator().progressProperty().unbind();
-                    view.getProgressIndicator().setProgress(0);
+                    view.getProgressBar().progressProperty().unbind();
+                    view.getProgressBar().setProgress(0);
                     Task t = createTask();
-                    view.getProgressIndicator().progressProperty().bind(t.progressProperty());
+                    view.getProgressBar().progressProperty().bind(t.progressProperty());
                     
                     new Thread(t).start();
 
