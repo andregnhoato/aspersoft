@@ -36,6 +36,7 @@ public class RedeNeuralImpl implements IRedeNeural {
                 pb = new ProcessBuilder("neural.exe");
                 Dialog.showInfo("Detected Windows", "no problem yet");
             } else {
+                Runtime.getRuntime().exec("chmod 777 neural.out");
                 pb = new ProcessBuilder("./neural.out");
             }
             Process p = pb.start();
