@@ -28,6 +28,7 @@ public class MainView {
     private MenuItem menuQuebraJato;
     private MenuItem menuCombinacao;
     private MenuItem menuPerfil;
+    private MenuItem menuAjuda;
     
 
     public MainView(Stage stage) {
@@ -82,7 +83,7 @@ public class MainView {
 
         menuAbout = new MenuItem("Sobre");
         menuAbout.setId("exibirSobre");
-        menuAbout.setAccelerator(KeyCombination.keyCombination("F1"));
+        menuAbout.setAccelerator(KeyCombination.keyCombination("F9"));
         
         menuBocais = new MenuItem("Bocais");
         menuBocais.setId("bocais");
@@ -99,12 +100,20 @@ public class MainView {
         menuPerfil = new MenuItem("Perfis");
         menuPerfil.setId("perfis");
         menuPerfil.setAccelerator(KeyCombination.keyCombination("F8"));
+        
+        menuAjuda = new MenuItem("Ajuda");
+        menuAjuda.setId("ajuda");
+        menuAjuda.setAccelerator(KeyCombination.keyCombination("F1"));
                
 
-        menuHelp.getItems().addAll(menuAbout, menuConfiguracao);
+        menuHelp.getItems().addAll(menuAjuda, menuAbout, menuConfiguracao);
         menuStart.getItems().addAll(menuEnsaio, menuEnsaioList, menuBocais, menuQuebraJato, menuCombinacao, menuPerfil);
         menuBar.getMenus().addAll(menuStart ,menuHelp);
         return menuBar;
+    }
+    
+    public MenuItem getMenuAjuda(){
+        return menuAjuda;
     }
 
     public MenuItem getMenuAbout() {

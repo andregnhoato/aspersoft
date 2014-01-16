@@ -1,12 +1,10 @@
 package dr.ui.bocal;
 
-import dr.ui.bocal.*;
 import dr.model.Bocal;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,7 +19,6 @@ import javafx.stage.Stage;
  */
 public class BocalListView extends Stage {
 
-    private Scene subScene;
     private BocalTable table;    
     private Button bNewBocal;
     private Button bRefreshList;
