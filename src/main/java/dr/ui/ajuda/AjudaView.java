@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dr.ui.ajuda;
 
 import javafx.scene.Scene;
@@ -16,14 +12,12 @@ import javafx.stage.Stage;
  */
 public class AjudaView extends Stage {
 
-//	public static void main(String[] args) {
-//		Application.launch(args);
-//	}
     public AjudaView() {
         setTitle("Guia de Utilização Aspersoft");
         WebView browser = new WebView();
         WebEngine engine = browser.getEngine();
-        String url = "https://dl.dropboxusercontent.com/u/10055997/help/inicio.html";
+//        String url = "https://dl.dropboxusercontent.com/u/10055997/help/inicio.html";
+        String url = System.getProperty("user.dir")+"/help/inicio.html";
         engine.load(url);
 
         StackPane sp = new StackPane();

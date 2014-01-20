@@ -32,59 +32,59 @@ public class EnsaioTableView extends TableView<EnsaioTableView.EnsaioItem> {
 
     public EnsaioTableView() {
         TableColumn<EnsaioItem, String> idCol = new TableColumn<>("Id");
-        idCol.setMinWidth(40);
+//        idCol.setMinWidth(40);
         idCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("id"));
 
         TableColumn<EnsaioItem, String> descricaoCol = new TableColumn<>("Descrição");
-        descricaoCol.setMinWidth(100);
+//        descricaoCol.setMinWidth(100);
         descricaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("descricao"));
 
         TableColumn<EnsaioItem, String> pressaoCol = new TableColumn<>("Pressão");
-        pressaoCol.setMinWidth(80);
+//        pressaoCol.setMinWidth(80);
         pressaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("pressao"));
 
         TableColumn<EnsaioItem, String> bocalCol = new TableColumn<>("Bocal");
-        bocalCol.setMinWidth(80);
+//        bocalCol.setMinWidth(80);
         bocalCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("bocal"));
 
         TableColumn<EnsaioItem, String> quebraJatoCol = new TableColumn<>("QuebraJato");
-        quebraJatoCol.setMinWidth(90);
+//        quebraJatoCol.setMinWidth(90);
         quebraJatoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("quebraJato"));
 
         TableColumn<EnsaioItem, String> duracaoCol = new TableColumn<>("Duração");
-        duracaoCol.setMinWidth(80);
+//        duracaoCol.setMinWidth(80);
         duracaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("duracao"));
 
         TableColumn<EnsaioItem, String> espacamentoCol = new TableColumn<>("Esp. pluviometro");
-        espacamentoCol.setMinWidth(110);
+//        espacamentoCol.setMinWidth(110);
         espacamentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("espacamentoPluviometro"));
 
         TableColumn<EnsaioItem, String> alturaCol = new TableColumn<>("Altura");
-        alturaCol.setMinWidth(80);
+//        alturaCol.setMinWidth(80);
         alturaCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("gridAltura"));
 
         TableColumn<EnsaioItem, String> larguraCol = new TableColumn<>("Largura");
-        larguraCol.setMinWidth(80);
+//        larguraCol.setMinWidth(80);
         larguraCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("gridLargura"));
 
         TableColumn<EnsaioItem, String> dataCol = new TableColumn<>("Data");
-        dataCol.setMinWidth(100);
+//        dataCol.setMinWidth(100);
         dataCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("data"));
 
         TableColumn<EnsaioItem, String> velocidadeVentoCol = new TableColumn<>("Vel. Vento");
-        velocidadeVentoCol.setMinWidth(80);
+//        velocidadeVentoCol.setMinWidth(80);
         velocidadeVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("velocidadeVento"));
 
         TableColumn<EnsaioItem, String> direcaoVentoCol = new TableColumn<>("Dir. Vento");
-        direcaoVentoCol.setMinWidth(80);
+//        direcaoVentoCol.setMinWidth(80);
         direcaoVentoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("direcaoVento"));
 
         TableColumn<EnsaioItem, String> direcaoVentoGrausCol = new TableColumn<>("Sentido do Vento");
-        direcaoVentoGrausCol.setMinWidth(150);
+//        direcaoVentoGrausCol.setMinWidth(150);
         direcaoVentoGrausCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("direcaoVentoGraus"));
 
         TableColumn<EnsaioItem, String> vazaoCol = new TableColumn<>("Vazão");
-        vazaoCol.setMinWidth(80);
+//        vazaoCol.setMinWidth(80);
         vazaoCol.setCellValueFactory(new PropertyValueFactory<EnsaioItem, String>("vazao"));
 
 

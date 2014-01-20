@@ -43,6 +43,8 @@ public class ListaEnsaioController extends PersistenceController {
     private BuscarEnsaioController buscarController;
     private ListaColetaController coletaController;
     private AnaliseController uniformidadeController;
+    private ListaBocalController bocalListController;
+    private ListaQuebraJatoController quebraListController;
 
     public ListaEnsaioController(AbstractController parent) {
         super(parent);
@@ -52,6 +54,8 @@ public class ListaEnsaioController extends PersistenceController {
         this.buscarController = new BuscarEnsaioController(this);
         this.coletaController = new ListaColetaController(this);
         this.uniformidadeController = new AnaliseController(this);
+        this.bocalListController = new ListaBocalController(this);
+        this.quebraListController = new ListaQuebraJatoController(this);
 
 
         registerAction(view.getNewButton(), new AbstractAction() {
@@ -116,12 +120,11 @@ public class ListaEnsaioController extends PersistenceController {
         });
 
         registerAction(view.getSimuladoButton(), new AbstractAction() {
-            
             @Override
-            protected void preAction(){
-                view.disableButtonBar(true);              
+            protected void preAction() {
+                view.disableButtonBar(true);
             }
-            
+
             @Override
             protected void action() {
                 if (view.getTable().getEnsaioSelected() != null) {
@@ -130,19 +133,60 @@ public class ListaEnsaioController extends PersistenceController {
                     view.getProgressBar().setProgress(0);
                     Task t = createTask();
                     view.getProgressBar().progressProperty().bind(t.progressProperty());
-                    
+
                     new Thread(t).start();
 
                 } else {
                     Dialog.showInfo("Validacão", "Selecione um ensaio.", view);
                 }
             }
+        });
 
+        registerAction(view.getBocalButton(), new AbstractAction() {
+            @Override
+            protected void action() {
+                bocalListController.show(view);
+            }
+        });
+
+        registerAction(view.getQuebraJatoButton(), new AbstractAction() {
+            @Override
+            protected void action() {
+                quebraListController.show(view);
+            }
+        });
+
+        registerAction(view.getFilterButton(), new AbstractAction() {
+            @Override
+            protected void action() {
+                try {
+                    EnsaioDAO edao = new EnsaioDAOImpl((getPersistenceContext()));
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("WHERE 1=1 ");
+                    if (view.getBocal() != null) {
+                        sb.append(" and e.bocal.id = ").append(view.getBocal().getId()).append(" ");
+                    }
+                    if (view.getQuebraJato() != null) {
+                        sb.append(" and e.quebraJato.id = ").append(view.getQuebraJato().getId()).append("");
+                    }
+
+
+                    refreshTable(edao.getEnsaiosByWhere(sb.toString()));
+
+
+
+                } catch (Exception e) {
+                    Logger.getLogger(ListaEnsaioController.class
+                            .getName()).log(Level.SEVERE, null, e);
+                }
+            }
         });
 
 
 
-        view.getTable().setMouseEvent(new EventHandler<MouseEvent>() {
+        view.getTable()
+                .setMouseEvent(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
                 if (t.getClickCount() == 2) {
@@ -212,12 +256,18 @@ public class ListaEnsaioController extends PersistenceController {
                         refreshTable();
                         view.showProgress(false);
                         view.disableButtonBar(false);
+
+
                     } else {
 //                        Dialog.showError("Notificação", "Retorno das coletas menor que o valor esperado.", view);
-                        Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, "Erro!!! Retorno das coletas menor que o valor esperado.");
+                        Logger.getLogger(ListaEnsaioController.class
+                                .getName()).log(Level.SEVERE, null, "Erro!!! Retorno das coletas menor que o valor esperado.");
                     }
+
+
                 } catch (Exception ex) {
-                    Logger.getLogger(ListaEnsaioController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ListaEnsaioController.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
                 return true;
             }
@@ -254,6 +304,8 @@ public class ListaEnsaioController extends PersistenceController {
                 try {
                     EnsaioDAO dao = new EnsaioDAOImpl(getPersistenceContext());
                     view.refreshTable(dao.findAll());
+
+
 
 
 

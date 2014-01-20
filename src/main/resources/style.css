@@ -36,8 +36,8 @@
 }
 
 .buttonBarMain, .buttonBar {
-    -fx-alignment: center;
-    -fx-padding: 10 0 10 0;
+  
+    -fx-padding: 10 10 20 10;
     -fx-spacing: 5;
 }
 

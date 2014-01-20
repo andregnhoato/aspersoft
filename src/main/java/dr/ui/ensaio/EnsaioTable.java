@@ -3,11 +3,9 @@ package dr.ui.ensaio;
 import dr.model.Ensaio;
 import java.util.List;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Screen;
+import javafx.scene.layout.GridPane;
 
 /**
  * Reune os componentes para formar uma tabela de
@@ -18,14 +16,14 @@ import javafx.stage.Screen;
  * @author
  * @Andre
  */
-public class EnsaioTable extends BorderPane {
+public class EnsaioTable extends BorderPane{
 
     private EnsaioTableView table;
 
     public EnsaioTable() {
         table = new EnsaioTableView();
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
+//        Screen screen = Screen.getPrimary();
+//        Rectangle2D bounds = screen.getVisualBounds();
        
 //        table.setMaxSize(bounds.getWidth() / 2, bounds.getHeight() / 2);
 //        table.setMinSize(bounds.getWidth() / 2.2, bounds.getHeight() / 2.5);
@@ -33,7 +31,10 @@ public class EnsaioTable extends BorderPane {
         
 //        this.getChildren().addAll(table);
         this.setCenter(table);
-        this.setPadding(new Insets(30, 10, 10, 10));//css
+//        this.add(table, 0,0);
+//        this.autosize();
+        
+//        this.setPadding(new Insets(30, 10, 10, 10));//css
     }
 
     public void reload(List<Ensaio> ensaios) {

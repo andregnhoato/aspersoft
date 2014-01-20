@@ -11,6 +11,7 @@ import dr.event.RemoveQuebraJatoEvent;
 import dr.model.QuebraJato;
 import dr.ui.Dialog;
 import dr.ui.combinacao.IncluirCombinacaoView;
+import dr.ui.ensaio.EnsaioListView;
 import dr.ui.ensaio.IncluirEnsaioView;
 import dr.ui.quebraJato.QuebraJatoListView;
 import dr.util.JPAUtil;
@@ -40,6 +41,7 @@ public class ListaQuebraJatoController extends PersistenceController {
     private QuebraJato quebraJato;
     private IncluirEnsaioView Iview;
     private IncluirCombinacaoView Cview;
+    private EnsaioListView Eview;
     
 
     public ListaQuebraJatoController(AbstractController parent) {
@@ -95,6 +97,8 @@ public class ListaQuebraJatoController extends PersistenceController {
                         Iview.setQuebraJato(quebraJato);
                     if(Cview!=null)
                         Cview.setQuebraJato(quebraJato);
+                    if(Eview!=null)
+                        Eview.setQuebraJato(view.getTable().getQuebraJatoSelected());
                                 
                     view.hide();               
                 }
@@ -151,6 +155,11 @@ public class ListaQuebraJatoController extends PersistenceController {
         view.show();
     }
     
+    public void show(EnsaioListView v) {
+        this.Eview = v;
+        loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
+        view.show();
+    }
 
     @Override
     public void cleanUp() {

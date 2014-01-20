@@ -12,6 +12,7 @@ import dr.model.Bocal;
 import dr.ui.Dialog;
 import dr.ui.bocal.BocalListView;
 import dr.ui.combinacao.IncluirCombinacaoView;
+import dr.ui.ensaio.EnsaioListView;
 import dr.ui.ensaio.IncluirEnsaioView;
 import dr.util.JPAUtil;
 import java.util.List;
@@ -40,6 +41,7 @@ public class ListaBocalController extends PersistenceController {
     private Bocal bocal;
     private IncluirEnsaioView Iview;
     private IncluirCombinacaoView Cview;
+    private EnsaioListView Eview;
     
 
     public ListaBocalController(AbstractController parent) {
@@ -93,6 +95,9 @@ public class ListaBocalController extends PersistenceController {
                         Iview.setBocal(view.getTable().getBocalSelected());
                     if(Cview != null)
                         Cview.setBocal(view.getTable().getBocalSelected());
+                    if(Eview!=null)
+                        Eview.setBocal(view.getTable().getBocalSelected());
+                    
                     view.hide();
                     
 //                    if (e != null) {
@@ -149,6 +154,12 @@ public class ListaBocalController extends PersistenceController {
     
     public void show(IncluirCombinacaoView v) {
         this.Cview = v;
+        loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
+        view.show();
+    }
+    
+    public void show(EnsaioListView v) {
+        this.Eview = v;
         loadPersistenceContext(((PersistenceController) getParentController()).getPersistenceContext());
         view.show();
     }
