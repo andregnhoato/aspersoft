@@ -16,9 +16,7 @@ public class AjudaView extends Stage {
         setTitle("Guia de Utilização Aspersoft");
         WebView browser = new WebView();
         WebEngine engine = browser.getEngine();
-//        String url = "https://dl.dropboxusercontent.com/u/10055997/help/inicio.html";
-        String url = System.getProperty("user.dir")+"/help/inicio.html";
-        engine.load(url);
+        engine.load("file://"+System.getProperty("user.dir")+"/help/inicio.html");
 
         StackPane sp = new StackPane();
         sp.getChildren().add(browser);
