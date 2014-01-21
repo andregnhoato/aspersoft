@@ -266,8 +266,10 @@ public class ListaEnsaioController extends PersistenceController {
 
 
                 } catch (Exception ex) {
+                    this.setException(ex); 
                     Logger.getLogger(ListaEnsaioController.class
                             .getName()).log(Level.SEVERE, null, ex);
+                    return false;
                 }
                 return true;
             }
