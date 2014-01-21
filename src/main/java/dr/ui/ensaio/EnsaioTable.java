@@ -5,7 +5,6 @@ import java.util.List;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 
 /**
  * Reune os componentes para formar uma tabela de
@@ -22,19 +21,11 @@ public class EnsaioTable extends BorderPane{
 
     public EnsaioTable() {
         table = new EnsaioTableView();
-//        Screen screen = Screen.getPrimary();
-//        Rectangle2D bounds = screen.getVisualBounds();
-       
-//        table.setMaxSize(bounds.getWidth() / 2, bounds.getHeight() / 2);
-//        table.setMinSize(bounds.getWidth() / 2.2, bounds.getHeight() / 2.5);
-        
-        
-//        this.getChildren().addAll(table);
         this.setCenter(table);
-//        this.add(table, 0,0);
-//        this.autosize();
+
+        this.autosize();
         
-//        this.setPadding(new Insets(30, 10, 10, 10));//css
+
     }
 
     public void reload(List<Ensaio> ensaios) {

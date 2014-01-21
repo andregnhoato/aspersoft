@@ -75,6 +75,9 @@ public class ListaEnsaioController extends PersistenceController {
         registerAction(view.getRefreshButton(), new AbstractAction() {
             @Override
             protected void action() {
+                view.getTfDescricao().setText("");
+                view.setBocal(null);
+                view.setQuebraJato(null);
                 refreshTable();
             }
         });
@@ -164,17 +167,16 @@ public class ListaEnsaioController extends PersistenceController {
 
                     StringBuilder sb = new StringBuilder();
                     sb.append("WHERE 1=1 ");
-                    if (view.getBocal() != null) {
+                    if (view.getBocal() != null)
                         sb.append(" and e.bocal.id = ").append(view.getBocal().getId()).append(" ");
-                    }
-                    if (view.getQuebraJato() != null) {
+                    
+                    if (view.getQuebraJato() != null) 
                         sb.append(" and e.quebraJato.id = ").append(view.getQuebraJato().getId()).append("");
-                    }
-
+                    
+                    if(!view.getTfDescricao().getText().isEmpty())
+                        sb.append(" and e.descricao like '%").append(view.getTfDescricao().getText()).append("%' ");
 
                     refreshTable(edao.getEnsaiosByWhere(sb.toString()));
-
-
 
                 } catch (Exception e) {
                     Logger.getLogger(ListaEnsaioController.class
@@ -182,8 +184,6 @@ public class ListaEnsaioController extends PersistenceController {
                 }
             }
         });
-
-
 
         view.getTable()
                 .setMouseEvent(new EventHandler<MouseEvent>() {
