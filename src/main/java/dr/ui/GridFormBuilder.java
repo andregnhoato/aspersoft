@@ -2,6 +2,7 @@ package dr.ui;
 
 import eu.schudt.javafx.controls.calendar.DatePicker;
 import javafx.geometry.HPos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -42,6 +43,14 @@ public class GridFormBuilder {
     public GridFormBuilder addRow(Label label, DatePicker dp) {
         this.pane.add(label, 0, row);
         this.pane.add(dp, 1, row++);
+        GridPane.setHalignment(label, HPos.RIGHT);
+        return this;
+    }
+    
+    public GridFormBuilder addRow(Label label, TextField tf, Button bt) {
+        this.pane.add(label, 0, row);
+        this.pane.add(tf, 1, row);
+        this.pane.add(bt, 2, row++);
         GridPane.setHalignment(label, HPos.RIGHT);
         return this;
     }

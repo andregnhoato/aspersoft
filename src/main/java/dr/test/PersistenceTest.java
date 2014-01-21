@@ -5,12 +5,19 @@
 package dr.test;
 
 import dr.controller.PersistenceController;
+import dr.dao.BocalDAO;
+import dr.dao.BocalDAOImpl;
 import dr.dao.ColetaDAO;
 import dr.dao.ColetaDAOImpl;
+import dr.dao.CombinacaoDAO;
+import dr.dao.CombinacaoDAOImpl;
 import dr.dao.EnsaioDAO;
 import dr.dao.EnsaioDAOImpl;
+import dr.dao.QuebraJatoDAO;
+import dr.dao.QuebraJatoDAOImpl;
 import dr.model.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -27,11 +34,15 @@ public class PersistenceTest extends PersistenceController {
 
     public static ColetaDAO cdao;
     public static EnsaioDAO edao;
+    public static CombinacaoDAO combDao;
+    public static QuebraJatoDAO qdao;
+    public static BocalDAO bdao;
 
     public static void main(String[] args) throws Exception {
 
         PersistenceTest pt = new PersistenceTest();
-//        pt.listarColetasByEnsaio(1);
+
+//        pt.listarColetasByEnsaio(118);
 //        pt.qtdeColetasByEnsaio(1);
 //        pt.removeColetasByEnsaio(1);
 //        pt.qtdeColetasByEnsaio(1);
@@ -40,9 +51,9 @@ public class PersistenceTest extends PersistenceController {
 
 //        pt.qtdeColetas();
 //        pt.atualizarEnsaio();
-        
-        
-        pt.removeColeta(30320);
+
+
+//        pt.removeColeta(30320);
 //        pt.removeColeta(30312);
 //        pt.removeColeta(30321);
 //        pt.removeColeta(30322);
@@ -50,11 +61,12 @@ public class PersistenceTest extends PersistenceController {
 //        pt.removeColeta(30324);
 //        pt.removeColeta(30325);
 //        pt.removeColeta(30326);
-//        pt.removeColeta(30327);
-        
-        
-        
+//        pt.removeColeta(30308);
+
+
+//         pt.listarColetasByEnsaio(108);
         pt.listarColetasByEnsaio(118);
+//        pt.insertNewFunc();
 
 
 
@@ -73,7 +85,7 @@ public class PersistenceTest extends PersistenceController {
             Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void atualizarEnsaio() {
         Ensaio e;
         try {
@@ -83,7 +95,7 @@ public class PersistenceTest extends PersistenceController {
                 ensaio.setGridLargura(24);
                 edao.update(ensaio);
             }
-           
+
         } catch (Exception ex) {
             Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -105,47 +117,140 @@ public class PersistenceTest extends PersistenceController {
         }
     }
 
+    public void insertNewFunc() {
+        List<QuebraJato> quebras = new ArrayList<>();
+
+        QuebraJato qj = new QuebraJato();
+        qj.setDescricao("2.4");//2.6, 2.8 3.2
+        quebras.add(qj);
+        qj = new QuebraJato();
+        qj.setDescricao("2.6");
+        quebras.add(qj);
+        qj = new QuebraJato();
+        qj.setDescricao("2.8");
+        quebras.add(qj);
+        qj = new QuebraJato();
+        qj.setDescricao("3.2");
+        quebras.add(qj);
+        for (int i = 0; i < quebras.size(); i++) {
+            try {
+                qdao.save(quebras.get(i));
+            } catch (Exception ex) {
+                Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        List<Bocal> bocais = new ArrayList<>();
+        Bocal b = new Bocal();
+        b.setDescricao("2.6");
+        bocais.add(b);
+        b = new Bocal();
+        b.setDescricao("2.8");
+        bocais.add(b);
+        b = new Bocal();
+        b.setDescricao("3.0");
+        bocais.add(b);
+        b = new Bocal();
+        b.setDescricao("3.2");
+        bocais.add(b);
+        b = new Bocal();
+        b.setDescricao("3.4");
+        bocais.add(b);
+        b = new Bocal();
+        b.setDescricao("3.6");
+        bocais.add(b);
+        b = new Bocal();
+        b.setDescricao("3.8");
+        bocais.add(b);
+        b = new Bocal();
+        b.setDescricao("4.0");
+        bocais.add(b);
+        for (int i = 0; i < bocais.size(); i++) {
+            try {
+                bdao.save(bocais.get(i));
+            } catch (Exception ex) {
+                Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+        try {
+            quebras.clear();
+            quebras = qdao.findAll();
+            for (int i = 0; i < quebras.size(); i++) {
+                System.out.println("ID: "+quebras.get(i).getId());
+                System.out.println("Descricao quebra jatoØ: "+quebras.get(i).getDescricao());
+                
+            }
+            
+            bocais.clear();
+            bocais = bdao.findAll();
+            for (int i = 0; i < bocais.size(); i++) {
+                System.out.println("ID: "+bocais.get(i).getId());
+                System.out.println("Descricao bocais: "+bocais.get(i).getDescricao());
+                
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Combinacao c = new Combinacao();
+        c.setAltura(0F);
+        c.setDiametroIrrigado(0F);
+        c.setLargura(12F);
+        c.setPressao(0F);
+        c.setVazao(0F);
+        c.setAltura(12F);
+        c.setBocal(bocais.get(0));
+        c.setQuebraJato(quebras.get(0));
+        try {
+            combDao.save(c);
+        } catch (Exception ex) {
+            Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+
+    }
+
     public void listarColetasByEnsaio(int idEnsaio) {
         try {
             Ensaio e = new Ensaio();
             e.setId(idEnsaio);
             List<Coleta> coletas = (List<Coleta>) cdao.findColetasByEnsaio(e);
-            System.out.println("tamanho array: "+coletas.size());
-            
+            System.out.println("tamanho array: " + coletas.size());
+
             int linha = 15;
-            int coluna = 8;
-//            for(int i=0; i<=7; i++ ){
-//                Coleta c = new Coleta();
-//                c.setColuna(coluna);
-//                c.setLinha(linha);
-//                c.setValor(0F);
-//                c.setEnsaio(coletas.get(0).getEnsaio());
-//                
-//                cdao.save(c);
-//                coluna++;
-//            }
+            int coluna = 10;
+            for (int i = 0; i <= 5; i++) {
+                Coleta c = new Coleta();
+                c.setColuna(coluna);
+                c.setLinha(linha);
+                c.setValor(0F);
+                c.setEnsaio(coletas.get(0).getEnsaio());
+
+                cdao.save(c);
+                coluna++;
+            }
             coletas = null;
             coletas = (List<Coleta>) cdao.findColetasByEnsaio(e);
-            System.out.println("tamanho array: "+coletas.size());
-            for (Coleta cc: coletas) {
+            System.out.println("tamanho array: " + coletas.size());
+            for (Coleta cc : coletas) {
                 Coleta coleta = cc;
-                System.out.println("tamanho array: "+coletas.size());
-                
+                System.out.println("tamanho array: " + coletas.size());
+
                 System.out.println("coleta id: " + coleta.getId());
                 System.out.println("coleta coluna: " + coleta.getColuna());
                 System.out.println("coleta linha: " + coleta.getLinha());
                 System.out.println("coleta valor: " + coleta.getValor());
                 System.out.println("id ensaio: " + coleta.getEnsaio().getId() + " descricao: " + (coleta.getEnsaio() == null ? "nulo" : coleta.getEnsaio().getDescricao()));
                 System.out.println("=====================================");
-                
+
             }
         } catch (Exception ex) {
             Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
-    public void removeColeta(int idColeta){
+
+    public void removeColeta(int idColeta) {
         Coleta c = new Coleta();
         try {
             c = cdao.findById(idColeta);
@@ -153,7 +258,7 @@ public class PersistenceTest extends PersistenceController {
         } catch (Exception ex) {
             Logger.getLogger(PersistenceTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-      
+
     }
 
     public void qtdeColetas() {
@@ -189,8 +294,6 @@ public class PersistenceTest extends PersistenceController {
         }
 
     }
-    
-    
 
     public void qtdeEnsaios() {
         try {
@@ -334,5 +437,8 @@ public class PersistenceTest extends PersistenceController {
     public PersistenceTest() {
         this.cdao = new ColetaDAOImpl(getPersistenceContext());
         this.edao = new EnsaioDAOImpl(getPersistenceContext());
+        this.qdao = new QuebraJatoDAOImpl(getPersistenceContext());
+        this.combDao = new CombinacaoDAOImpl(getPersistenceContext());
+        this.bdao = new BocalDAOImpl(getPersistenceContext());
     }
 }

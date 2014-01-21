@@ -3,7 +3,9 @@ JavaFX-Version: 2.2
 Implementation-Vendor-Id: 
 Implementation-Build: 52549a9247163dd3f609734b6446141b8531f789
 Built-By: André R. Gnhoato
-Implementation-Title: Experimento
+Idealized-By: Paulo Lopes de Menezes
+Implementation-Title: Aspersoft
+Implementation-Version: 1.1.6
 Implementation-Site: https://agnhoato@bitbucket.org/agnhoato/projeto.git
 JavaFX-Application-Class: dr.app.MainApp
 JavaFX-Class-Path: lib/antlr-2.7.7.jar lib/dom4j-1.6.1.jar lib/hiberna
@@ -13,7 +15,7 @@ JavaFX-Class-Path: lib/antlr-2.7.7.jar lib/dom4j-1.6.1.jar lib/hiberna
  ldb-2.2.8.jar lib/javassist-3.15.0-GA.jar lib/jboss-logging-3.1.0.GA.
  jar lib/jboss-transaction-api_1.1_spec-1.0.0.Final.jar lib/junit-3.8.
  1.jar lib/log4j-1.2.16.jar lib/slf4j-api-1.6.4.jar lib/validation-api
- -1.0.0.GA.jar
+ -1.0.0.GA.jar lib/xmlbeans-2.3.0.jar lib/poi-3.9-20121203.jar lib/poi-ooxml-3.9-20121203.jar lib/poi-ooxml-schemas-3.9-20121203.jar lib/schudt-javafx-datepicker-0.0.2.jar 
 Created-By: JavaFX Packager
 Main-Class: com/javafx/main/Main
 

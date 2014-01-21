@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    <title>Guia Aspersoft v 1.1.6</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="justified-nav.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="masthead">
+        <h3 class="text-muted">Aspersoft - Guia de utilização</h3>
+        <ul class="nav nav-tabs">
+          <li ><a href="inicio.html">Início</a></li>
+          <li class="active"><a href="ensaio.html">Ensaio</a></li>
+          <li><a href="coleta.html">Coleta</a></li>
+          <li><a href="analise.html">Análise</a></li>
+          <li><a href="bocal.html">Bocal</a></li >
+          <li><a href="quebrajato.html">Quebra Jato</a></li >
+          <li><a href="desempenho.html">Tabela Desempenho</a></li>
+          <li><a href="perfil.html">Perfil</a></li>
+          <li><a href="simulacao.html">Simulação</a></li>
+          <li><a href="preferencia.html">Prefências</a></li>
+        </ul>
+      </div>
+
+      <div class="jumbotron">
+          <h2>Ensaio</h2>
+          <p>O que é e para que serve o cadastro de Ensaio?</p>
+          <p>O cadastro de Ensaio é a representação de um experimento, tem por finalidade armazenar as informação referentes ao Ensaio; Encontra-se no menu Início >> Ensaio, possui outra alternativa de acesso via a listagem de ensaio botão <button type="button" class="btn btn-sm btn-default">Novo</button>;</p>
+          <p>Tela responsável pelo cadastro de Ensaio: </p>
+          <img class="img-thumbnail" alt="400x400" style="width: 400px; height: 500px;" src="dist/prints/incluirEnsaio.png">
+          <p>Detalhamento dos campos:</p>
+          <li>Descrição: campo texto obrigatório, indica-se cadastrar uma descrição que identifique o ensaio. Campo utilizado posteriormete para a consulta;</li>
+          <li>Pressão: campo numérico, referente a pressão da água liberada para o aspersor central, unidade de medida indicada kilograma força por centímetro cúbico(kgf/cm3);</li>
+          <li>Bocal: selecionar o bocal utilizado no ensaio, no botão <button type="button" class="btn btn-sm btn-success">...</button> é possível visualizar a listagem dos bocais cadastrados. Dois cliques para selecionar; <a class="btn btn-primary" href="bocal.html" role="button">ver cadastro de bocal &raquo;</a></li>
+          <li>Quebra Jato:  selecionar o quebra jato utilizado no ensaio, no botão <button type="button" class="btn btn-sm btn-success">...</button> é possível visualizar a listagem dos quebra jato cadastrados. Dois cliques para selecionar; <a class="btn btn-primary" href="quebrajato.html" role="button">ver cadastro de Quebra Jato &raquo;</a></li>
+          <li>Ínicio: campo texto referente a hora de início;</li>
+          <li>Data: campo de data referente a data de realização;</li>
+          <li>Duração em horas: campo texto, indica o tempo de duração</li>
+          <li>Velocidade do vento: campo númerico referente a velocidade média do vento registrada durante a duração do ensaio, unidade de medida utilizada metros por segundo (m/s);</li>
+          <li>Direção do vento: o campo direção do vento possui duas formas para inserção, a primeira é selecionando no combobox as direções padrões; a segunda é informando o valor numérico correspondente aos graus referente a norte. Após informar um dos campos é atualizado o outro de forma automática;</li>
+          <li>Vazão: campo numérico não obrigatório referente a vazão registrado no relógio de vazão de água, unidade de medida indicada Litros;</li>
+          <li>Espaço entre pluviometros: campo numérico referente ao espaçamento entre pluviometros, unidade de medida utilizada metros(m); ** </li>
+          <li>Dimensão altura: campo numérico obrigatório referente a altura em metros da malha de pluviometros; **</li>
+          <li>Dimensão largura: campo numérico obrigatório referente a largura em metros da malha de pluviometros; **</li>
+          <p> ** O campo após a inserção não pode ser editado, devido a sua utilização para a geração da malha de pluviometros (coletas).</p>
+
+        </div>
+
+        <div class="jumbotron">
+          <h2>Listagem de Ensaio</h2>
+          <p>Após o cadastro de um ensaio é possível visualizar todos os ensaios a partir do menu Início >> Listagem de Ensaio;</p>
+          <p>Esta tela proporciona várias ações:</p>
+          <li><button type="button" class="btn btn-sm btn-default">Novo</button> Cadastro de um novo Ensaio; </li>
+          <li><button type="button" class="btn btn-sm btn-default">Atualizar</button> Atualização da listagem de ensaio</li>
+          <li><button type="button" class="btn btn-sm btn-default">Coleta</button> Inserção/Atualização das Coletas <a class="btn btn-primary" href="coleta.html" role="button">ver cadastro de Coleta &raquo;</a> </li>
+          <li><button type="button" class="btn btn-sm btn-default">Análise</button> Gerar uma analise das informações inseridas <a class="btn btn-primary" href="analise.html" role="button">ver Analise &raquo;</a> </li>
+          <li><button type="button" class="btn btn-sm btn-default">Simulação</button> Clonar um ensaio e simular suas coletas <a class="btn btn-primary" href="simulado.html" role="button">ver opção de Simulação &raquo;</a> </li>
+          <li>Atualizar/Excluir um Ensaio: dois cliques em cima da linha do ensaio</li>
+          <li>No painel de filtros é possível parametrizar a listagem de acordo com a necessidade, os campos de filtro trabalham de forma conjunta sendo possível filtrar apenas por um dos campos, dois ou os tres campos. </li>
+          <img class="img-thumbnail" alt="400x400" style="width: 850px; height: 450px;" src="dist/prints/listagemEnsaio.png">
+        </div>
+
+        <div class="jumbotron">
+          <h2>Atualizando/Excluindo um Ensaio</h2>
+          <p>Para atualizar um ensaio selecione-o na listagem e duplo clique, ele abrirá a tela abaixo, atualize as informações e acione o botão <button type="button" class="btn btn-sm btn-primary">Salvar</button> para armazenar as alterações.</p>
+          <p> Caso deseje excluir um ensaio, selecione na listagem e duplo clique, acione o botão <button type="button" class="btn btn-sm btn-danger">Excluir</button>. Ao excluir um ensaio será também excluido todas as coletas referentes ao mesmo, não sendo possível a recuperação dos dados.</p>
+          <img class="img-thumbnail" alt="400x400" style="width: 400px; height: 500px;" src="dist/prints/editarEnsaio.png">
+        </div>
+      </div>
+
+      <!-- Site footer -->
+      <div class="footer" style="text-align: center;">
+        <p>&copy; Aspersoft 2013</p>
+      </div>
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
+</html>

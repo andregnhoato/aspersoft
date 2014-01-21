@@ -5,7 +5,7 @@ import dr.action.BooleanExpression;
 import dr.action.ConditionalAction;
 import dr.dao.EnsaioDAO;
 import dr.dao.EnsaioDAOImpl;
-import dr.event.ensaio.BuscarEnsaioEvent;
+import dr.event.BuscarEnsaioEvent;
 import dr.model.Ensaio;
 import dr.ui.ensaio.BuscarEnsaioView;
 import dr.util.DateUtil;

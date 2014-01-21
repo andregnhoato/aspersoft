@@ -1,12 +1,19 @@
 package dr.excell;
 
 import dr.controller.PersistenceController;
+import dr.dao.BocalDAO;
+import dr.dao.BocalDAOImpl;
 import dr.dao.ColetaDAO;
 import dr.dao.ColetaDAOImpl;
 import dr.dao.EnsaioDAO;
 import dr.dao.EnsaioDAOImpl;
+import dr.dao.QuebraJatoDAO;
+import dr.dao.QuebraJatoDAOImpl;
+import dr.model.Bocal;
 import dr.model.Coleta;
 import dr.model.Ensaio;
+import dr.model.QuebraJato;
+import dr.util.WindUtil;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,6 +26,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -35,10 +43,44 @@ public class ReadExcel extends PersistenceController {
 
     public static ColetaDAO cdao;
     public static EnsaioDAO edao;
+    public static BocalDAO bdao;
+    public static QuebraJatoDAO qjdao;
+
+    private static Bocal salvarBocais(Bocal bocal) {
+
+        try {
+            List<Bocal> bocais = bdao.getBocalByDescricao(bocal.getDescricao());
+            if (bocais.size() == 0) {
+                return bdao.save(bocal);
+            } else {
+                return bocais.get(0);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ReadExcel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
+    }
+
+    private static QuebraJato salvarQuebraJato(QuebraJato quebraJato) {
+        try {
+            List<QuebraJato> quebras = qjdao.getQuebraJatoByDescricao(quebraJato.getDescricao());
+            if (quebras.size() == 0) {
+                return qjdao.save(quebraJato);
+            } else {
+                return quebras.get(0);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ReadExcel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public ReadExcel() {
         this.cdao = new ColetaDAOImpl(getPersistenceContext());
         this.edao = new EnsaioDAOImpl(getPersistenceContext());
+        this.bdao = new BocalDAOImpl(getPersistenceContext());
+        this.qjdao = new QuebraJatoDAOImpl(getPersistenceContext());
     }
 
     public static void readXLSFile() throws IOException {
@@ -108,8 +150,11 @@ public class ReadExcel extends PersistenceController {
         DecimalFormat df = new DecimalFormat("0.00");
         //String arquivo = "1_LINHA_REPETICAO_1/Ensaios_L1-R1-A.xlsx";
 
+
+
+
         int linha = 1;
-        while (linha <= 9) {
+        while (linha < 10) {
             int repeticao = 1;
             while (repeticao <= 3) {
                 //System.out.print(ensaios + " - " + caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx\n");
@@ -128,8 +173,9 @@ public class ReadExcel extends PersistenceController {
                     //bocal pequeno
                     sb.append(sheet.getRow(19).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
                     sb.append(";");
-                    //bocal grande
+                    //bocal grande (quebra-jato)
                     sb.append(sheet.getRow(21).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
+
                     sb.append(";");
                     //pressao
                     sb.append(sheet.getRow(20).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
@@ -186,43 +232,56 @@ public class ReadExcel extends PersistenceController {
         SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
         Calendar time = Calendar.getInstance();
 
-
-//        int linha = 1;
-//        while (linha < 9) {
-//            int repeticao = 1;
-//            while (repeticao <= 3) {
-                //System.out.print(ensaios + " - " + caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx\n");
-//                InputStream ExcelFileToRead = new FileInputStream(caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx");
-                InputStream ExcelFileToRead = new FileInputStream(caminho + "SIMULADOS/Ensaios_simulados.xlsx");
+        int linha = 1;
+        while (linha <= 9) {
+            int repeticao = 1;
+            while (repeticao <= 3) {
+                System.out.print(ensaios + " - " + caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx\n");
+                InputStream ExcelFileToRead = new FileInputStream(caminho + linha + "_LINHA_REPETICAO_" + repeticao + "/Ensaios_L" + linha + "-R" + repeticao + "-A.xlsx");
 
                 XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
 
                 int pages = 0;
-                while (pages <= 10) {
+                while (pages < 4) {
                     Ensaio e = new Ensaio();
                     try {
-//                        Ensaio e = new Ensaio();
                         int cellcont = 0;
                         FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
                         XSSFSheet sheet = wb.getSheetAt(pages);
                         XSSFRow row;
                         XSSFCell cell;
-                        e.setDescricao("Ensaio Simulado " + sheet.getSheetName());
+                        e.setDescricao("Ensaio linha " + linha + " repeticao " + repeticao);
+
                         //bocal pequeno
-                        e.setBocal(sheet.getRow(19).getCell(1).getStringCellValue().trim());
-                        //bocal grande
-                        e.setQuebraJato(sheet.getRow(21).getCell(1).getStringCellValue().trim().replace(",", "."));
+                        sb.append(sheet.getRow(19).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
+                        Bocal b = new Bocal();
+                        b.setDescricao(sheet.getRow(19).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
+                        sb.append(";");
+                        //bocal grande (quebra-jato)
+                        sb.append(sheet.getRow(21).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
+                        QuebraJato qj = new QuebraJato();
+                        qj.setDescricao(sheet.getRow(21).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
+
+                        //bocal pequeno
+//                        e.setBocal(sheet.getRow(19).getCell(1).getStringCellValue().trim());
+//                        //bocal grande
+//                        e.setQuebraJato(sheet.getRow(21).getCell(1).getStringCellValue().trim().replace(",", "."));
                         //pressao
                         e.setPressao(sheet.getRow(20).getCell(1).getStringCellValue().trim().replace(",", "."));
                         //velocidade vento
                         e.setVelocidadeVento(Float.parseFloat(evaluator.evaluate(sheet.getRow(23).getCell(1)).formatAsString().replaceAll("\"", "")));
                         //direcao do vento MODA
-                        e.setDirecaoVento(evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", ""));
+                        String moda = evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", "");
+                        float grau = WindUtil.getWindByText(WindUtil.WindDirection.valueOf(moda));
+                        grau += 55;
+                        if (grau > 360) {
+                            grau = grau % 360;
+                        }
+                        e.setDirecaoVentoGraus(grau);
                         //data e hora de inicio
                         e.setData(sheet.getRow(22).getCell(1).getDateCellValue());
-//                        time.setTime(sheet.getRow(17).getCell(1).getDateCellValue());
-//                        e.setInicio(f.format(time.getTime()));
-                        e.setInicio("00:00:00");
+                        time.setTime(sheet.getRow(17).getCell(1).getDateCellValue());
+                        e.setInicio(f.format(time.getTime()));
 
                         e.setEspacamentoPluviometro(1.5F);
 //                    e.setEvaporacao((sheet.getRow(19).getCell(3)!=null ? (float) sheet.getRow(19).getCell(3).getNumericCellValue() :0));
@@ -230,7 +289,11 @@ public class ReadExcel extends PersistenceController {
                         e.setVazao((sheet.getRow(22).getCell(3) != null ? (float) sheet.getRow(22).getCell(3).getNumericCellValue() : 0));
                         e.setGridAltura(24);
                         e.setGridLargura(24);
-                        e.setDuracao("simulado 2 horas");
+                        e.setDuracao("2 horas");
+
+                        //salvar os bocais e quebra-jatos
+                        e.setBocal(salvarBocais(b));
+                        e.setQuebraJato(salvarQuebraJato(qj));
 
                         e = edao.save(e);
 
@@ -263,10 +326,111 @@ public class ReadExcel extends PersistenceController {
                     }
 
                     pages++;
-//                }
-//                repeticao++;
-//            }
-//            linha++;
+                }
+                repeticao++;
+            }
+            linha++;
+        }
+
+
+
+        System.out.print(sb.toString().replaceAll(",", "."));
+        writeTxtFile(sb.toString());
+
+    }
+
+    public static void readXLSXFileUpdateDataBaseFileSimulado() throws IOException {
+
+        int ensaios = 0;
+
+        String caminho = "/Users/andregnhoato/Dropbox/ensaios/";
+        StringBuilder sb = new StringBuilder();
+        DecimalFormat df = new DecimalFormat("0.00");
+        SimpleDateFormat f = new SimpleDateFormat("HH:mm:ss");
+        Calendar time = Calendar.getInstance();
+
+
+        InputStream ExcelFileToRead = new FileInputStream(caminho + "SIMULADOS/Ensaios_simulados.xlsx");
+
+        XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
+
+        int pages = 0;
+        while (pages <= 9) {
+            Ensaio e = new Ensaio();
+            try {
+                int cellcont = 0;
+                FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
+                XSSFSheet sheet = wb.getSheetAt(pages);
+                XSSFRow row;
+                XSSFCell cell;
+                e.setDescricao("Ensaio Simulado " + sheet.getSheetName());
+                //bocal pequeno
+                sb.append(sheet.getRow(19).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
+                Bocal b = new Bocal();
+                b.setDescricao(sheet.getRow(19).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
+                sb.append(";");
+                //bocal grande (quebra-jato)
+                sb.append(sheet.getRow(21).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
+                QuebraJato qj = new QuebraJato();
+                qj.setDescricao(sheet.getRow(21).getCell(1).getStringCellValue().trim().substring(0, 3).replace(",", "."));
+                //pressao
+                e.setPressao(sheet.getRow(20).getCell(1).getStringCellValue().trim().replace(",", "."));
+                //velocidade vento
+                e.setVelocidadeVento(Float.parseFloat(evaluator.evaluate(sheet.getRow(23).getCell(1)).formatAsString().replaceAll("\"", "")));
+                //direcao do vento MODA
+                String moda = evaluator.evaluate(sheet.getRow(26).getCell(1)).formatAsString().replaceAll("\"", "");
+                float grau = WindUtil.getWindByText(WindUtil.WindDirection.valueOf(moda));
+
+                e.setDirecaoVentoGraus(grau);
+                //data e hora de inicio
+                e.setData(sheet.getRow(22).getCell(1).getDateCellValue());
+//                        time.setTime(sheet.getRow(17).getCell(1).getDateCellValue());
+//                        e.setInicio(f.format(time.getTime()));
+                e.setInicio("00:00:00");
+
+                e.setEspacamentoPluviometro(1.5F);
+//                    e.setEvaporacao((sheet.getRow(19).getCell(3)!=null ? (float) sheet.getRow(19).getCell(3).getNumericCellValue() :0));
+                e.setEvaporacao(0);
+                e.setVazao((sheet.getRow(22).getCell(3) != null ? (float) sheet.getRow(22).getCell(3).getNumericCellValue() : 0));
+                e.setGridAltura(24);
+                e.setGridLargura(24);
+                e.setDuracao("simulado 2 horas");
+
+                //salvar os bocais e quebra-jatos
+                e.setBocal(salvarBocais(b));
+                e.setQuebraJato(salvarQuebraJato(qj));
+
+                e = edao.save(e);
+
+
+                Iterator rows = sheet.rowIterator();
+                //coleta
+                while (rows.hasNext()) {
+                    row = (XSSFRow) rows.next();
+                    if (row.getRowNum() <= 15) {
+                        Iterator cells = row.cellIterator();
+                        while (cells.hasNext()) {
+                            cell = (XSSFCell) cells.next();
+                            Coleta c = new Coleta();
+                            c.setEnsaio(e);
+                            c.setColuna(cell.getColumnIndex());
+                            c.setLinha(cell.getRowIndex());
+                            c.setValor((float) cell.getNumericCellValue());
+                            try {
+                                cdao.save(c);
+                            } catch (Exception ex) {
+                                Logger.getLogger(ReadExcel.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println("Erro no ensaio: " + e.getDescricao());
+                Logger.getLogger(ReadExcel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            pages++;
         }
 
 
@@ -379,8 +543,9 @@ public class ReadExcel extends PersistenceController {
     public static void main(String[] args) throws IOException {
         ReadExcel re = new ReadExcel();
         re.readXLSXFileUpdateDataBaseFile();
+        re.readXLSXFileUpdateDataBaseFileSimulado();
 //        re.readXLSXFileGenerateTxtFile();
-       
+
 
 //        writeXLSFile();
 //        readXLSFile();

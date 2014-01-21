@@ -3,9 +3,12 @@ package dr.util;
 import dr.controller.PersistenceController;
 import dr.dao.ColetaDAO;
 import dr.dao.ColetaDAOImpl;
+import dr.dao.ConfiguracaoDAO;
+import dr.dao.ConfiguracaoDAOImpl;
 import dr.model.Coleta;
+import dr.model.Configuracao;
 import dr.model.Ensaio;
-import dr.ui.coleta.uniformidade.UniformidadeTable;
+import dr.ui.analise.SobreposicaoTable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,11 +44,14 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
     private Float mediaMenorQuartil;
     private Float coeficienteVariacao;
     private ColetaDAO cDao;
+    private ConfiguracaoDAO configDao;
+    private Configuracao config;
 
     public UniformidadesImpl(Ensaio e) {
 
         if (e != null) {
             this.cDao = new ColetaDAOImpl(this.getPersistenceContext());
+            this.configDao = new ConfiguracaoDAOImpl(this.getPersistenceContext());
             this.ensaio = e;
             //transformando a metragem em unidade
             gridAltura = ensaio.getGridAltura() / ensaio.getEspacamentoPluviometro();
@@ -53,6 +59,7 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
 
             try {
                 this.coletas = cDao.findColetasByEnsaio(e);
+                this.config = configDao.findAll().get(0);
             } catch (Exception ex) {
                 Logger.getLogger(UniformidadesImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -142,6 +149,10 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
                             sp.add(soma);
                         }
 
+                        ajustaSobreposicaoParaTabela(sp);
+                    }else{
+                        reSobrepoeX = !reSobrepoeX;
+                        reSobrepoeY = !reSobrepoeY;
                         ajustaSobreposicaoParaTabela(sobreposicaoQuadrantes(clts));
                     }
                 } else {
@@ -151,7 +162,7 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
 
             }
         } catch (Exception ex) {
-            Logger.getLogger(UniformidadeTable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SobreposicaoTable.class.getName()).log(Level.SEVERE, null, ex);
         }
         return sobreposicoes;
     }
@@ -213,7 +224,7 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
         for (int linha = 0; linha < posAspersorX; linha++) {
             ObservableList<Float> row = FXCollections.observableArrayList();
             for (int coluna = 0; coluna < posAspersorY; coluna++) {
-                row.add(sp.get(contador));
+                row.add(round(sp.get(contador), config.getCasasDecimaisSobreposicao()));
                 contador++;
             }
             sobreposicoes.add(row);
@@ -247,7 +258,7 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
 
         float ccc = 1 - somatoriaAbsolutos / (valoresAbsolutos.size() * mediaSobreposicao);
 
-        return round(ccc, 3);
+        return round(ccc, config.getCasasDecimaisUniformidade());
     }
 
     /**
@@ -273,7 +284,7 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
         mediaMenorQuartil = somatoria / quarto;
         //calcula cud media de 1/4 dividido pela media geral
 
-        return round((mediaMenorQuartil / UniformidadesImpl.mediaSobreposicao), 3);
+        return round((mediaMenorQuartil / UniformidadesImpl.mediaSobreposicao), config.getCasasDecimaisUniformidade());
 
     }
 
@@ -306,7 +317,7 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
                 ;
 
         //2 calcular cue = 1 - raiz quadrada(soma / ((quantidade sobreposições -1 ) * media sobreposições ao quadrado
-        return round(1 - (float) Math.sqrt((soma / ((listaSobreposicoes.size() - 1) * (float) Math.pow(UniformidadesImpl.mediaSobreposicao, 2)))), 3);
+        return round(1 - (float) Math.sqrt((soma / ((listaSobreposicoes.size() - 1) * (float) Math.pow(UniformidadesImpl.mediaSobreposicao, 2)))), config.getCasasDecimaisUniformidade());
     }
 
     /**
@@ -508,16 +519,20 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
 
     @Override
     public Float getDesvioPadrao() {
-        return round((desvioPadrao != null ? desvioPadrao : 0), 4);
+        return round((desvioPadrao != null ? desvioPadrao : 0), config.getCasasDecimaisDadosEstatisticos());
     }
 
     @Override
     public Float getMediaMenorQuartil() {
-        return round((mediaMenorQuartil != null ? mediaMenorQuartil : 0), 4);
+        return round((mediaMenorQuartil != null ? mediaMenorQuartil : 0), config.getCasasDecimaisDadosEstatisticos());
     }
 
     @Override
-    public Float getCoeficienteVariacao() {
-        return round((coeficienteVariacao != null ? coeficienteVariacao : 0), 0);
+    public Integer getCoeficienteVariacao() {
+        if(coeficienteVariacao != null){
+            coeficienteVariacao = round(coeficienteVariacao, 0);
+            return new Integer(coeficienteVariacao.intValue()) ;
+        }else
+            return 0;
     }
 }

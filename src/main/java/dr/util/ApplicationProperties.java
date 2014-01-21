@@ -49,6 +49,10 @@ public class ApplicationProperties {
     public static String getDesenvolvidoPor() {
         return checkProperty("Built-By");
     }
+    
+    public static String getIdealizador() {
+        return checkProperty("Idealized-By");
+    }
 
     public static String getSite() {
         return checkProperty("Implementation-Site");

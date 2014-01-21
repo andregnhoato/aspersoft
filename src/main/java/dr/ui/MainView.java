@@ -23,6 +23,13 @@ public class MainView {
     private MenuItem menuAbout;
     private MenuItem menuEnsaio;
     private MenuItem menuEnsaioList;
+    private MenuItem menuConfiguracao;
+    private MenuItem menuBocais;
+    private MenuItem menuQuebraJato;
+    private MenuItem menuCombinacao;
+    private MenuItem menuPerfil;
+    private MenuItem menuAjuda;
+    
 
     public MainView(Stage stage) {
         //inicializaComponentes();
@@ -46,7 +53,7 @@ public class MainView {
         stage.setWidth(bounds.getWidth());
         stage.setHeight(bounds.getHeight());
 
-        stage.setTitle("Experimento");
+        stage.setTitle("Aspersoft 1.1.6");
         stage.setScene(mainScene);
         stage.setResizable(true);
         stage.centerOnScreen();
@@ -60,7 +67,7 @@ public class MainView {
     private MenuBar getMenuBar() {
         MenuBar menuBar = new MenuBar();
         Menu menuHelp = new Menu("Ajuda");
-        Menu menuStart = new Menu("Inicio");
+        Menu menuStart = new Menu("Início");
 
         menuEnsaio = new MenuItem("Ensaio");
         menuEnsaio.setId("ensaio");
@@ -69,15 +76,44 @@ public class MainView {
         menuEnsaioList = new MenuItem("Listagem Ensaio");
         menuEnsaioList.setId("ensaioList");
         menuEnsaioList.setAccelerator(KeyCombination.keyCombination("F3"));
+        
+        menuConfiguracao = new MenuItem("Prefêrencias");
+        menuConfiguracao.setId("config");
+        menuConfiguracao.setAccelerator(KeyCombination.keyCombination("F4"));
 
         menuAbout = new MenuItem("Sobre");
         menuAbout.setId("exibirSobre");
-        menuAbout.setAccelerator(KeyCombination.keyCombination("F1"));
+        menuAbout.setAccelerator(KeyCombination.keyCombination("F9"));
+        
+        menuBocais = new MenuItem("Bocais");
+        menuBocais.setId("bocais");
+        menuBocais.setAccelerator(KeyCombination.keyCombination("F5"));
+        
+        menuQuebraJato = new MenuItem("Quebra Jato");
+        menuQuebraJato.setId("quebraJato");
+        menuQuebraJato.setAccelerator(KeyCombination.keyCombination("F6"));
+        
+        menuCombinacao = new MenuItem("Combinação de bocais");
+        menuCombinacao.setId("combinacao");
+        menuCombinacao.setAccelerator(KeyCombination.keyCombination("F7"));
+        
+        menuPerfil = new MenuItem("Perfis");
+        menuPerfil.setId("perfis");
+        menuPerfil.setAccelerator(KeyCombination.keyCombination("F8"));
+        
+        menuAjuda = new MenuItem("Ajuda");
+        menuAjuda.setId("ajuda");
+        menuAjuda.setAccelerator(KeyCombination.keyCombination("F1"));
+               
 
-        menuHelp.getItems().addAll(menuAbout);
-        menuStart.getItems().addAll(menuEnsaio, menuEnsaioList);
-        menuBar.getMenus().addAll(menuStart, menuHelp);
+        menuHelp.getItems().addAll(menuAjuda, menuAbout, menuConfiguracao);
+        menuStart.getItems().addAll(menuEnsaio, menuEnsaioList, menuBocais, menuQuebraJato, menuCombinacao, menuPerfil);
+        menuBar.getMenus().addAll(menuStart ,menuHelp);
         return menuBar;
+    }
+    
+    public MenuItem getMenuAjuda(){
+        return menuAjuda;
     }
 
     public MenuItem getMenuAbout() {
@@ -103,4 +139,41 @@ public class MainView {
     public void setMenuEnsaioList(MenuItem menuEnsaioList) {
         this.menuEnsaioList = menuEnsaioList;
     }
+
+    public MenuItem getMenuConfiguracao() {
+        return menuConfiguracao;
+    }
+
+    public void setMenuConfiguracao(MenuItem menuConfiguracao) {
+        this.menuConfiguracao = menuConfiguracao;
+    }
+
+    public MenuItem getMenuBocais() {
+        return menuBocais;
+    }
+
+    public void setMenuBocais(MenuItem menuBocais) {
+        this.menuBocais = menuBocais;
+    }
+
+    public MenuItem getMenuQuebraJato() {
+        return menuQuebraJato;
+    }
+
+    public void setMenuQuebraJato(MenuItem menuQuebraJato) {
+        this.menuQuebraJato = menuQuebraJato;
+    }
+
+    public MenuItem getMenuCombinacao() {
+        return menuCombinacao;
+    }
+
+    public void setMenuCombinacao(MenuItem menuCombinacao) {
+        this.menuCombinacao = menuCombinacao;
+    }
+
+    public MenuItem getMenuPerfil() {
+        return menuPerfil;
+    }
+    
 }

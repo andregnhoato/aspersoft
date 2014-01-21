@@ -6,6 +6,7 @@ import static dr.util.ApplicationProperties.getSite;
 import static dr.util.ApplicationProperties.getTitulo;
 import static dr.util.ApplicationProperties.getVersao;
 import static dr.util.ApplicationProperties.getURLLogo;
+import static dr.util.ApplicationProperties.getIdealizador;
 import javafx.application.Platform;
 
 import javafx.scene.Group;
@@ -33,7 +34,7 @@ public class SobreView extends Stage {
     public SobreView() {
         setTitle("Sobre");
         setWidth(670);
-        setHeight(200);
+        setHeight(220);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
         centerOnScreen();
@@ -72,9 +73,10 @@ public class SobreView extends Stage {
         GridFormBuilder grid = new GridFormBuilder();
         grid.addRow(new Label("Aplicacão: "), buildField(getTitulo(), 200));
         grid.addRow(new Label("Versão: "), buildField(getVersao(), 100));
-        grid.addRow(new Label("Desenvolvido por: "), buildField(getDesenvolvidoPor(), 150));
+        grid.addRow(new Label("Idealizado por: "), buildField(getIdealizador(), 200));
+        grid.addRow(new Label("Desenvolvido por: "), buildField(getDesenvolvidoPor(), 200));
         grid.addRow(new Label("Build: "), buildField(getBuild(), 350));
-        grid.addRow(new Label("Site: "), buildField(getSite(), 200));
+        grid.addRow(new Label("Site: "), buildField(getSite(), 350));
         
         return grid.build();
     }

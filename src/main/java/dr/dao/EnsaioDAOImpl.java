@@ -3,13 +3,13 @@ package dr.dao;
 import dr.model.Ensaio;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.persistence.TransactionRequiredException;
 
 /**
  * Implementa o contrato de persistência da entidade
@@ -70,9 +70,33 @@ public class EnsaioDAOImpl implements EnsaioDAO {
                 return object;
             }
         } catch (PersistenceException e) {
-//            this.em.getTransaction().rollback();
+            if (e instanceof TransactionRequiredException) {
+                return saveWhitTransation(object);
+            } else {
+                throw new PersistenceException(e);
+            }
+
+        }
+    }
+
+    public Ensaio saveWhitTransation(Ensaio object) throws Exception {
+        if (object == null) {
+            throw new Exception("O objeto Ensaio está nulo.");
+        }
+        try {
+            if (object.getId() != null) {
+                return this.update(object);
+            } else {
+                this.em.getTransaction().begin();
+                this.em.persist(object);
+                this.em.flush();
+                this.em.getTransaction().commit();
+                return object;
+            }
+        } catch (PersistenceException e) {
+            this.em.getTransaction().rollback();
             throw new PersistenceException(e);
-            
+
         }
     }
 
@@ -81,10 +105,10 @@ public class EnsaioDAOImpl implements EnsaioDAO {
         if (object == null) {
             throw new Exception("O objeto Ensaio está nulo.");
         }
-        Ensaio c = this.em.merge(object);
+        Ensaio e = this.em.merge(object);
         this.em.flush();
-        
-        return c;
+
+        return e;
     }
 
     @Override
@@ -109,7 +133,7 @@ public class EnsaioDAOImpl implements EnsaioDAO {
     }
 
     @Override
-    public Collection<Ensaio> findAll() throws Exception {
+    public List<Ensaio> findAll() throws Exception {
         String query = "SELECT en FROM ensaio en ORDER BY en.descricao ASC";
         try {
 //            em.getTransaction().begin();
@@ -124,12 +148,11 @@ public class EnsaioDAOImpl implements EnsaioDAO {
         if (where == null || where.isEmpty()) {
             return null;
         }
-        System.out.println("SELECT e FROM ensaio e "+ where );
-        System.out.println("SELECT e FROM ensaio e "+ where );
-        Query query = em.createQuery("SELECT e FROM ensaio e "+where);
+        System.out.println("SELECT e FROM ensaio e " + where);
+        Query query = em.createQuery("SELECT e FROM ensaio e " + where);
 //        query.setParameter("where", where );//nm.concat(descricao).concat("%"));
-        
+
         return (List<Ensaio>) query.getResultList();
-        
+
     }
 }

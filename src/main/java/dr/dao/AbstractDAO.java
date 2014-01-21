@@ -2,7 +2,7 @@ package dr.dao;
 
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Interface mãe de todas as interfaces do repositório. Esta
@@ -20,6 +20,6 @@ public interface AbstractDAO<T> {
 	
 	boolean remove(T object)throws Exception;
 	
-	Collection<T> findAll() throws Exception;
+	List<T> findAll() throws Exception;
 
 }

@@ -3,11 +3,15 @@ package dr.ui.coleta;
 import dr.controller.PersistenceController;
 import dr.dao.ColetaDAO;
 import dr.dao.ColetaDAOImpl;
+import dr.dao.ConfiguracaoDAO;
+import dr.dao.ConfiguracaoDAOImpl;
 import dr.model.Coleta;
+import dr.model.Configuracao;
 import dr.ui.ensaio.*;
 import dr.model.Ensaio;
+import dr.ui.Dialog;
 import dr.ui.table.cell.NumericEditableTableCell;
-
+import dr.util.UniformidadesImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,10 +46,12 @@ public class ColetaTable extends VBox {
     private Ensaio e = null;
     PersistenceController pe = new PersistenceController();
     final ColetaDAO dao;
+    final ConfiguracaoDAO daoConfig;
 
     public ColetaTable() {
         table = new ColetaTableView();
         dao = new ColetaDAOImpl(pe.getPersistenceContext());
+        daoConfig = new ConfiguracaoDAOImpl(pe.getPersistenceContext());
         this.getChildren().addAll(table);
         this.setPadding(new Insets(10, 10, 10, 10));//css
 
@@ -80,19 +86,19 @@ public class ColetaTable extends VBox {
                 }
             };
 
-            for (int i = 0; i < (ensaio.getGridLargura()/ensaio.getEspacamentoPluviometro()); i++) {
+            for (int i = 0; i < (ensaio.getGridLargura() / ensaio.getEspacamentoPluviometro()); i++) {
 
                 final int j = i;
 
                 TableColumn col = new TableColumn(alphabet + "");
                 col.setCellFactory(numericFactory);
-                
+
 
                 col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList, Float>, ObservableValue<Float>>() {
                     @Override
                     public ObservableValue call(CellDataFeatures<ObservableList, Float> param) {
 
-                        return new SimpleFloatProperty((Float)param.getValue().get(j));
+                        return new SimpleFloatProperty((Float) param.getValue().get(j));
 
                     }
                 });
@@ -112,23 +118,21 @@ public class ColetaTable extends VBox {
                                     public void run() {
                                         try {
                                             Coleta col = dao.findColetaByPosicao(e, linha, coluna);
-                                            col.setValor(valor);                                           
+                                            col.setValor(valor);
                                             dao.update(col);
                                         } catch (Exception ex) {
                                             Logger.getLogger(ColetaTable.class.getName()).log(Level.SEVERE, null, ex);
                                         }
                                     }
                                 });
-                            } else {
-                                throw new Exception("dao está nulo");
                             }
-
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
+                            Dialog.showError(e.getLocalizedMessage(), e.getMessage());
                         }
                     }
                 });
-               
+
                 table.getColumns().add(col);
                 alphabet++;
             }
@@ -141,14 +145,14 @@ public class ColetaTable extends VBox {
 
     /*método responsável por inserir todas as coletas vazias, é executado uma unica vez para cada ensaio*/
     public void insertEmptyColetas(ArrayList<Coleta> clts, final Ensaio ensaio) {
-        try {
-            if (dao != null) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (dao != null) {
                         try {
-                            for (int linha = 0; linha < (ensaio.getGridAltura()/ensaio.getEspacamentoPluviometro()); linha++) {
-                                for (int coluna = 0; coluna < (ensaio.getGridLargura()/ensaio.getEspacamentoPluviometro()); coluna++) {
+                            for (int linha = 0; linha < (ensaio.getGridAltura() / ensaio.getEspacamentoPluviometro()); linha++) {
+                                for (int coluna = 0; coluna < (ensaio.getGridLargura() / ensaio.getEspacamentoPluviometro()); coluna++) {
                                     Coleta c = new Coleta();
                                     c.setColuna(coluna);
                                     c.setLinha(linha);
@@ -161,32 +165,32 @@ public class ColetaTable extends VBox {
                                     }
                                 }
                             }
-
                         } catch (Exception e) {
                             System.err.println(e.getMessage());
                         }
                     }
-                });
+                } catch (Exception ex) {
+                    System.err.println(ex.getMessage());
+                }
             }
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        }
+        });
     }
 
     private ObservableList getColetasfromDatabase() {
         coletas = FXCollections.observableArrayList();
+
         try {
             List<Coleta> clts = dao.findColetasByEnsaio(e);
+            Configuracao c = daoConfig.findAll().get(0);
             if (clts.size() > 0) {
                 int contador = 0;
-                for (int linha = 0; linha < (e.getGridAltura()/e.getEspacamentoPluviometro()); linha++) {
+                for (int linha = 0; linha < (e.getGridAltura() / e.getEspacamentoPluviometro()); linha++) {
                     ObservableList<Float> row = FXCollections.observableArrayList();
-                    for (int coluna = 0; coluna < (e.getGridLargura()/e.getEspacamentoPluviometro()); coluna++) {
-                        row.add(clts.get(contador).getValor());
+                    for (int coluna = 0; coluna < (e.getGridLargura() / e.getEspacamentoPluviometro()); coluna++) {
+                        row.add(UniformidadesImpl.round(clts.get(contador).getValor(), c.getCasasDecimaisColeta()));
                         contador++;
                     }
                     coletas.add(row);
-
                 }
             }
 
