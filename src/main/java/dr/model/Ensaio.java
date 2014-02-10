@@ -2,7 +2,6 @@ package dr.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,7 +46,7 @@ public class Ensaio implements Bean, Serializable {
     private String inicio;
     
     @NotNull 
-    private String duracao;
+    private Integer duracao;
     
     @NotNull
     @Column(name = "grid_altura")
@@ -77,6 +76,9 @@ public class Ensaio implements Bean, Serializable {
     
     @Column 
     private float vazao;
+    
+    @Column(name ="coleta_hora")
+    private boolean coletaHora;
     
        
     /**
@@ -149,11 +151,11 @@ public class Ensaio implements Bean, Serializable {
         this.inicio = inicio;
     }
 
-    public String getDuracao() {
+    public Integer getDuracao() {
         return duracao;
     }
 
-    public void setDuracao(String duracao) {
+    public void setDuracao(Integer duracao) {
         this.duracao = duracao;
     }
 
@@ -221,5 +223,12 @@ public class Ensaio implements Bean, Serializable {
     public void setDirecaoVentoGraus(float direcaoVentoGraus) {
         this.direcaoVentoGraus = direcaoVentoGraus;
     }
-    
+
+    public boolean getColetaHora() {
+      return coletaHora;
+    }
+
+    public void setColetaHora(boolean coletaHora) {
+        this.coletaHora = coletaHora;
+    }
 }

@@ -1,6 +1,7 @@
 package dr.util;
 
 import dr.model.Coleta;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.ObservableList;
 
@@ -57,6 +58,8 @@ public interface IUniformidades {
     public Float getDesvioPadrao();
     public Integer getCoeficienteVariacao();
     public Float getMediaMenorQuartil();
+
+    public List<Coleta> getColetas();
 
     
 }

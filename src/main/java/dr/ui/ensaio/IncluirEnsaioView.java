@@ -8,6 +8,7 @@ import dr.dao.QuebraJatoDAOImpl;
 import dr.model.Bocal;
 import dr.model.Ensaio;
 import dr.model.QuebraJato;
+import dr.ui.Dialog;
 import dr.ui.GridFormBuilder;
 import dr.util.WindUtil;
 import eu.schudt.javafx.controls.calendar.DatePicker;
@@ -20,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -53,6 +55,7 @@ public class IncluirEnsaioView extends Stage {
     private TextField tfVersion;
     private TextField tfEvaporacao;
     private TextField tfVazao;
+    private CheckBox cbColetaPorHora;
     private DatePicker dpData;
     private Button bSave;
     private Button bCancel;
@@ -70,7 +73,7 @@ public class IncluirEnsaioView extends Stage {
         bdao = new BocalDAOImpl(pe.getPersistenceContext());
         setTitle("Incluir Ensaio");
         setWidth(410);
-        setHeight(520);
+        setHeight(540);
         setResizable(false);
         initModality(Modality.APPLICATION_MODAL);
 
@@ -198,8 +201,24 @@ public class IncluirEnsaioView extends Stage {
         tfInicio.setMinWidth(180);
         tfInicio.setMaxWidth(180);
 
-        tfDuracao = new TextField();
-        tfDuracao.setPromptText("*Campo obrigatório");
+        tfDuracao = new TextField() {
+            @Override
+            public void replaceText(int start, int end, String text) {
+                //permitir somente numeros no campo
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+
+            @Override
+            public void replaceSelection(String text) {
+                if (text.matches("^\\d{0,3}(\\.\\d{0,2})?$")) {
+                    super.replaceSelection(text);
+                }
+            }
+        };
+        
+        tfDuracao.setPromptText("*Campo obrigatório, ex 60");
         tfDuracao.setMinWidth(180);
         tfDuracao.setMaxWidth(180);
 
@@ -393,7 +412,8 @@ public class IncluirEnsaioView extends Stage {
         bQuebraJato = new Button("...");
         bQuebraJato.setId("quebraZoom");
         bQuebraJato.getStyleClass().add("buttonGreen");
-
+        
+        cbColetaPorHora = new CheckBox("Coletas por hora");
 
 
 
@@ -405,7 +425,7 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Quebra Jato: "), tfQuebraJato, bQuebraJato)
                 .addRow(new Label("Inicio: "), tfInicio)
                 .addRow(new Label("Data:"), dpData)
-                .addRow(new Label("Duração em horas:"), tfDuracao)
+                .addRow(new Label("Duração em minutos:"), tfDuracao)
                 .addRow(new Label("Velocidade Vento:"), tfVelocidadeVento)
                 .addRow(new Label("Direção Vento:"), cbDirecaoVento)
                 .addRow(new Label("Direção Vento em Graus:"), tfDirecaoVentoGraus)
@@ -413,7 +433,8 @@ public class IncluirEnsaioView extends Stage {
                 .addRow(new Label("Evaporação:"), tfEvaporacao)
                 .addRow(new Label("Espaço entre Pluviometros:"), tfEspacamentoPluviometro)
                 .addRow(new Label("Dimensão altura:"), tfGridAltura)
-                .addRow(new Label("Dimensão largura:"), tfGridLargura);
+                .addRow(new Label("Dimensão largura:"), tfGridLargura)
+                .addRow(new Label(), cbColetaPorHora);
 
         return grid.build();
     }
@@ -438,6 +459,7 @@ public class IncluirEnsaioView extends Stage {
         tfGridAltura.setEditable(true);
         tfGridLargura.setEditable(true);
         tfEspacamentoPluviometro.setEditable(true);
+        cbColetaPorHora.setSelected(false);
         bRemove.setVisible(false);
     }
 
@@ -450,7 +472,7 @@ public class IncluirEnsaioView extends Stage {
         tfEspacamentoPluviometro.setText(e.getEspacamentoPluviometro() + "");
         tfEspacamentoPluviometro.setEditable(false);
         tfInicio.setText(e.getInicio());
-        tfDuracao.setText(e.getDuracao());
+        tfDuracao.setText(e.getDuracao()+"");
         tfVelocidadeVento.setText(e.getVelocidadeVento() + "");
         cbDirecaoVento.setValue(WindUtil.getWindByDegress(e.getDirecaoVentoGraus()));
         tfDirecaoVentoGraus.setText(e.getDirecaoVentoGraus() + "");
@@ -462,6 +484,9 @@ public class IncluirEnsaioView extends Stage {
         tfGridLargura.setEditable(false);
         tfVersion.setText(e.getVersion() == null ? "0" : e.getVersion().toString());
         dpData.setSelectedDate(e.getData());
+        cbColetaPorHora.setSelected(e.getColetaHora());
+         
+        
 
 
     }
@@ -490,7 +515,7 @@ public class IncluirEnsaioView extends Stage {
         }
 
         if (!tfDuracao.getText().trim().isEmpty()) {
-            e.setDuracao(tfDuracao.getText().trim());
+            e.setDuracao(Integer.parseInt(tfDuracao.getText()));
         }
 
         if (!tfVazao.getText().trim().isEmpty()) {
@@ -504,18 +529,11 @@ public class IncluirEnsaioView extends Stage {
 
         if (!tfEspacamentoPluviometro.getText().trim().isEmpty()) {
             e.setEspacamentoPluviometro(Float.parseFloat(tfEspacamentoPluviometro.getText().trim()));
-//                    ( != 0 
-//                    ? Float.parseFloat(tfEspacamentoPluviometro.getText().trim()) 
-//                    : null));
         }
 
         if (!tfVelocidadeVento.getText().trim().isEmpty()) {
             e.setVelocidadeVento(Float.parseFloat(tfVelocidadeVento.getText().trim()));
         }
-
-//        if (cbDirecaoVento.getValue() != null && !"".equals(cbDirecaoVento.getValue().toString())) {
-//            e.setDirecaoVentoGraus(Float.parseFloat(tfDirecaoVentoGraus.getText()));
-//        }
 
         if (!tfDirecaoVentoGraus.getText().trim().isEmpty()) {
             e.setDirecaoVentoGraus(Float.parseFloat(tfDirecaoVentoGraus.getText().trim()));
@@ -539,6 +557,7 @@ public class IncluirEnsaioView extends Stage {
         e.setData(dpData.getSelectedDate());
         e.setBocal(this.bocal);
         e.setQuebraJato(this.quebraJato);
+        e.setColetaHora(cbColetaPorHora.isSelected());
 
         return e;
     }
