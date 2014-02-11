@@ -13,7 +13,7 @@ import javafx.scene.control.TableView;
 public class ColetaTableView extends TableView<ColetaTableView.ColetaItem> {
 
     private ObservableList coletas;
-    private Coleta coleta;
+  
 
     public ColetaTableView() {
         

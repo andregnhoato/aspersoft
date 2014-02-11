@@ -60,6 +60,7 @@ public class ColetaTable extends VBox {
 
 
     }
+   
 
     public void reRenderTable(Ensaio ensaio) {
         try {
@@ -146,10 +147,11 @@ public class ColetaTable extends VBox {
         }
         
         coleta = new Label("Visualização das coletas referente a duração de 60 minutos");
-        coleta.setTextFill(Color.web("#0076a3"));
-        if(e.getColetaHora())
+        coleta.setTextFill(Color.web("#0000FF"));
+        if(e.getColetaHora()){
+            this.setPadding(new Insets(10, 10, 10, 10));
             this.getChildren().addAll(coleta,table);
-        else
+        }else
             this.getChildren().addAll(table);
     }
 

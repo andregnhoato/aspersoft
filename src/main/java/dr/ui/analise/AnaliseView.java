@@ -28,6 +28,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
@@ -65,6 +66,12 @@ public final class AnaliseView extends Stage {
     private SimpleStringProperty dv;
     private Label espacamento;
     private SimpleStringProperty esp;
+    private Label duracao;
+    private SimpleStringProperty dur;
+    private Label quebraJato;
+    private SimpleStringProperty qj;
+    private Label bocal;
+    private SimpleStringProperty boc;
     private ScrollPane sp;
     private Label cuc;
     private SimpleStringProperty Cuc;
@@ -110,6 +117,9 @@ public final class AnaliseView extends Stage {
         espacamento = new Label("--");
         inicio = new Label("--");
         metros = new Label("--");
+        duracao = new Label("--");
+        quebraJato = new Label("--");
+        bocal = new Label("--");
         cuc = new Label("--");
         cud = new Label("--");
         cue = new Label("--");
@@ -147,22 +157,35 @@ public final class AnaliseView extends Stage {
         grid.setVgap(5);
         grid.setHgap(5);
         grid.setPadding(new Insets(5, 5, 5, 5));
+        
         grid.add(new Label("Ensaio:"), 0, 0);
         grid.add(descricao, 1, 0);
         grid.add(new Label("Pressão:"), 2, 0);
         grid.add(pressao, 3, 0);
-        grid.add(new Label("Data:"), 0, 1);
-        grid.add(data, 1, 1);
-        grid.add(new Label("Vel. Vento(m/s):"), 2, 1);
-        grid.add(velVento, 3, 1);
-        grid.add(new Label("Início:"), 0, 2);
-        grid.add(inicio, 1, 2);
-        grid.add(new Label("Direção vento:"), 2, 2);
-        grid.add(dirVento, 3, 2);
-        grid.add(new Label("Espaçamento (m): "), 0, 3);
-        grid.add(espacamento, 1, 3);
-        grid.add(new Label("Tamanho grid: "), 2, 3);
-        grid.add(metros, 3, 3);
+        
+        grid.add(new Label("Bocal:"), 0, 1);
+        grid.add(bocal, 1, 1);
+        grid.add(new Label("Quebra Jato:"), 2, 1);
+        grid.add(quebraJato, 3, 1);
+        
+        grid.add(new Label("Data:"), 0, 2);
+        grid.add(data, 1, 2);
+        grid.add(new Label("Vel. Vento(m/s):"), 2, 2);
+        grid.add(velVento, 3, 2);
+        
+        grid.add(new Label("Início:"), 0, 3);
+        grid.add(inicio, 1, 3);
+        grid.add(new Label("Direção vento:"), 2, 3);
+        grid.add(dirVento, 3, 3);
+        
+        grid.add(new Label("Espaçamento (m): "), 0, 4);
+        grid.add(espacamento, 1, 4);
+        grid.add(new Label("Tamanho grid: "), 2, 4);
+        grid.add(metros, 3, 4);
+        
+        grid.add(new Label("Duração:"), 0, 5);
+        grid.add(duracao, 1, 5);
+        
         td.setContent(grid);
         td.setPrefWidth(bounds.getWidth());
 
@@ -447,6 +470,16 @@ public final class AnaliseView extends Stage {
         esp = new SimpleStringProperty(e.getEspacamentoPluviometro() + "");
         ini = new SimpleStringProperty(e.getInicio());
         m = new SimpleStringProperty(mQuad + " m2");
+        qj = new SimpleStringProperty(e.getQuebraJato().getDescricao());
+        boc = new SimpleStringProperty(e.getBocal().getDescricao());
+        
+        if(e.getColetaHora()){
+            dur = new SimpleStringProperty("60 minutos");
+            duracao.setTextFill(Color.web("#0000FF"));
+        }else{
+            dur = new SimpleStringProperty(e.getDuracao() + " minutos");
+            duracao.setTextFill(Color.web("#000000"));
+        }
 
 
 
@@ -458,8 +491,11 @@ public final class AnaliseView extends Stage {
         espacamento.textProperty().bind(esp);
         inicio.textProperty().bind(ini);
         metros.textProperty().bind(m);
-
-
+        quebraJato.textProperty().bind(qj);
+        bocal.textProperty().bind(boc);
+        duracao.textProperty().bind(dur);
+        
+        
     }
 
     public ComboBox getComboEspacamento() {
