@@ -58,7 +58,21 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
             gridLargura = ensaio.getGridLargura() / ensaio.getEspacamentoPluviometro();
 
             try {
-                this.coletas = cDao.findColetasByEnsaio(e);
+                if(e.getColetaHora()){
+                    LinkedList<Coleta> clts = new LinkedList<>();
+                    for (Coleta clt :cDao.findColetasByEnsaio(e)) {
+                        Coleta c = new Coleta();
+                        c.setValor(clt.getValor()/(e.getDuracao()/60));
+                        c.setColuna(clt.getColuna());
+                        c.setEnsaio(clt.getEnsaio());
+                        c.setLinha(clt.getLinha());
+                        c.setId(clt.getId());
+                        clts.add(c);
+                    }
+                    this.coletas = clts;
+                }else
+                    this.coletas = cDao.findColetasByEnsaio(e);
+                
                 this.config = configDao.findAll().get(0);
             } catch (Exception ex) {
                 Logger.getLogger(UniformidadesImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -534,5 +548,10 @@ public class UniformidadesImpl extends PersistenceController implements IUniform
             return new Integer(coeficienteVariacao.intValue()) ;
         }else
             return 0;
+    }
+
+    @Override
+    public List<Coleta> getColetas() {
+        return this.coletas;
     }
 }

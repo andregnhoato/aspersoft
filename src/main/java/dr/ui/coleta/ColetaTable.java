@@ -23,11 +23,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 /**
@@ -47,6 +49,7 @@ public class ColetaTable extends VBox {
     PersistenceController pe = new PersistenceController();
     final ColetaDAO dao;
     final ConfiguracaoDAO daoConfig;
+    Label coleta;
 
     public ColetaTable() {
         table = new ColetaTableView();
@@ -57,6 +60,7 @@ public class ColetaTable extends VBox {
 
 
     }
+   
 
     public void reRenderTable(Ensaio ensaio) {
         try {
@@ -71,6 +75,7 @@ public class ColetaTable extends VBox {
 
         this.e = ensaio;
         this.getChildren().remove(table);
+        this.getChildren().remove(coleta);
         table = new ColetaTableView();
         table.setEditable(true);
         table.getSelectionModel().setCellSelectionEnabled(true);
@@ -140,7 +145,14 @@ public class ColetaTable extends VBox {
             table.setItems(getColetasfromDatabase());
 
         }
-        this.getChildren().addAll(table);
+        
+        coleta = new Label("Visualização das coletas referente a duração de 60 minutos");
+        coleta.setTextFill(Color.web("#0000FF"));
+        if(e.getColetaHora()){
+            this.setPadding(new Insets(10, 10, 10, 10));
+            this.getChildren().addAll(coleta,table);
+        }else
+            this.getChildren().addAll(table);
     }
 
     /*método responsável por inserir todas as coletas vazias, é executado uma unica vez para cada ensaio*/
@@ -178,6 +190,12 @@ public class ColetaTable extends VBox {
 
     private ObservableList getColetasfromDatabase() {
         coletas = FXCollections.observableArrayList();
+        float divisao = 0;
+        if(e.getColetaHora())
+            if(e.getDuracao()> 60)
+                divisao = e.getDuracao() / 60;
+            else 
+                divisao = 60 / e.getDuracao();
 
         try {
             List<Coleta> clts = dao.findColetasByEnsaio(e);
@@ -187,7 +205,14 @@ public class ColetaTable extends VBox {
                 for (int linha = 0; linha < (e.getGridAltura() / e.getEspacamentoPluviometro()); linha++) {
                     ObservableList<Float> row = FXCollections.observableArrayList();
                     for (int coluna = 0; coluna < (e.getGridLargura() / e.getEspacamentoPluviometro()); coluna++) {
-                        row.add(UniformidadesImpl.round(clts.get(contador).getValor(), c.getCasasDecimaisColeta()));
+                        if(e.getColetaHora()){
+                            if(clts.get(contador).getValor()> 0){
+                                Float a = (clts.get(contador).getValor() / divisao);
+                                row.add(UniformidadesImpl.round(a, c.getCasasDecimaisColeta()));
+                            }
+                            
+                        }else
+                            row.add(UniformidadesImpl.round(clts.get(contador).getValor(), c.getCasasDecimaisColeta()));
                         contador++;
                     }
                     coletas.add(row);

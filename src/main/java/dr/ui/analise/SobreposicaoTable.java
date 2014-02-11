@@ -59,12 +59,7 @@ public class SobreposicaoTable extends VBox {
     public void reRenderTable(Ensaio ensaio, String espacamento) {
         if (espacamento != null) {
             uniformidade = new UniformidadesImpl(ensaio);
-            ArrayList<Coleta> clts = null;
-            try {
-                clts = (ArrayList<Coleta>) dao.findColetasByEnsaio(ensaio);
-            } catch (Exception ex) {
-                Logger.getLogger(SobreposicaoTable.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            List<Coleta> clts = uniformidade.getColetas();
             int espacamentoX = Integer.parseInt(espacamento.substring(3, 5));
             int espacamentoY = Integer.parseInt(espacamento.substring(0, 2));
 

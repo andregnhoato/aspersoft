@@ -289,7 +289,7 @@ public class ReadExcel extends PersistenceController {
                         e.setVazao((sheet.getRow(22).getCell(3) != null ? (float) sheet.getRow(22).getCell(3).getNumericCellValue() : 0));
                         e.setGridAltura(24);
                         e.setGridLargura(24);
-                        e.setDuracao("2 horas");
+                        e.setDuracao(120);
 
                         //salvar os bocais e quebra-jatos
                         e.setBocal(salvarBocais(b));
@@ -394,7 +394,7 @@ public class ReadExcel extends PersistenceController {
                 e.setVazao((sheet.getRow(22).getCell(3) != null ? (float) sheet.getRow(22).getCell(3).getNumericCellValue() : 0));
                 e.setGridAltura(24);
                 e.setGridLargura(24);
-                e.setDuracao("simulado 2 horas");
+                e.setDuracao(120);
 
                 //salvar os bocais e quebra-jatos
                 e.setBocal(salvarBocais(b));

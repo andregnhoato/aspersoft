@@ -56,8 +56,8 @@
         <copy file="neural.exe" flatten="true" todir="${dist.dir}"/> 
         <copy file="template/perfildedistribuicao.xlsx" flatten="true" todir="${dist.dir}/template/"/> 
         <copy file="LEIA-ME.rtf" flatten="true" todir="${dist.dir}"/> 
-        <copy file="/Users/andregnhoato/Dropbox/backup_base_dados_projeto/base-com-tabela-desempenho-22-11/database.properties" flatten="true" todir="${dist.dir}"/> 
-        <copy file="/Users/andregnhoato/Dropbox/backup_base_dados_projeto/base-com-tabela-desempenho-22-11/database.script" flatten="true" todir="${dist.dir}"/>
+        <copy file="/Users/andregnhoato/Dropbox/backup_base_dados_projeto/base-ultima/database.properties" flatten="true" todir="${dist.dir}"/> 
+        <copy file="/Users/andregnhoato/Dropbox/backup_base_dados_projeto/base-ultima/database.script" flatten="true" todir="${dist.dir}"/>
         
     </target>
     

@@ -58,5 +58,7 @@ public interface IUniformidades {
     public Integer getCoeficienteVariacao();
     public Float getMediaMenorQuartil();
 
+    public List<Coleta> getColetas();
+
     
 }
